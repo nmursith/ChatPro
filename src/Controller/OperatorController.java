@@ -198,9 +198,21 @@ public class OperatorController implements MessageListener {
 
                 int count  = loadHistory(controller.getHashMapOperator().get(producerID));
                 operatorController.setMessageCounter(count);        //starting
+               }
+            else {
+               // System.out.println(controller.getHashMapOperator().get(producerID).getChatHolder().isDisabled());
+                try{
+                    if(controller.getHashMapOperator().get(producerID).getChatHolder().isDisabled()) {
+                        controller.getHashMapOperator().get(producerID).getChatHolder().setDisable(false);
+                        controller.getSendButton().setDisable(false);
+                        controller.getMessageTextField().setDisable(false);
+                    }
 
+                }
+                catch (NullPointerException e){
 
-           }
+                }
+            }
 
             Platform.runLater(() -> {
                 if(controller!=null)
@@ -233,6 +245,7 @@ public class OperatorController implements MessageListener {
 
 
         if(controller.getListItems().size()<producerID.size()){
+
             for(int count=0; count < producerID.size(); count++) {
 
                 String tempName = producerID.get(count);

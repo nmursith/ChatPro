@@ -162,28 +162,52 @@ public class ChatController{
 
     // Set usernames from the users list to Header label
     public void setUsername() {
-        String name = valueOf(chatUsersList.getSelectionModel().getSelectedItem());
+
+        try {
+            String name = valueOf(chatUsersList.getSelectionModel().getSelectedItem());
 
 
-        Platform.runLater(() -> {
-       //     chatBubble = hashMapOperator.get(name).getTextArea();
-   //         System.out.println(chatHolder +"                    ");
-            chatHolder = hashMapOperator.get(name).getChatHolder();
-            operatorController = hashMapOperator.get(name).getOperatorController();
-            historyController = hashMapOperator.get(name).getHistoryController();
-            messageDisplay.setContent(chatHolder);
-            messageDisplay.setVvalue(messageDisplay.getVmax());
+            Platform.runLater(() -> {
+           //     chatBubble = hashMapOperator.get(name).getTextArea();
+       //         System.out.println(chatHolder +"                    ");
+
+                try{
+
+                    chatHolder = hashMapOperator.get(name).getChatHolder();
+                    operatorController = hashMapOperator.get(name).getOperatorController();
+                    historyController = hashMapOperator.get(name).getHistoryController();
+                    messageDisplay.setContent(chatHolder);
+                    messageDisplay.setVvalue(messageDisplay.getVmax());
+                }
+                catch (NullPointerException e){
+
+                }
 
 
-            if(name.equals(defaultOperator)){
-                CloseButton.setDisable(true);
+
+                if(name.equals(defaultOperator)){
+                    CloseButton.setDisable(true);
+                }
+                else {
+                    CloseButton.setDisable(false);
+                }
+
+            });
+            if(hashMapOperator.get(name).getChatHolder().isDisabled()) {
+                sendButton.setDisable(true);
+                messageTextField.setDisable(true);
             }
             else {
-                CloseButton.setDisable(false);
+                sendButton.setDisable(false);
+                messageTextField.setDisable(false);
             }
 
-        });
-        Username.setText(name);
+            Username.setText("User "+ name.substring(name.length()-2));
+        }
+
+        catch (RuntimeException r ){
+
+        }
     }
 
     public ChatMessage getObjectMessage(String messageText, String producerID){
@@ -195,15 +219,15 @@ public class ChatController{
     }
 
     // Get Usernames from TextField and add them to the ArrayList
-    public void setUserList() throws JMSException {
-        System.out.println("Click");
-        String tempName = sampleNameInput.getText();
-        listItems.add(tempName);
-        chatUsersList.setItems(listItems);
-        sampleNameInput.clear();
-        createChatSpace();
-
-    }
+//    public void setUserList() throws JMSException {
+//        System.out.println("Click");
+//        String tempName = sampleNameInput.getText();
+//        listItems.add(tempName);
+//        chatUsersList.setItems(listItems);
+//        sampleNameInput.clear();
+//        createChatSpace();
+//
+//    }
 
     // Remove users from the chat and ArrayList
     public void closeChat() throws JMSException {
@@ -214,12 +238,15 @@ public class ChatController{
 
 
             String name = chatUsersList.getItems().get(index);
-            hashMapOperator.remove(name);
-            hashMapOperator.get(defaultOperator).getOperatorController().getMessageProduceID().remove(name);
+//            hashMapOperator.remove(name);
+ //           hashMapOperator.get(defaultOperator).getOperatorController().getMessageProduceID().remove(name);
             //listItems.remove(index);
+            hashMapOperator.get(name).getChatHolder().setDisable(true);
+            sendButton.setDisable(true);
+            messageTextField.setDisable(true);
 
-            if(index==0)
-                messageDisplay.setContent(getGridPane());
+            //if(index==0)
+              //  messageDisplay.setContent(getGridPane());
             if(index>0) {
                 name = chatUsersList.getItems().get(index - 1);
                 //chatBubble = hashMapOperator.get(name).getTextArea();

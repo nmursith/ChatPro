@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.image.*?>
 <?import javafx.scene.paint.*?>
 <?import javafx.scene.*?>
 <?import javafx.scene.shape.*?>
@@ -12,7 +13,7 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 
-<GridPane alignment="center" hgap="10" vgap="10" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.ChatController">
+<GridPane alignment="center" hgap="10" prefHeight="564.0" prefWidth="516.0" vgap="10" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.ChatController">
    <columnConstraints>
       <ColumnConstraints />
    </columnConstraints>
@@ -24,20 +25,25 @@
          <items>
             <AnchorPane prefHeight="596.0" prefWidth="514.0">
                <children>
-                  <Button fx:id="sendButton" layoutX="197.0" layoutY="517.0" mnemonicParsing="false" onAction="#getMyMessage" onMouseClicked="#getMyMessage" prefHeight="44.0" prefWidth="107.0" text="Send" />
+                  <Button fx:id="sendButton" cacheShape="false" centerShape="false" focusTraversable="false" layoutX="452.0" layoutY="474.0" mnemonicParsing="false" onAction="#getMyMessage" onMouseClicked="#getMyMessage" prefHeight="62.0" prefWidth="52.0" style="-fx-background-radius: 100; -fx-border-radius: 100; -fx-focus-color: transparent; -fx-faint-focus-color: transparent; -fx-background-insets: 0 0 0 0, 0, 0, 0;">
+                     <graphic>
+                        <ImageView fitHeight="42.0" fitWidth="33.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../Images/send.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
                   <Label fx:id="Username" layoutX="202.0" layoutY="7.0" prefHeight="44.0" prefWidth="293.0" text="operator0" textOverrun="CLIP">
                      <font>
                         <Font name="System Bold" size="24.0" />
                      </font></Label>
-                  <TextArea id="messageTextField" fx:id="messageTextField" layoutX="198.0" layoutY="429.0" prefHeight="84.0" prefWidth="279.0" promptText="Type Message here....." />
+                  <TextArea id="messageTextField" fx:id="messageTextField" layoutX="199.0" layoutY="464.0" prefHeight="84.0" prefWidth="249.0" promptText="Type Message here....." />
                   <Line endX="200.0" layoutX="299.0" layoutY="57.0" startX="-100.0" />
                   <Line endX="460.0" layoutX="14.0" layoutY="280.0" rotate="90.0" startX="-100.0" />
                   <Button fx:id="CloseButton" layoutX="455.0" layoutY="16.0" mnemonicParsing="false" onAction="#closeChat" text="Close" />
-                  <ScrollPane fx:id="messageDisplay" layoutX="197.0" layoutY="61.0" prefHeight="365.0" prefWidth="312.0" />
-                  <Button layoutX="480.0" layoutY="429.0" mnemonicParsing="false" prefHeight="84.0" prefWidth="31.0" text="-" />
-                  <Button fx:id="AddChatBtn" layoutX="3.0" layoutY="564.0" mnemonicParsing="false" onMouseClicked="#setUserList" text="Add Chat" />
+                  <ScrollPane fx:id="messageDisplay" layoutX="197.0" layoutY="61.0" prefHeight="382.0" prefWidth="312.0" style="-fx-padding: 5px;" />
                   <ListView fx:id="chatUsersList" layoutX="3.0" layoutY="14.0" onMouseClicked="#setUsername" prefHeight="545.0" prefWidth="188.0" />
-                  <TextField fx:id="sampleNameInput" layoutX="69.0" layoutY="564.0" prefHeight="25.0" prefWidth="122.0" />
                </children>
             </AnchorPane>
          </items>
