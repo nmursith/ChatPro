@@ -1,0 +1,18 @@
+.fromLabel{
+    	-fx-position:relative;
+    	-fx-padding:10px 20px;
+    	-fx-color:white;
+    	-fx-background-color:#0B93F6;
+    	-fx-border-radius:25px;
+    	-fx-float: right;
+    	-fx-background-radius:15px
+}
+.toLabel{
+    	-fx-position:relative;
+    	-fx-padding:10px 20px;
+    	-fx-color:white;
+    	-fx-background-color:#E5E5EA;
+    	-fx-border-radius:25px;
+    	-fx-float: right;
+    	-fx-background-radius:15px
+}

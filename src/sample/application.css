@@ -1,0 +1,20 @@
+.label{
+/*
+    -fx-padding: 5 22 5 22;
+    -fx-border-color: #e2e2e2;
+    -fx-border-width: 2;
+    -fx-background-radius: 0;
+    -fx-background-color: #1d1d1d;
+    -fx-font-family: "Segoe UI", Helvetica, Arial, sans-serif;
+    -fx-font-size: 11pt;
+    -fx-text-fill: #d8d8d8;
+    -fx-background-insets: 0 0 0 0, 0, 1, 2
+*/
+    	-fx-position:relative;
+    	-fx-padding:10px 20px;
+    	-fx-color:white;
+    	-fx-background-color:#E5E5EA;/*#0B93F6*/
+    	-fx-border-radius:25px;
+    	-fx-float: right;
+    	-fx-background-radius:15px
+}
