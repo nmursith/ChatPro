@@ -1,7 +1,9 @@
 package Model;
 
 import Controller.ChatController;
+import javafx.geometry.HPos;
 import javafx.scene.control.Label;
+import javafx.scene.layout.GridPane;
 
 /**
  * Created by mmursith on 12/8/2015.
@@ -18,9 +20,11 @@ public class Bubble {
         fromBubble = new Label(message);
         fromBubble.getStyleClass().add("fromLabel");
 //        GridPane.setHalignment(chatMessage, i % 2 == 0 ? HPos.LEFT : HPos.RIGHT);
+        GridPane.setHalignment(fromBubble, HPos.RIGHT);
 
         toBubble = new Label(message);
         toBubble.getStyleClass().add("toLabel");
+        GridPane.setHalignment(toBubble, HPos.LEFT);
         //chatController.getScene().getStylesheets().add(getClass().getResource("bubble.css").toExternalForm());
 
     }

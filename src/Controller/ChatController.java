@@ -5,7 +5,6 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.geometry.HPos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.ColumnConstraints;
@@ -31,6 +30,7 @@ public class ChatController{
     private ChatController controller =null;
     private Scene scene;
     private GridPane chatHolder;
+    private String previousID; // previous opertor message
 
 
     final ObservableList<UserItem> listItems = FXCollections.observableArrayList();
@@ -49,7 +49,7 @@ public class ChatController{
 
         hashMapOperator = new HashMap<>();
         controller =this;
-
+        previousID = "";
         Configuration config = ConfigurationController.readConfig();
         //operatorController = new OperatorController("operator0", "chat.*",this);
         operatorController = new OperatorController(config.getOperator(), config.getTopic(),this);
@@ -58,7 +58,7 @@ public class ChatController{
         chatHolder = new GridPane();
         defaultOperator = "operator1";
         messageProducerID = new Vector<>();
-
+        //messageTextField.siz
         //hashMapOperator.put("operator0", new BindOperator(operatorController, chatBubble));
 
 
@@ -103,7 +103,7 @@ public class ChatController{
                     int counter = (int) operatorController.getMessageCounter();
                     //             System.out.println("value chat:  "+counter+"     ****"+operatorController);
                     Bubble bubble = new Bubble(myMessage, controller);
-                    GridPane.setHalignment(bubble.getFromBubble(), HPos.RIGHT);
+             //       GridPane.setHalignment(bubble.getFromBubble(), HPos.RIGHT);
                     historyController.writehistory(counter, "operator",myMessage);
                     chatHolder.addRow(counter, bubble.getFromBubble());
                     //          chatBubble.appendText("Admin : "+myMessageMod);
@@ -119,7 +119,7 @@ public class ChatController{
                         int counter = (int) operatorController.getMessageCounter();
                         //             System.out.println("value chat:  "+counter+"     ****"+operatorController);
                         Bubble bubble = new Bubble(myMessage, controller);
-                        GridPane.setHalignment(bubble.getFromBubble(), HPos.RIGHT);
+             //           GridPane.setHalignment(bubble.getFromBubble(), HPos.RIGHT);
 
                         historyController.writehistory(counter, "operator",myMessage);
                         chatHolder.addRow(counter, bubble.getFromBubble());
@@ -161,24 +161,41 @@ public class ChatController{
     public void setUsername() {
 
         try {
+            String message = messageTextField.getText();
+            if(!previousID.equals(""))
+                hashMapOperator.get(previousID).setTypedMessage(message);
+            messageTextField.clear();
 
 
             UserItem useritem = chatUsersList.getSelectionModel().getSelectedItem();
 
             String name = useritem.getUser().getUserName();
-            String userID = useritem.getUser().getuserId();
-            System.out.println("UserID:     "+userID);
+            String userID = useritem.getUser().getSubscriptionName();
+            previousID = userID;
+            System.out.println("userName:     "+name);
+
+            Username.setText(name);
             Platform.runLater(() -> {
            //     chatBubble = hashMapOperator.get(name).getTextArea();
        //         System.out.println(chatHolder +"                    ");
 
                 try{
-
+                    messageTextField.setText(hashMapOperator.get(userID).getTypedMessage());
                     chatHolder = hashMapOperator.get(userID).getChatHolder();
                     operatorController = hashMapOperator.get(userID).getOperatorController();
                     historyController = hashMapOperator.get(userID).getHistoryController();
                     messageDisplay.setContent(chatHolder);
                     messageDisplay.setVvalue(messageDisplay.getVmax());
+
+
+
+//                    if(name.equals(defaultOperator)){
+//                        CloseButton.setDisable(true);
+//                    }
+//                    else {
+//                        CloseButton.setDisable(false);
+//                    }
+
                 }
                 catch (NullPointerException e){
                     e.printStackTrace();
@@ -186,15 +203,8 @@ public class ChatController{
 
 
 
-                if(name.equals(defaultOperator)){
-                    CloseButton.setDisable(true);
-                }
-                else {
-                    CloseButton.setDisable(false);
-                }
-
             });
-            if(hashMapOperator.get(name).getChatHolder().isDisabled()) {
+            if(hashMapOperator.get(userID).getChatHolder().isDisabled()) {
                 sendButton.setDisable(true);
                 messageTextField.setDisable(true);
             }
@@ -203,7 +213,7 @@ public class ChatController{
                 messageTextField.setDisable(false);
             }
 
-            Username.setText(name);
+
         }
 
         catch (RuntimeException r ){
@@ -237,24 +247,35 @@ public class ChatController{
 
         if(!listItems.isEmpty() ) {
 
+            String myMessage = "exit";
+            ChatMessage myMessageMod = getObjectMessage(myMessage, operatorController.getSubscriptionName());
+
+            operatorController.sendMessage(myMessageMod, operatorController);
+            int counter = (int) operatorController.getMessageCounter();
+            Bubble bubble = new Bubble(myMessage, controller);
+            historyController.writehistory(counter, "operator",myMessage);
+            chatHolder.addRow(counter, bubble.getFromBubble());
+            messageDisplay.setContent(chatHolder);
+
+
 
 
             UserItem useritem = controller.getListItems().get(index);
-
-            String userID = useritem.getUser().getuserId();
+            String userID = useritem.getUser().getSubscriptionName();
 //            hashMapOperator.remove(name);
  //           hashMapOperator.get(defaultOperator).getOperatorController().getMessageProduceID().remove(name);
             //listItems.remove(index);
             hashMapOperator.get(userID).getChatHolder().setDisable(true);
             sendButton.setDisable(true);
             messageTextField.setDisable(true);
+            useritem.setDisable(true);
 
             //if(index==0)
               //  messageDisplay.setContent(getGridPane());
             if(index>0) {
                  useritem = controller.getListItems().get(index-1);
 
-                userID = useritem.getUser().getuserId();
+                userID = useritem.getUser().getSubscriptionName();
 
                 //chatBubble = hashMapOperator.get(name).getTextArea();
                 chatHolder = hashMapOperator.get(userID).getChatHolder();
@@ -320,7 +341,7 @@ public class ChatController{
             for(int index=0; index< listItems.size(); index++) {
                 UserItem useritem = controller.getListItems().get(index);
 
-                String name = useritem.getUser().getuserId();
+                String name = useritem.getUser().getSubscriptionName();
                 hashMapOperator.remove(name);
                 hashMapOperator.get(defaultOperator).getOperatorController().getMessageProduceID().remove(name);
                 hashMapOperator.get(defaultOperator).getOperatorController().closeConnection();
@@ -329,6 +350,11 @@ public class ChatController{
             }
 
         }
+
+    }
+    public void setSelectedItem(ActionEvent actionEvent) {
+        String item = " {"+((MenuItem)(actionEvent.getTarget())).getText()+"}";
+        messageTextField.appendText(item);
 
     }
     public synchronized ChatController getInstance(){
@@ -448,6 +474,14 @@ public class ChatController{
     public void sendMyMessage(ActionEvent actionEvent) {
     }
 
+    public String getPreviousID() {
+        return previousID;
+    }
+
+    public void setPreviousID(String previousID) {
+        this.previousID = previousID;
+    }
+
     public Scene getScene() {
         return scene;
     }
@@ -457,6 +491,7 @@ public class ChatController{
       //  System.out.println(hashMapOperator);
         this.scene = scene;
     }
+
 
 }
 

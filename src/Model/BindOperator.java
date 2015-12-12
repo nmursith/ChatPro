@@ -13,7 +13,7 @@ public class BindOperator {
     private  OperatorController operatorController;
     private HistoryController historyController;
     private GridPane chatHolder;
-
+    private String typedMessage;
     public BindOperator(OperatorController operatorController, GridPane gridPane){
         this.operatorController = operatorController;
         this.chatHolder = gridPane;
@@ -43,5 +43,13 @@ public class BindOperator {
 
     public void setHistoryController(HistoryController historyController) {
         this.historyController = historyController;
+    }
+
+    public String getTypedMessage() {
+        return typedMessage;
+    }
+
+    public void setTypedMessage(String typedMessage) {
+        this.typedMessage = typedMessage;
     }
 }

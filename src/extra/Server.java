@@ -20,7 +20,7 @@ public class Server implements MessageListener {
 
     static {
         messageBrokerUrl = "tcp://localhost:61616";
-        messageQueueName = "client.messages";
+        messageQueueName = "clients.message";
         ackMode = Session.AUTO_ACKNOWLEDGE;
     }
 
@@ -70,19 +70,19 @@ public class Server implements MessageListener {
             if (message instanceof TextMessage) {
                 TextMessage txtMsg = (TextMessage) message;
                 String messageText = txtMsg.getText();
-                System.out.println("From Client: "+ txtMsg.getText());
+                System.out.println("From sClient: "+ txtMsg.getText());
                 response.setText("Server: This is from Server");
             }
 
             System.out.println("replyto:  "+message.getJMSReplyTo().toString());
             System.out.println("ID:  "+message.getJMSCorrelationID().toString());
             //Set the correlation ID from the received message to be the correlation id of the response message
-            //this lets the client identify which message this is a response to if it has more than
+            //this lets the clients identify which message this is a response to if it has more than
             //one outstanding message to the server
             response.setJMSCorrelationID(message.getJMSCorrelationID());
 
             //Send the response to the Destination specified by the JMSReplyTo field of the received message,
-            //this is presumably a temporary queue created by the client
+            //this is presumably a temporary queue created by the clients
             this.replyProducer.send(message.getJMSReplyTo(), response);
         } catch (JMSException e) {
             //Handle the exception appropriately

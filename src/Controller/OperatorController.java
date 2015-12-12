@@ -1,12 +1,8 @@
 package Controller;
 
-import Model.BindOperator;
-import Model.Bubble;
-import Model.ChatMessage;
-import Model.Operator;
+import Model.*;
 import com.csvreader.CsvReader;
 import javafx.application.Platform;
-import javafx.geometry.HPos;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import org.apache.activemq.command.ActiveMQBytesMessage;
@@ -142,7 +138,7 @@ public class OperatorController implements MessageListener {
                 TextMessage txtMsg = (TextMessage) message;
                 String messageText = txtMsg.getText();
 
-                System.out.println("From Client: "+ txtMsg.getText());
+                System.out.println("From Clisent: "+ txtMsg.getText());
 
                 ChatMessage chatMessage =  new ChatMessage();
 
@@ -176,7 +172,7 @@ public class OperatorController implements MessageListener {
                 chatMessage.setTime(ChatMessage.dateFormat.format(ChatMessage.calendar.getTime()));
                 chatMessage.setMessage(message);
                 chatMessage.setTextMessage(messageText);
-                System.out.println("From Byte Client: "+ chatMessage.getTextMessage());
+                System.out.println("From Byte Clsient: "+ chatMessage.getTextMessage());
                 this.chatMessagess.add(chatMessage);
 //                System.out.println(chatMessagess.isEmpty());
             }
@@ -185,9 +181,8 @@ public class OperatorController implements MessageListener {
             if(!messageProduceID.contains(producerID) && producerID!=null ){
                 System.out.println("Adding:  "+  producerID);
                 messageProduceID.add(producerID);
-                //"User "+ numberOfUsers
-                //numberOfUsers++;
-                //TextArea chatBubble = getChatTextArea();//new TextArea();
+
+
                 GridPane chatHolder = getGridPane();
                 OperatorController operatorController = new OperatorController(producerID, "chat."+producerID, controller);
 
@@ -198,6 +193,10 @@ public class OperatorController implements MessageListener {
 
                 int count  = loadHistory(controller.getHashMapOperator().get(producerID));
                 operatorController.setMessageCounter(count);        //starting
+
+
+
+
                }
             else {
                // System.out.println(controller.getHashMapOperator().get(producerID).getChatHolder().isDisabled());
@@ -206,6 +205,7 @@ public class OperatorController implements MessageListener {
                         controller.getHashMapOperator().get(producerID).getChatHolder().setDisable(false);
                         controller.getSendButton().setDisable(false);
                         controller.getMessageTextField().setDisable(false);
+                        controller.getListItems().get(controller.getMessageProducerID().indexOf(producerID)).setDisable(false);
                     }
 
                 }
@@ -241,21 +241,40 @@ public class OperatorController implements MessageListener {
         Vector<String> producerID = getMessageProduceID();
         ChatMessage chatMessage =null;
 
+        System.out.println("Routing...");
 
 
-
-        if(controller.getListItems().size()<producerID.size()){
-
-            for(int count=0; count < producerID.size(); count++) {
-
-                String tempName = producerID.get(count);
-                //System.out.println(tempName);
-                if (!controller.getListItems().contains(tempName) && !tempName.equals(null) && !tempName.equals(defaultOperator)) {
-                    controller.getListItems().add(tempName);
-                    controller.getChatUsersList().setItems(controller.getListItems());
-                    System.out.println("updating");
-
+        if(controller.getListItems().size()< producerID.size()){
+            System.out.println("Condition ");
+            for(int index=0; index < producerID.size(); index++) {
+                boolean isoOutOfIndex = false;
+                String tempName = producerID.get(index);
+                System.out.println("updating  "+tempName);
+                try {
+                    System.out.println("checking:  " + controller.getListItems().get(index).getUser().getSubscriptionName());
+                    isoOutOfIndex =false;
                 }
+                catch (Exception e) {
+                        isoOutOfIndex = true;
+
+                    //  e.printStackTrace();
+                }
+
+                    if (!controller.getMessageProducerID().contains(tempName) && !tempName.equals(null) && !tempName.equals(defaultOperator)) {
+                        controller.getMessageProducerID().add(tempName);
+                        User user = new User();
+                        user.setuserId(tempName);
+                        user.setUserName("User " + tempName.substring(tempName.length() - 2));
+                        user.setSubscriptionName(tempName);
+                        user.setTopicName("chat." + tempName);
+
+                        controller.getListItems().add(new UserItem(user,controller));
+                        controller.getChatUsersList().setItems(controller.getListItems());
+                        System.out.println("updated");
+
+                    }
+
+
 
             }
         }
@@ -282,7 +301,7 @@ public class OperatorController implements MessageListener {
                         if( correID == null ) {
 
                             Bubble bubble = new Bubble(reply, controller);
-                            GridPane.setHalignment(bubble.getToBubble(), HPos.LEFT );
+                         //   GridPane.setHalignment(bubble.getToBubble(), HPos.LEFT );
 
                             System.out.println("User:  " + reply);
 //                            BindOperator bindOperator =  controller.getHashMapOperator().get("operator0");
@@ -347,12 +366,12 @@ public class OperatorController implements MessageListener {
 
                     if(from.equalsIgnoreCase("user")) {
 
-                        GridPane.setHalignment(bubble.getToBubble(), HPos.LEFT);
+               //         GridPane.setHalignment(bubble.getToBubble(), HPos.LEFT);
                         bindOperator.getChatHolder().addRow(id, bubble.getToBubble());
                     }
                     else {
 
-                        GridPane.setHalignment(bubble.getFromBubble(), HPos.RIGHT);
+                    //    GridPane.setHalignment(bubble.getFromBubble(), HPos.RIGHT);
                         bindOperator.getChatHolder().addRow(id, bubble.getFromBubble());
                     }
 
@@ -488,9 +507,9 @@ public class OperatorController implements MessageListener {
     }
 
     private class NetworkDownHandler extends Thread{
-
+    Thread thread = null;
         public void run() {
-
+        thread = Thread.currentThread();
         System.out.println(isOnline);
         synchronized (cachedMessages) {
             while (!isOnline) {
@@ -536,7 +555,9 @@ public class OperatorController implements MessageListener {
             if (isOnline) {
                 try {
                     for (int index = 0; index < controller.getListItems().size(); index++) {
-                        String producerID = controller.getListItems().get(index);
+
+                        UserItem useritem = controller.getListItems().get(index);
+                        String producerID =useritem.getUser().getSubscriptionName();
                         System.out.println(producerID);
                         OperatorController operatorController = new OperatorController(producerID, "chat." + producerID, controller);
                         operatorController.getMessageConsumer().setMessageListener(null);
@@ -558,6 +579,7 @@ public class OperatorController implements MessageListener {
                         sendMessage(chatMessage, bindOperator.getOperatorController());
                     }
                     stop();
+                    //stopThread();
 
                 } catch (JMSException e) {
                     System.out.println("JMS problem");
@@ -573,6 +595,12 @@ public class OperatorController implements MessageListener {
 
         }
 
+        public  void stopThread(){
+            Thread t = thread;
+            thread = null;
+            t.interrupt();
+        }
     }
+
 
 }

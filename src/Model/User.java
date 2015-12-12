@@ -1,37 +1,39 @@
 package Model;
 
+import Controller.ChatController;
+
 import javax.jms.JMSException;
 
 /**
  * Created by mmursith on 11/24/2015.
  */
-public class Client {
+public class User {
 
     private String userName;
     private String firstName;
     private String lastName;
     private String subscriptionName;
 
-    private String clientId;
+    private String userId;
     private String topicName;
 
 
-    private Operator operator;
 
-    public Client(){
+
+    public User(){
 
     }
 
-    public Client(String clientId, String topicName) throws JMSException {
-        this.clientId = clientId;
+    public User(String userId, String topicName) throws JMSException {
+        this.userId = userId;
         this.topicName = topicName;
 
 
 
     }
 
-    public Client(String clientId, String topicName,String subscriptionName) throws JMSException {
-        this.clientId = clientId;
+    public User(String userId, String topicName, String subscriptionName) throws JMSException {
+        this.userId = userId;
         this.topicName = topicName;
         this.subscriptionName=subscriptionName;
 
@@ -64,12 +66,12 @@ public class Client {
         this.lastName = lastName;
     }
 
-    public String getClientId() {
-        return clientId;
+    public String getuserId() {
+        return userId;
     }
 
-    public void setClientId(String clientId) {
-        this.clientId = clientId;
+    public void setuserId(String userId) {
+        this.userId = userId;
     }
 
 
@@ -81,15 +83,6 @@ public class Client {
         this.topicName = topicName;
     }
 
-
-
-    public Operator getOperator() {
-        return operator;
-    }
-
-    public void setOperator(Operator operator) {
-        this.operator = operator;
-    }
 
     public String getSubscriptionName() {
         return subscriptionName;

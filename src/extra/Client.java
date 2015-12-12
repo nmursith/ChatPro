@@ -16,7 +16,7 @@ public class Client implements MessageListener {
     private MessageProducer producer;
 
     static {
-        clientQueueName = "client.messages";
+        clientQueueName = "clients.message";
         ackMode = Session.AUTO_ACKNOWLEDGE;
     }
 
@@ -33,9 +33,9 @@ public class Client implements MessageListener {
             this.producer = session.createProducer(adminQueue);
             this.producer.setDeliveryMode(DeliveryMode.NON_PERSISTENT);
 
-            //Create a temporary queue that this client will listen for responses on then create a consumer
-            //that consumes message from this temporary queue...for a real application a client should reuse
-            //the same temp queue for each message to the server...one temp queue per client
+            //Create a temporary queue that this sclient will listen for responses on then create a consumer
+            //that consumes message from this temporary queue...for a real application a sclient should reuse
+            //the same temp queue for each message to the server...one temp queue per sclient
             Destination tempDest = session.createTemporaryTopic();
             MessageConsumer responseConsumer = session.createConsumer(tempDest);
 
@@ -44,7 +44,7 @@ public class Client implements MessageListener {
 
             //Now create the actual message you want to send
             TextMessage txtMessage = session.createTextMessage();
-            txtMessage.setText("From Client messsage");
+            txtMessage.setText("From Clients messsage");
 
             //Set the reply to field to the temp queue you created above, this is the queue the server
             //will respond to

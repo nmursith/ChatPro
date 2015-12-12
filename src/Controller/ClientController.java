@@ -1,7 +1,7 @@
 package Controller;
 
 import Model.ChatMessage;
-import Model.Client;
+import Model.User;
 
 import javax.jms.JMSException;
 import java.util.LinkedList;
@@ -12,23 +12,23 @@ import java.util.Queue;
  */
 public class ClientController  {
 
-    protected Client client;
+    protected User user;
     private Queue<ChatMessage>  chatMessagess= new LinkedList<>();
 
-    public ClientController(Client client) throws JMSException {
-        setClient(client);
+    public ClientController(User user) throws JMSException {
+        setUser(user);
 
 
     }
 
     public ClientController(String clientId, String topicName) throws JMSException {
-        client = new Client(clientId, topicName);
+        user = new User(clientId, topicName);
 
 
     }
 
     public ClientController(String clientId, String topicName, String subscriptionName) throws JMSException{
-        client = new Client(clientId,topicName, subscriptionName);
+        user = new User(clientId,topicName, subscriptionName);
 
 
 
@@ -50,60 +50,53 @@ public class ClientController  {
 
 
     public String getUserName() {
-        return client.getUserName();
+        return user.getUserName();
     }
 
     public void setUserName(String userName) {
-        client.setUserName(userName);
+        user.setUserName(userName);
     }
 
     public String getFirstName() {
-        return client.getFirstName();
+        return user.getFirstName();
     }
 
     public void setFirstName(String firstName) {
-        client.setFirstName(firstName);
+        user.setFirstName(firstName);
     }
 
     public String getLastName() {
-        return client.getLastName();
+        return user.getLastName();
     }
 
     public void setLastName(String lastName) {
-        client.setLastName(lastName);
+        user.setLastName(lastName);
     }
 
-    public String getClientId() {
-        return client.getClientId();
-    }
-
-    public void setClientId(String clientId) {
-        client.setClientId(clientId);
-    }
 
 
     public String getTopicName() {
-        return client.getTopicName();
+        return user.getTopicName();
     }
 
     public void setTopicName(String topicName) {
-        client.setTopicName(topicName);
+        user.setTopicName(topicName);
     }
 
-    public Client getClient() {
-        return client;
+    public User getUser() {
+        return user;
     }
 
-    public void setClient(Client client) {
-        this.client = client;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public void setSubscriptionName(String subscriptionName) {
-        client.setSubscriptionName(subscriptionName);
+        user.setSubscriptionName(subscriptionName);
     }
 
     public String getSubscriptionName() {
-        return client.getSubscriptionName();
+        return user.getSubscriptionName();
     }
 
 
