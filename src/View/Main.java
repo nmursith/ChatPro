@@ -21,7 +21,7 @@ public class Main extends Application {
 
         Parent root = fxmlLoader.load();
         ChatController chatController = fxmlLoader.<ChatController>getController();
-        Scene scene = new Scene(root, 514, 605);
+        Scene scene = new Scene(root, 550, 605);
 
 
         chatController.setScene(scene);

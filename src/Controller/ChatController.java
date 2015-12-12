@@ -6,6 +6,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
+import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
@@ -14,27 +15,30 @@ import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 
 import javax.jms.JMSException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Vector;
 
 
 public class ChatController{
 
-    public Button sendButton;
-    public Button CloseButton;
-    public TextArea messageTextField;
-    public Label Username;
-    public TextArea chatBubble;
-    public Button AddChatBtn;
-    public ListView<UserItem> chatUsersList;
-    public TextField sampleNameInput;
-    public ScrollPane messageDisplay;
+    @FXML public Button sendButton;
+    @FXML public Button CloseButton;
+    @FXML public TextArea messageTextField;
+    @FXML public Label Username;
+    @FXML public TextArea chatBubble;
+    @FXML public Button AddChatBtn;
+    @FXML public ListView<UserItem> chatUsersList;
+    @FXML public TextField sampleNameInput;
+    @FXML public ScrollPane messageDisplay;
+    @FXML private ContextMenu variablesMenu;
+
     private HashMap<String, BindOperator> hashMapOperator;
     private ChatController controller =null;
     private Scene scene;
     private GridPane chatHolder;
     private String previousID; // previous opertor message
-    private
+
 
 
     final ObservableList<UserItem> listItems = FXCollections.observableArrayList();
@@ -77,9 +81,9 @@ public class ChatController{
 //        chatUsersList.setItems(listItems);
         Platform.runLater(() -> {
             try {
-               createChatSpace();
+                createChatSpace();
                 applyDimensions();
-
+                addMenuItems();
                 hashMapOperator.put(defaultOperator, new BindOperator(operatorController, getGridPane()));
                 historyController = hashMapOperator.get(config.getSubscription()).getHistoryController();
 
@@ -337,7 +341,14 @@ public class ChatController{
         }
     }
 
-
+    public  void addMenuItems(){
+        ArrayList<Variable> variables = VariablesController.readVariables();
+        for (Variable variable :variables) {
+            MenuItem menuitem = new MenuItem(variable.getName());
+            menuitem.setId(variable.getID());
+            variablesMenu.getItems().add(menuitem);
+        }
+    }
     public void createChatSpace() throws JMSException {
 
 //        chatBubble.setPrefSize(309,362);

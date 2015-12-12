@@ -266,7 +266,7 @@ public class OperatorController implements MessageListener {
                         controller.getMessageProducerID().add(tempName);
                         User user = new User();
                         user.setuserId(tempName);
-                        user.setUserName("User " + tempName.substring(tempName.length() - 2));
+                        user.setUserName("User " + tempName.substring(tempName.length() - 1));
                         user.setSubscriptionName(tempName);
                         user.setTopicName("chat." + tempName);
 

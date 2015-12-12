@@ -19,11 +19,13 @@ public class Bubble {
 
         fromBubble = new Label(message);
         fromBubble.getStyleClass().add("fromLabel");
+        fromBubble.setWrapText(true);
 //        GridPane.setHalignment(chatMessage, i % 2 == 0 ? HPos.LEFT : HPos.RIGHT);
         GridPane.setHalignment(fromBubble, HPos.RIGHT);
 
         toBubble = new Label(message);
         toBubble.getStyleClass().add("toLabel");
+        toBubble.setWrapText(true);
         GridPane.setHalignment(toBubble, HPos.LEFT);
         //chatController.getScene().getStylesheets().add(getClass().getResource("bubble.css").toExternalForm());
 

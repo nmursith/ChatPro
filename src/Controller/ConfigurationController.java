@@ -104,6 +104,6 @@ import java.io.IOException;
         configuration.setDestination("chat.*");
         configuration.setSubscription("chat.*");
         configuration.setTopic("chat.*");
-        configuration.setURL("tcp://localhost:61616");
+        configuration.setURL("tcp://cmterainsight:61616?trace=false&soTimeout=60000");
     }
 }
