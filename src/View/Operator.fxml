@@ -34,14 +34,23 @@
                         </ImageView>
                      </graphic>
                   </Button>
-                  <Label fx:id="Username" layoutX="202.0" layoutY="7.0" prefHeight="44.0" prefWidth="293.0" text="operator0" textOverrun="CLIP">
+                  <Label fx:id="Username" layoutX="202.0" layoutY="7.0" prefHeight="44.0" prefWidth="293.0" text="User ..." textOverrun="CLIP">
                      <font>
                         <Font name="System Bold" size="24.0" />
                      </font></Label>
-                  <TextArea id="messageTextField" fx:id="messageTextField" layoutX="199.0" layoutY="464.0" prefHeight="84.0" prefWidth="249.0" promptText="Type Message here....." />
+                  <TextArea id="messageTextField" fx:id="messageTextField" layoutX="199.0" layoutY="464.0" maxHeight="84.0" maxWidth="249.0" minHeight="84.0" minWidth="249.0" prefHeight="84.0" prefWidth="249.0" promptText="Type Message here....." wrapText="true">
+                     <contextMenu>
+                        <ContextMenu onAction="#setSelectedItem">
+                          <items>
+                            <MenuItem id="userName" mnemonicParsing="false" text="Username" />
+                              <MenuItem id="introducedViolations" mnemonicParsing="false" text="Introduced Violations" />
+                              <MenuItem id="openViolations" mnemonicParsing="false" text="Open Violations" />
+                              <MenuItem id="runtimeViolations" mnemonicParsing="false" text="Runtime Violations" />
+                          </items>
+                        </ContextMenu>
+                     </contextMenu></TextArea>
                   <Line endX="200.0" layoutX="299.0" layoutY="57.0" startX="-100.0" />
                   <Line endX="460.0" layoutX="14.0" layoutY="280.0" rotate="90.0" startX="-100.0" />
-                  <Button fx:id="CloseButton" layoutX="455.0" layoutY="16.0" mnemonicParsing="false" onAction="#closeChat" text="Close" />
                   <ScrollPane fx:id="messageDisplay" layoutX="197.0" layoutY="61.0" prefHeight="382.0" prefWidth="312.0" style="-fx-padding: 5px;" />
                   <ListView fx:id="chatUsersList" layoutX="3.0" layoutY="14.0" onMouseClicked="#setUsername" prefHeight="545.0" prefWidth="188.0" />
                </children>
