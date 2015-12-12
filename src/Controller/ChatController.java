@@ -5,8 +5,11 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 
@@ -31,6 +34,7 @@ public class ChatController{
     private Scene scene;
     private GridPane chatHolder;
     private String previousID; // previous opertor message
+    private
 
 
     final ObservableList<UserItem> listItems = FXCollections.observableArrayList();
@@ -56,10 +60,9 @@ public class ChatController{
 
         //chatBubble = new TextArea();
         chatHolder = new GridPane();
-        defaultOperator = "operator1";
+        defaultOperator = ConfigurationController.readConfig().getOperator();// "operator1";
         messageProducerID = new Vector<>();
-        //messageTextField.siz
-        //hashMapOperator.put("operator0", new BindOperator(operatorController, chatBubble));
+
 
 
    //     listItems.add("operator0");
@@ -81,6 +84,7 @@ public class ChatController{
                 historyController = hashMapOperator.get(config.getSubscription()).getHistoryController();
 
 
+
             } catch (JMSException e) {
                 e.printStackTrace();
             }
@@ -93,68 +97,71 @@ public class ChatController{
     public void getMyMessage() {
 
         sendButton.setOnMouseClicked(event -> {
-            String myMessage = messageTextField.getText();
-            ChatMessage myMessageMod = getObjectMessage(myMessage, operatorController.getSubscriptionName());
+            sendMessage();
+
+        });
+    }
+    public void sendMessage(){
+        String myMessage = messageTextField.getText().trim();
+        ChatMessage myMessageMod = getObjectMessage(myMessage, operatorController.getSubscriptionName());
 
 
-            try {
-                if(!myMessage.trim().equals("") && !myMessage.trim().equalsIgnoreCase("exit")){
+        try {
+            if(!myMessage.trim().equals("") && !myMessage.trim().equalsIgnoreCase("exit")){
+                operatorController.sendMessage(myMessageMod, operatorController);
+                int counter = (int) operatorController.getMessageCounter();
+                //             System.out.println("value chat:  "+counter+"     ****"+operatorController);
+                Bubble bubble = new Bubble(myMessage, controller);
+                //       GridPane.setHalignment(bubble.getFromBubble(), HPos.RIGHT);
+                historyController.writehistory(counter, "operator",myMessage);
+                chatHolder.addRow(counter, bubble.getFromBubble());
+                //          chatBubble.appendText("Admin : "+myMessageMod);
+                messageDisplay.setContent(chatHolder);
+
+            }
+
+            else if(myMessage.trim().equalsIgnoreCase("exit")){
+                if(!operatorController.getSubscriptionName().equals(defaultOperator)) {
+
+
                     operatorController.sendMessage(myMessageMod, operatorController);
                     int counter = (int) operatorController.getMessageCounter();
                     //             System.out.println("value chat:  "+counter+"     ****"+operatorController);
                     Bubble bubble = new Bubble(myMessage, controller);
-             //       GridPane.setHalignment(bubble.getFromBubble(), HPos.RIGHT);
+                    //           GridPane.setHalignment(bubble.getFromBubble(), HPos.RIGHT);
+
                     historyController.writehistory(counter, "operator",myMessage);
                     chatHolder.addRow(counter, bubble.getFromBubble());
                     //          chatBubble.appendText("Admin : "+myMessageMod);
                     messageDisplay.setContent(chatHolder);
 
-                }
-
-                else if(myMessage.trim().equalsIgnoreCase("exit")){
-                    if(!operatorController.getSubscriptionName().equals(defaultOperator)) {
-
-
-                        operatorController.sendMessage(myMessageMod, operatorController);
-                        int counter = (int) operatorController.getMessageCounter();
-                        //             System.out.println("value chat:  "+counter+"     ****"+operatorController);
-                        Bubble bubble = new Bubble(myMessage, controller);
-             //           GridPane.setHalignment(bubble.getFromBubble(), HPos.RIGHT);
-
-                        historyController.writehistory(counter, "operator",myMessage);
-                        chatHolder.addRow(counter, bubble.getFromBubble());
-                        //          chatBubble.appendText("Admin : "+myMessageMod);
-                        messageDisplay.setContent(chatHolder);
-
-                        controller.closeChat();//closeConnection();
-                        try{
+                    controller.closeChat();//closeConnection();
+                    try{
                         operatorController.closeConnection();
-                        }
-                        catch (NullPointerException e){
-
-                        }
-
+                    }
+                    catch (NullPointerException e){
 
                     }
-                    else {
-                        try{
-                            operatorController.closeConnection();
-                        }
-                        catch (NullPointerException e){
 
-                        }
-                        System.exit(0);
-                    }
+
                 }
+                else {
+                    try{
+                        operatorController.closeConnection();
+                    }
+                    catch (NullPointerException e){
 
-
-
-            } catch (JMSException e) {
-                e.printStackTrace();
+                    }
+                    System.exit(0);
+                }
             }
-            messageTextField.clear();
 
-        });
+
+
+        } catch (JMSException e) {
+            e.printStackTrace();
+        }
+        messageTextField.setText("");
     }
 
     // Set usernames from the users list to Header label
@@ -163,8 +170,8 @@ public class ChatController{
         try {
             String message = messageTextField.getText();
             if(!previousID.equals(""))
-                hashMapOperator.get(previousID).setTypedMessage(message);
-            messageTextField.clear();
+                hashMapOperator.get(previousID).setTypedMessage(message.trim());
+            messageTextField.setText("");
 
 
             UserItem useritem = chatUsersList.getSelectionModel().getSelectedItem();
@@ -243,6 +250,7 @@ public class ChatController{
     // Remove users from the chat and ArrayList
     public void closeChat() throws JMSException {
         int index = chatUsersList.getSelectionModel().getSelectedIndex();
+        System.out.println("Closing index: "+ index);
       //  operatorController.closeConnection();
 
         if(!listItems.isEmpty() ) {
@@ -258,8 +266,6 @@ public class ChatController{
             messageDisplay.setContent(chatHolder);
 
 
-
-
             UserItem useritem = controller.getListItems().get(index);
             String userID = useritem.getUser().getSubscriptionName();
 //            hashMapOperator.remove(name);
@@ -270,8 +276,6 @@ public class ChatController{
             messageTextField.setDisable(true);
             useritem.setDisable(true);
 
-            //if(index==0)
-              //  messageDisplay.setContent(getGridPane());
             if(index>0) {
                  useritem = controller.getListItems().get(index-1);
 
@@ -287,12 +291,51 @@ public class ChatController{
         }
 
 
-        //System.exit(0);
-
     }
 
-    // Test Message Reply
 
+    public void closeChat(UserItem useritem) throws JMSException {
+        int index = chatUsersList.getSelectionModel().getSelectedIndex();
+        System.out.println("Closing index: "+ index);
+        //  operatorController.closeConnection();
+
+        if(!listItems.isEmpty() ) {
+
+            String myMessage = "exit";
+            ChatMessage myMessageMod = getObjectMessage(myMessage, operatorController.getSubscriptionName());
+
+            operatorController.sendMessage(myMessageMod, operatorController);
+            int counter = (int) operatorController.getMessageCounter();
+            Bubble bubble = new Bubble(myMessage, controller);
+            historyController.writehistory(counter, "operator",myMessage);
+            chatHolder.addRow(counter, bubble.getFromBubble());
+            messageDisplay.setContent(chatHolder);
+
+
+    //        UserItem useritem = controller.getListItems().get(index);
+            String userID = useritem.getUser().getSubscriptionName();
+//            hashMapOperator.remove(name);
+            //           hashMapOperator.get(defaultOperator).getOperatorController().getMessageProduceID().remove(name);
+            //listItems.remove(index);
+            hashMapOperator.get(userID).getChatHolder().setDisable(true);
+            sendButton.setDisable(true);
+            messageTextField.setDisable(true);
+            useritem.setDisable(true);
+
+
+        }
+
+
+    }
+    public void doSendMessage(Event event) {
+
+        if (((KeyEvent)event).getCode().equals(KeyCode.ENTER)){
+            sendMessage();
+            event.consume();
+            System.out.println("sending");
+
+        }
+    }
 
 
     public void createChatSpace() throws JMSException {
@@ -363,6 +406,7 @@ public class ChatController{
         }
         return  controller;
     }
+
 
     public GridPane getGridPane() {
         GridPane gridPane = new GridPane();
@@ -491,6 +535,7 @@ public class ChatController{
       //  System.out.println(hashMapOperator);
         this.scene = scene;
     }
+
 
 
 }

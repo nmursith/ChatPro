@@ -29,8 +29,8 @@ public class Operator{
 
     static {
         messageBrokerUrl = ConfigurationController.readConfig().getURL();//"tcp://localhost:61616";//ActiveMQConnection.DEFAULT_BROKER_URL;//"tcp://localhost:61616";
-        //messageBrokerUrl ="tcp://cmterainsight:61616";
-     //  messageBrokerUrl ="tcp://cmterainsight:61616?trace=false&soTimeout=60000";
+
+//       messageBrokerUrl ="tcp://cmterainsight:61616?trace=false&soTimeout=60000";
         ackMode = Session.AUTO_ACKNOWLEDGE;
 
     }

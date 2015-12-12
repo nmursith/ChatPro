@@ -140,9 +140,11 @@ public class UserItem extends GridPane implements  EventHandler<javafx.event.Act
     @Override
     public void handle(javafx.event.ActionEvent event) {
         try {
-            chatController.closeChat();
+
+            chatController.closeChat(this);
+            //chatController.closeChat((UserItem)event.getTarget());
         } catch (JMSException e) {
-            System.out.println("No problem");
+            System.out.println("problem");
             //e.printStackTrace();
         }
 

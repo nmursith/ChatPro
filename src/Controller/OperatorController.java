@@ -62,7 +62,7 @@ public class OperatorController implements MessageListener {
         this.operatorController = this;
         this.networkHandler = new NetworkDownHandler();
         //MessageConsumer consumer = this.getSesssion().createConsumer(getDestination());
-        defaultOperator = "operator1";
+        defaultOperator = ConfigurationController.readConfig().getOperator();//"operator1";
 
         messageConsumer= this.getSesssion().createDurableSubscriber(getTopic(),getSubscriptionName());
         messageCounter = -1;
@@ -155,12 +155,17 @@ public class OperatorController implements MessageListener {
 
                 //System.out.println(text.getText());
                 ActiveMQBytesMessage activeMQBytesMessage = (ActiveMQBytesMessage) message;
-                producerID = activeMQBytesMessage.getProducerId().getConnectionId();
+                String temp = ((ActiveMQBytesMessage) message).getDestination().getPhysicalName();
+                temp =temp.substring(temp.indexOf('.')+1);
 
-                if(producerID!=null){
-                    producerID = producerID.replace("-","");
-                    producerID = producerID.replace(":","");
-                }
+                System.out.println("destination: "+ temp);
+                producerID = temp;
+                //producerID = activeMQBytesMessage.getProducerId().getConnectionId();
+
+//                if(producerID!=null){
+//                    producerID = producerID.replace("-","");
+//                    producerID = producerID.replace(":","");
+//                }
 
                 ByteSequence byteSequence = activeMQBytesMessage.getContent();
                 byte [] bytes = byteSequence.getData();
@@ -188,14 +193,11 @@ public class OperatorController implements MessageListener {
 
                 if(!producerID.equals(defaultOperator))
                     operatorController.getMessageConsumer().setMessageListener(null);
-                BindOperator bindOperator = new BindOperator(operatorController, chatHolder);
-                controller.getHashMapOperator().put(producerID, bindOperator);
+                    BindOperator bindOperator = new BindOperator(operatorController, chatHolder);
+                    controller.getHashMapOperator().put(producerID, bindOperator);
 
                 int count  = loadHistory(controller.getHashMapOperator().get(producerID));
                 operatorController.setMessageCounter(count);        //starting
-
-
-
 
                }
             else {
@@ -320,11 +322,12 @@ public class OperatorController implements MessageListener {
                             bindOperator.getChatHolder().addRow(counter, bubble.getToBubble());
                             try {
                                 Thread.sleep(100);
-                                controller.messageDisplay.setVvalue(controller.messageDisplay.getVmax());
+
                             } catch (InterruptedException e) {
                                 e.printStackTrace();
                             }
 
+                            Platform.runLater(() -> controller.messageDisplay.setVvalue(controller.messageDisplay.getVmax()));
                             bindOperator.getHistoryController().writehistory(counter, "user",reply);       //swriting to csv
 
                             // System.out.println(chatMessage.getMessage());
