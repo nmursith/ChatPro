@@ -28,9 +28,9 @@ public class UserItem extends GridPane implements  EventHandler<javafx.event.Act
     private Image thumbImage;
     private User user;
     private ChatController chatController;
-    private Thread blink;        //addded lates
+    private volatile Thread blink;        //addded lates
     private static UserItem userItem;  //addded latest
-    private volatile boolean running;
+    private volatile Boolean running;
 
     public UserItem(User user, ChatController controller){
 
@@ -106,31 +106,31 @@ public class UserItem extends GridPane implements  EventHandler<javafx.event.Act
 
 
     public void stop(){
-        running = false;
-
 
     }
 
 
     @Override
     public void run() {
-        while(running){
+
+        for (int i = 0; i < 5; i++) {
             userItem.setStyle("-fx-background-color:#00ffff;-fx-border:5px");
             try {
                 Thread.sleep(250);
             } catch (InterruptedException e) {
-                // e.printStackTrace();
-                running = false;
+
             }
             userItem.setStyle("-fx-background-color:#fff8dc;-fx-border:5px");
             try {
                 Thread.sleep(250);
             } catch (InterruptedException e) {
                 ///  e.printStackTrace();
-                running = false;
-            }
 
+            }
+            System.out.println("Loop: " + running);
         }
+             userItem.setStyle("-fx-background-color:#00ffff;-fx-border:5px");
+
 
     }
     public ImageView getUserImage() {

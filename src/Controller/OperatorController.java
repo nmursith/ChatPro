@@ -336,12 +336,12 @@ public class OperatorController implements MessageListener {
 
                                     }
 
-                                  //  int index = controller.getChatUsersList().getSelectionModel().getSelectedIndex();
+                                    int index = controller.getChatUsersList().getSelectionModel().getSelectedIndex();
 
 
-                                    //if(!controller.getChatUsersList().getSelectionModel().isSelected(index)){
-                                    //    System.out.println("should work");
-                                    //    controller.getChatUsersList().getItems().get(index).startBlink();
+                                   // if(!controller.getChatUsersList().getSelectionModel().isSelected(index)){
+                                        System.out.println("should work");
+                                        controller.getChatUsersList().getItems().get(index).startBlink();
                                     //}
 
 
@@ -355,7 +355,8 @@ public class OperatorController implements MessageListener {
 
                             bindOperator.getHistoryController().writehistory(counter, "user",reply);       //swriting to csv
                             String username = controller.getListItems().get(controller.getMessageProducerID().indexOf(chatMessage.getProducerID())).getUser().getUserName();
-                            notificationController.getNotification(reply, username);
+
+                       //     notificationController.getNotification(reply, username);
                             // System.out.println(chatMessage.getMessage());
                             //     System.out.print("Operator:   ");
                             //  send = in.nextLine();
