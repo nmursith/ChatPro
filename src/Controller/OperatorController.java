@@ -334,11 +334,11 @@ public class OperatorController implements MessageListener {
 
                                     }
 
-//                                    ScrollPane messageHolder = new ScrollPane();
-//                                    messageHolder.setContent((bindOperator.getChatHolder()));
+                                    //ScrollPane messageHolder = new ScrollPane();
+                                    //messageHolder.setContent((bindOperator.getChatHolder()));
                                     controller.messageDisplay.setVvalue(controller.messageDisplay.getVmax());
                                     //messageDisplay.setVvalue(messageDisplay.getVmax());
-                                   //     controller.messageDisplay.setVvalue(controller.messageDisplay.getVmax());
+                                    //    controller.messageDisplay.setVvalue(messageHolder.getVmax());
                                 }
                             });
                             bindOperator.getHistoryController().writehistory(counter, "user",reply);       //swriting to csv

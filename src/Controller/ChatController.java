@@ -121,7 +121,8 @@ public class ChatController{
                 chatHolder.addRow(counter, bubble.getFromBubble());
                 //          chatBubble.appendText("Admin : "+myMessageMod);
                 messageDisplay.setContent(chatHolder);
-                messageDisplay.setVvalue(messageDisplay.getVmax());
+                Platform.runLater(() -> messageDisplay.setVvalue(messageDisplay.getVmax()));
+
 
             }
 
