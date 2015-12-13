@@ -1,6 +1,5 @@
 package Model;
 
-import Controller.ConfigurationController;
 import org.apache.activemq.ActiveMQConnectionFactory;
 
 import javax.jms.*;
@@ -25,12 +24,10 @@ public class Operator{
     private boolean transacted = false;
     private boolean isConnected;
 
-
-
     static {
-        messageBrokerUrl = ConfigurationController.readConfig().getURL();//"tcp://localhost:61616";//ActiveMQConnection.DEFAULT_BROKER_URL;//"tcp://localhost:61616";
+    //    messageBrokerUrl = ConfigurationController.readConfig().getURL();////ActiveMQConnection.DEFAULT_BROKER_URL;//"tcp://localhost:61616";
 
-//       messageBrokerUrl ="tcp://cmterainsight:61616?trace=false&soTimeout=60000";
+       messageBrokerUrl ="tcp://localhost:61616";
         ackMode = Session.AUTO_ACKNOWLEDGE;
 
     }

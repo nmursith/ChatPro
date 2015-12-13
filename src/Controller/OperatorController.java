@@ -34,6 +34,7 @@ public class OperatorController implements MessageListener {
     private static String defaultOperator;
     private static boolean isOnline;
     private Thread networkHandler;
+    private volatile boolean isFirstime =true;
 
     public OperatorController(String subscriptionName, String topicName) throws JMSException {
         this.operator = new Operator(subscriptionName, topicName);
@@ -42,6 +43,7 @@ public class OperatorController implements MessageListener {
         this.chatMessagess= new LinkedList<>();
         this.cachedMessages = new LinkedList<>();
         this.controller=null;
+
         //MessageConsumer consumer = this.getSesssion().createConsumer(getDestination());
         messageConsumer= this.getSesssion().createDurableSubscriber(getTopic(),getSubscriptionName());
 
@@ -92,7 +94,7 @@ public class OperatorController implements MessageListener {
                     String myMessage = chatMessage.getTextMessage();
 
                     response.setText(myMessage.trim().equalsIgnoreCase("exit") ? "DIRROUTETOBOT":myMessage);
-                    System.out.println("offline:   "+myMessage);
+                   // System.out.println("offline:   "+myMessage);
 
                     String random = Constant.correalationID;
                     response.setJMSCorrelationID(random);
@@ -107,7 +109,7 @@ public class OperatorController implements MessageListener {
                     if(networkHandler.isAlive())
                         networkHandler.stop();
                     cachedMessages.add(chatMessage);
-                    System.out.println("Message Added:  "+ chatMessage.getTextMessage() +"   "+cachedMessages.size());
+              //      System.out.println("Message Added:  "+ chatMessage.getTextMessage() +"   "+cachedMessages.size());
                     networkHandler = new NetworkDownHandler();
                     networkHandler.start();
 
@@ -121,7 +123,7 @@ public class OperatorController implements MessageListener {
      @Override
     public void onMessage(Message message) {
     String producerID = null;
-        System.out.println("Recieving......:      ");
+     //   System.out.println("Recieving......:      ");
         try {
 
 
@@ -130,7 +132,7 @@ public class OperatorController implements MessageListener {
                 TextMessage txtMsg = (TextMessage) message;
                 String messageText = txtMsg.getText();
 
-                System.out.println("From Clisent: "+ txtMsg.getText());
+         //       System.out.println("From Clisent: "+ txtMsg.getText());
 
                 ChatMessage chatMessage =  new ChatMessage();
 
@@ -149,7 +151,7 @@ public class OperatorController implements MessageListener {
                 String destination = ((ActiveMQBytesMessage) message).getDestination().getPhysicalName();
                 destination =destination.substring(destination.indexOf('.')+1);
 
-                System.out.println("destination: "+ destination);
+//                System.out.println("destination: "+ destination);
                 producerID = destination;
                 //producerID = activeMQBytesMessage.getProducerId().getConnectionId();
 
@@ -168,7 +170,7 @@ public class OperatorController implements MessageListener {
                 chatMessage.setTime(ChatMessage.dateFormat.format(ChatMessage.calendar.getTime()));
                 chatMessage.setMessage(message);
                 chatMessage.setTextMessage(messageText);
-                System.out.println("From Byte Client: "+ chatMessage.getTextMessage());
+//                System.out.println("From Byte Client: "+ chatMessage.getTextMessage());
                 this.chatMessagess.add(chatMessage);
 //                System.out.println(chatMessagess.isEmpty());
             }
@@ -234,17 +236,17 @@ public class OperatorController implements MessageListener {
         Vector<String> producerID = getMessageProduceID();
         ChatMessage chatMessage =null;
 
-        System.out.println("Routing...");
+  //      System.out.println("Routing...");
 
 
         if(controller.getListItems().size()< producerID.size()){
-            System.out.println("Condition ");
+ //           System.out.println("Condition ");
             for(int index=0; index < producerID.size(); index++) {
                 boolean isoOutOfIndex = false;
                 String tempName = producerID.get(index);
-                System.out.println("updating  "+tempName);
+           //     System.out.println("updating  "+tempName);
                 try {
-                    System.out.println("checking:  " + controller.getListItems().get(index).getUser().getSubscriptionName());
+             //       System.out.println("checking:  " + controller.getListItems().get(index).getUser().getSubscriptionName());
                     isoOutOfIndex =false;
                 }
                 catch (Exception e) {
@@ -327,8 +329,10 @@ public class OperatorController implements MessageListener {
                             Platform.runLater(new Runnable() {
                                 @Override
                                 public void run() {
-                                    if(controller.getListItems().size()==1) {
+ //                                   System.out.println("firsttime:   "+isFirstime +"    "+controller.getListItems().isEmpty());
+                                    if(!controller.getListItems().isEmpty() && isFirstime) {
                                         System.out.println("first");
+                                        isFirstime = false;
                                         UserItem item = controller.getListItems().get(0);
                                         controller.setUsername(item);
 

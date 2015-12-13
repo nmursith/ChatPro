@@ -24,7 +24,7 @@ public class Main extends Application {
 
 
         chatController.setScene(scene);
-        primaryStage.setTitle("Chat Desktop");
+        primaryStage.setTitle("vAssistant");
         primaryStage.setScene(scene);
         System.out.println("show");
         primaryStage.show();

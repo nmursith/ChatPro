@@ -31,7 +31,7 @@ import java.io.IOException;
         obj.put("topic", "chat.*");
         obj.put("subscription", "chat.*");
         obj.put("destination", "chat.*");
-        obj.put("URL", "tcp://localhost:61616");
+        obj.put("URL", "tcp://cmterainsight:61616?trace=false&soTimeout=60000");
 
 //        JSONArray list = new JSONArray();
 //        list.add("msg 1");
@@ -74,7 +74,7 @@ import java.io.IOException;
             configuration.setTopic(topic);
             configuration.setURL(URL);
 
-            System.out.println("Read:       "+URL );
+//            System.out.println("Read:       "+URL );
 //            System.out.println(destination );
 //            System.out.println(operator );
 //            System.out.println(topic );
