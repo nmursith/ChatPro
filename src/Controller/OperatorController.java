@@ -151,7 +151,7 @@ public class OperatorController implements MessageListener {
                 String destination = ((ActiveMQBytesMessage) message).getDestination().getPhysicalName();
                 destination =destination.substring(destination.indexOf('.')+1);
 
-//                System.out.println("destination: "+ destination);
+                System.out.println("destination: "+ destination);
                 producerID = destination;
                 //producerID = activeMQBytesMessage.getProducerId().getConnectionId();
 
@@ -235,6 +235,7 @@ public class OperatorController implements MessageListener {
         Queue<ChatMessage> durablechatMessage = null;
         Vector<String> producerID = getMessageProduceID();
         ChatMessage chatMessage =null;
+        String pID= "";
 
   //      System.out.println("Routing...");
 
@@ -259,7 +260,7 @@ public class OperatorController implements MessageListener {
                         controller.getMessageProducerID().add(tempName);
                         User user = new User();
                         user.setuserId(tempName);
-                        user.setUserName("User " + tempName.substring(tempName.length() - 1));
+                        user.setUserName(tempName);
                         user.setSubscriptionName(tempName);
                         user.setTopicName("chat." + tempName);
 
@@ -291,6 +292,7 @@ public class OperatorController implements MessageListener {
                         chatMessage =durablechatMessage.remove();
                         reply = chatMessage.getTextMessage();
                         String correID = chatMessage.getMessage().getJMSCorrelationID();
+                        pID = chatMessage.getProducerID();
 //                        if (correID==null)
 //                            correID = "";
                       // System.out.println(correID);
@@ -322,11 +324,14 @@ public class OperatorController implements MessageListener {
                                 e.printStackTrace();
                             }
 
+
+                            int cID = controller.getMessageProducerID().indexOf(pID);//current ID;
+                            controller.getChatUsersList().getItems().get(cID).startBlink();
                             Platform.runLater(new Runnable() {
                                 @Override
                                 public void run() {
-                                    System.out.println("firsttime:   "+isFirstime +"    "+controller.getListItems().isEmpty());
-                                    if(!controller.getListItems().isEmpty() && isFirstime) {
+                                    System.out.println("firsttime:   " + isFirstime + "    " + controller.getListItems().isEmpty());
+                                    if (!controller.getListItems().isEmpty() && isFirstime) {
                                         System.out.println("first");
                                         isFirstime = false;
 
@@ -334,16 +339,8 @@ public class OperatorController implements MessageListener {
                                         controller.getChatUsersList().getSelectionModel().select(0);
                                         controller.setUsername(item);
 
+
                                     }
-
-                                    int index = controller.getChatUsersList().getSelectionModel().getSelectedIndex();
-
-
-                                   // if(!controller.getChatUsersList().getSelectionModel().isSelected(index)){
-                                        System.out.println("should work");
-                                        controller.getChatUsersList().getItems().get(index).startBlink();
-                                    //}
-
 
                                     //ScrollPane messageHolder = new ScrollPane();
                                     //messageHolder.setContent((bindOperator.getChatHolder()));
@@ -352,6 +349,23 @@ public class OperatorController implements MessageListener {
                                     //    controller.messageDisplay.setVvalue(messageHolder.getVmax());
                                 }
                             });
+
+                            //need to look at it
+/*
+                                try{
+                                    int sID = controller.getChatUsersList().getSelectionModel().getSelectedIndex(); // selected ID
+
+                                    System.out.println("selected   "+cID);
+                                    if(sID!=cID){
+                                        System.out.println("should work");
+
+
+                                    }
+                                }
+                                catch (Exception e){
+
+                                }
+*/
 
                             bindOperator.getHistoryController().writehistory(counter, "user",reply);       //swriting to csv
                             String username = controller.getListItems().get(controller.getMessageProducerID().indexOf(chatMessage.getProducerID())).getUser().getUserName();

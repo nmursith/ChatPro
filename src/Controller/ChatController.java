@@ -353,7 +353,7 @@ public class ChatController{
             ChatMessage myMessageMod = getObjectMessage(myMessage, operatorController.getSubscriptionName());
 
             operatorController.sendMessage(myMessageMod, operatorController);
-            System.out.println("exit");
+          //  System.out.println("exit");
             int counter = (int) operatorController.getMessageCounter();
             Bubble bubble = new Bubble(myMessage, controller);
             historyController.writehistory(counter, "operator",myMessage);

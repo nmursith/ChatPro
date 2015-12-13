@@ -7,6 +7,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
@@ -17,7 +18,7 @@ import javax.jms.JMSException;
 /**
  * Created by PPNPERERA on 11/24/2015.
  */
-public class UserItem extends GridPane implements  EventHandler<javafx.event.ActionEvent>, Runnable {
+public class UserItem extends GridPane implements   Runnable, EventHandler<MouseEvent> {
 
 
 
@@ -31,7 +32,7 @@ public class UserItem extends GridPane implements  EventHandler<javafx.event.Act
     private volatile Thread blink;        //addded lates
     private static UserItem userItem;  //addded latest
     private volatile Boolean running;
-
+    private ImageView close;
     public UserItem(User user, ChatController controller){
 
         this.user = user;
@@ -61,22 +62,30 @@ public class UserItem extends GridPane implements  EventHandler<javafx.event.Act
         GridPane.setHalignment(thumbUserName, HPos.CENTER );
 
 
-        ImageView  close = new ImageView(new Image(getClass().getResourceAsStream("close.png")));
+//        ImageView  close = new ImageView(new Image(getClass().getResourceAsStream("close.png")));
+//        close.setFitHeight(20);
+//        close.setFitWidth(20);
+//
+//        closeButton = new Button("",close);
+//
+//        closeButton.setMaxHeight(15);
+//        closeButton.setMaxWidth(15);
+//        closeButton.setStyle("-fx-background-radius: 100; -fx-border-radius: 100; -fx-background-color: transparent;-fx-focus-color: transparent; -fx-faint-focus-color: transparent; -fx-background-insets: 0 0 0 0, 0, 0, 0;");
+//        GridPane.setHalignment(closeButton, HPos.LEFT );
+//        closeButton.setOnAction(this);
+      // = new Image(new Label(getClass().getResourceAsStream("closeButton.png"))); //();
+
+        close = new ImageView(new Image(getClass().getResourceAsStream("close.png")));
         close.setFitHeight(20);
         close.setFitWidth(20);
+        close.setOnMouseClicked(this);
 
-        closeButton = new Button("",close);
 
-        closeButton.setMaxHeight(15);
-        closeButton.setMaxWidth(15);
-        closeButton.setStyle("-fx-background-radius: 100; -fx-border-radius: 100; -fx-background-color: transparent;-fx-focus-color: transparent; -fx-faint-focus-color: transparent; -fx-background-insets: 0 0 0 0, 0, 0, 0;");
-        GridPane.setHalignment(closeButton, HPos.LEFT );
-        closeButton.setOnAction(this);
-      // = new Image(new Label(getClass().getResourceAsStream("closeButton.png"))); //();
 
         this.addRow(0,userImage);
         this.addRow(0,thumbUserName);
-        this.addRow(0,closeButton);
+        this.addRow(0,close);
+
         this.setStyle("-fx-background-color:#f0ffff;-fx-border:5px");
       //  this.addRow(1,statusBar);
      //   System.out.println(getWidth()+"     "+getHeight());
@@ -95,9 +104,6 @@ public class UserItem extends GridPane implements  EventHandler<javafx.event.Act
     }
 
     public void startBlink(){
-        System.out.println("invoked");
-        System.out.println("Starting "  );
-        running = true;
         blink = new Thread (this, user.getUserName());
         blink.start ();
 
@@ -113,7 +119,7 @@ public class UserItem extends GridPane implements  EventHandler<javafx.event.Act
     @Override
     public void run() {
 
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 3; i++) {
             userItem.setStyle("-fx-background-color:#00ffff;-fx-border:5px");
             try {
                 Thread.sleep(250);
@@ -127,7 +133,7 @@ public class UserItem extends GridPane implements  EventHandler<javafx.event.Act
                 ///  e.printStackTrace();
 
             }
-            System.out.println("Loop: " + running);
+        //    System.out.println("Loop: " + running);
         }
              userItem.setStyle("-fx-background-color:#00ffff;-fx-border:5px");
 
@@ -189,8 +195,9 @@ public class UserItem extends GridPane implements  EventHandler<javafx.event.Act
         this.chatController = chatController;
     }
 
+
     @Override
-    public void handle(javafx.event.ActionEvent event) {
+    public void handle(MouseEvent event) {
         try {
 
             chatController.closeChat(this);
@@ -199,10 +206,5 @@ public class UserItem extends GridPane implements  EventHandler<javafx.event.Act
             System.out.println("problem");
             //e.printStackTrace();
         }
-
     }
-
-
-
-
 }
