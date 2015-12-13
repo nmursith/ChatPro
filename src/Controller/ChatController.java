@@ -143,22 +143,12 @@ public class ChatController{
                     messageDisplay.setVvalue(messageDisplay.getVmax());
 
                     controller.closeChat();//closeConnection();
-                    try{
-                        operatorController.closeConnection();
-                    }
-                    catch (NullPointerException e){
 
-                    }
 
 
                 }
                 else {
-                    try{
-                        operatorController.closeConnection();
-                    }
-                    catch (NullPointerException e){
 
-                    }
                     System.exit(0);
                 }
             }
@@ -306,6 +296,7 @@ public class ChatController{
 
     // Remove users from the chat and ArrayList
     public void closeChat() throws JMSException {
+
         int index = chatUsersList.getSelectionModel().getSelectedIndex();
         System.out.println("Closing index: "+ index);
       //  operatorController.closeConnection();
@@ -362,6 +353,7 @@ public class ChatController{
             ChatMessage myMessageMod = getObjectMessage(myMessage, operatorController.getSubscriptionName());
 
             operatorController.sendMessage(myMessageMod, operatorController);
+            System.out.println("exit");
             int counter = (int) operatorController.getMessageCounter();
             Bubble bubble = new Bubble(myMessage, controller);
             historyController.writehistory(counter, "operator",myMessage);

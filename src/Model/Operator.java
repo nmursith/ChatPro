@@ -17,15 +17,13 @@ public class Operator{
     private Topic topic;
     private Destination destination;
 
-
-
     private static int ackMode;
     private static String messageBrokerUrl;
     private boolean transacted = false;
     private boolean isConnected;
 
     static {
-    //    messageBrokerUrl = ConfigurationController.readConfig().getURL();////ActiveMQConnection.DEFAULT_BROKER_URL;//"tcp://localhost:61616";
+  //      messageBrokerUrl = ConfigurationController.readConfig().getURL();////ActiveMQConnection.DEFAULT_BROKER_URL;//"tcp://localhost:61616";
 
        messageBrokerUrl ="tcp://localhost:61616";
         ackMode = Session.AUTO_ACKNOWLEDGE;

@@ -87,13 +87,13 @@ import java.io.IOException;
 
         } catch (FileNotFoundException e) {
             setConfiguration();
-            e.printStackTrace();
+        //    e.printStackTrace();
         } catch (IOException e) {
             setConfiguration();
-            e.printStackTrace();
+      //      e.printStackTrace();
         } catch (ParseException e) {
             setConfiguration();
-            e.printStackTrace();
+      //      e.printStackTrace();
         }
         return configuration;
     }

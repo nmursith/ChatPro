@@ -29,7 +29,7 @@ public class OperatorController implements MessageListener {
     private ChatController controller;
     private MessageConsumer messageConsumer;
     private long messageCounter;
-    private long numberOfUsers;
+    private NotificationController notificationController;
     private OperatorController operatorController;      //static or volatile or something
     private static String defaultOperator;
     private static boolean isOnline;
@@ -64,10 +64,10 @@ public class OperatorController implements MessageListener {
         this.networkHandler = new NetworkDownHandler();
         //MessageConsumer consumer = this.getSesssion().createConsumer(getDestination());
         defaultOperator = ConfigurationController.readConfig().getOperator();//"operator1";
-
-        messageConsumer= this.getSesssion().createDurableSubscriber(getTopic(),getSubscriptionName());
+        this.notificationController = new NotificationController();
+        messageConsumer= operator.getSession().createDurableSubscriber(getTopic(),getSubscriptionName());
         messageCounter = -1;
-        numberOfUsers =0;
+
 
 
         if(!messageProduceID.contains(defaultOperator)) {
@@ -315,10 +315,6 @@ public class OperatorController implements MessageListener {
 //                            bindOperator.getTextArea().appendText("User:  " + reply+"\n\n");
                             bindOperator.getChatHolder().addRow(counter, bubble.getToBubble());
 
-
-
-
-
                             try {
                                 Thread.sleep(100);
 
@@ -329,14 +325,25 @@ public class OperatorController implements MessageListener {
                             Platform.runLater(new Runnable() {
                                 @Override
                                 public void run() {
- //                                   System.out.println("firsttime:   "+isFirstime +"    "+controller.getListItems().isEmpty());
+                                    System.out.println("firsttime:   "+isFirstime +"    "+controller.getListItems().isEmpty());
                                     if(!controller.getListItems().isEmpty() && isFirstime) {
                                         System.out.println("first");
                                         isFirstime = false;
+
                                         UserItem item = controller.getListItems().get(0);
+                                        controller.getChatUsersList().getSelectionModel().select(0);
                                         controller.setUsername(item);
 
                                     }
+
+                                  //  int index = controller.getChatUsersList().getSelectionModel().getSelectedIndex();
+
+
+                                    //if(!controller.getChatUsersList().getSelectionModel().isSelected(index)){
+                                    //    System.out.println("should work");
+                                    //    controller.getChatUsersList().getItems().get(index).startBlink();
+                                    //}
+
 
                                     //ScrollPane messageHolder = new ScrollPane();
                                     //messageHolder.setContent((bindOperator.getChatHolder()));
@@ -345,8 +352,10 @@ public class OperatorController implements MessageListener {
                                     //    controller.messageDisplay.setVvalue(messageHolder.getVmax());
                                 }
                             });
-                            bindOperator.getHistoryController().writehistory(counter, "user",reply);       //swriting to csv
 
+                            bindOperator.getHistoryController().writehistory(counter, "user",reply);       //swriting to csv
+                            String username = controller.getListItems().get(controller.getMessageProducerID().indexOf(chatMessage.getProducerID())).getUser().getUserName();
+                            notificationController.getNotification(reply, username);
                             // System.out.println(chatMessage.getMessage());
                             //     System.out.print("Operator:   ");
                             //  send = in.nextLine();
@@ -537,7 +546,7 @@ public class OperatorController implements MessageListener {
                     Operator operator = new Operator("online", "online");
                     boolean isConnected = operator.isConnected();
 
-                    System.out.println("inside:  " + isOnline);
+           //         System.out.println("inside:  " + isOnline);
                     if (isConnected) {
                         isOnline = true;
                         System.out.println("Re-connected");

@@ -17,7 +17,7 @@ import javax.jms.JMSException;
 /**
  * Created by PPNPERERA on 11/24/2015.
  */
-public class UserItem extends GridPane implements  EventHandler<javafx.event.ActionEvent> {
+public class UserItem extends GridPane implements  EventHandler<javafx.event.ActionEvent>, Runnable {
 
 
 
@@ -28,8 +28,9 @@ public class UserItem extends GridPane implements  EventHandler<javafx.event.Act
     private Image thumbImage;
     private User user;
     private ChatController chatController;
-
-
+    private Thread blink;        //addded lates
+    private static UserItem userItem;  //addded latest
+    private volatile boolean running;
 
     public UserItem(User user, ChatController controller){
 
@@ -38,9 +39,10 @@ public class UserItem extends GridPane implements  EventHandler<javafx.event.Act
         this.setPrefSize(188,32);
         setHgap(5);
         setVgap(2);
+        userItem = this;                //
+
 
         thumbImage = new Image(getClass().getResourceAsStream("dummyImage.jpg"));
-
         userImage = new ImageView();
         userImage.setFitHeight(30);
         userImage.setFitWidth(30);
@@ -79,8 +81,58 @@ public class UserItem extends GridPane implements  EventHandler<javafx.event.Act
       //  this.addRow(1,statusBar);
      //   System.out.println(getWidth()+"     "+getHeight());
 
+        this.setOnMouseClicked(event -> {
+            System.out.println("clicked");
+               // blink.interrupt();
+                stop();
+               // blink = null;
+                System.out.println("stopping");
+            this.setStyle("-fx-background-color:#f0ffff;-fx-border:5px");
+            //blink = new Blink();
+
+        });
+
     }
 
+    public void startBlink(){
+        System.out.println("invoked");
+        System.out.println("Starting "  );
+        running = true;
+        blink = new Thread (this, user.getUserName());
+        blink.start ();
+
+    }
+
+
+
+    public void stop(){
+        running = false;
+
+
+    }
+
+
+    @Override
+    public void run() {
+        while(running){
+            userItem.setStyle("-fx-background-color:#00ffff;-fx-border:5px");
+            try {
+                Thread.sleep(250);
+            } catch (InterruptedException e) {
+                // e.printStackTrace();
+                running = false;
+            }
+            userItem.setStyle("-fx-background-color:#fff8dc;-fx-border:5px");
+            try {
+                Thread.sleep(250);
+            } catch (InterruptedException e) {
+                ///  e.printStackTrace();
+                running = false;
+            }
+
+        }
+
+    }
     public ImageView getUserImage() {
         return userImage;
     }
@@ -149,4 +201,8 @@ public class UserItem extends GridPane implements  EventHandler<javafx.event.Act
         }
 
     }
+
+
+
+
 }
