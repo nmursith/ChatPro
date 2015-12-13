@@ -33,11 +33,11 @@ public class ChatController{
     @FXML public ScrollPane messageDisplay;
     @FXML private ContextMenu variablesMenu;
 
-    private HashMap<String, BindOperator> hashMapOperator;
+    private volatile  HashMap<String, BindOperator> hashMapOperator;
     private ChatController controller =null;
     private Scene scene;
     private GridPane chatHolder;
-    private String previousID; // previous opertor message
+    private volatile String previousID; // previous opertor message
 
 
 
@@ -57,7 +57,7 @@ public class ChatController{
 
         hashMapOperator = new HashMap<>();
         controller =this;
-        previousID = "";
+        previousID = null;
         Configuration config = ConfigurationController.readConfig();
         //operatorController = new OperatorController("operator0", "chat.*",this);
         operatorController = new OperatorController(config.getOperator(), config.getTopic(),this);
@@ -121,6 +121,7 @@ public class ChatController{
                 chatHolder.addRow(counter, bubble.getFromBubble());
                 //          chatBubble.appendText("Admin : "+myMessageMod);
                 messageDisplay.setContent(chatHolder);
+                messageDisplay.setVvalue(messageDisplay.getVmax());
 
             }
 
@@ -138,6 +139,7 @@ public class ChatController{
                     chatHolder.addRow(counter, bubble.getFromBubble());
                     //          chatBubble.appendText("Admin : "+myMessageMod);
                     messageDisplay.setContent(chatHolder);
+                    messageDisplay.setVvalue(messageDisplay.getVmax());
 
                     controller.closeChat();//closeConnection();
                     try{
@@ -173,8 +175,11 @@ public class ChatController{
 
         try {
             String message = messageTextField.getText();
-            if(!previousID.equals(""))
+            if(previousID !=null) {
+             //   System.out.println("ID Selected:  "+ previousID + "     "+ hashMapOperator.get(previousID));
+                if(message!=null)
                 hashMapOperator.get(previousID).setTypedMessage(message.trim());
+            }
             messageTextField.setText("");
 
 
@@ -183,7 +188,7 @@ public class ChatController{
             String name = useritem.getUser().getUserName();
             String userID = useritem.getUser().getSubscriptionName();
             previousID = userID;
-            System.out.println("userName:     "+name);
+    //        System.out.println("previousID:     "+previousID);
 
             Username.setText(name);
             Platform.runLater(() -> {
@@ -197,15 +202,6 @@ public class ChatController{
                     historyController = hashMapOperator.get(userID).getHistoryController();
                     messageDisplay.setContent(chatHolder);
                     messageDisplay.setVvalue(messageDisplay.getVmax());
-
-
-
-//                    if(name.equals(defaultOperator)){
-//                        CloseButton.setDisable(true);
-//                    }
-//                    else {
-//                        CloseButton.setDisable(false);
-//                    }
 
                 }
                 catch (NullPointerException e){
@@ -228,9 +224,65 @@ public class ChatController{
         }
 
         catch (RuntimeException r ){
-
+                r.printStackTrace();
         }
     }
+
+    public void setUsername(UserItem useritem) {
+
+        try {
+            String message = messageTextField.getText();
+            if(previousID !=null) {
+                //   System.out.println("ID Selected:  "+ previousID + "     "+ hashMapOperator.get(previousID));
+                if(message!=null)
+                    hashMapOperator.get(previousID).setTypedMessage(message.trim());
+            }
+            messageTextField.setText("");
+
+            String name = useritem.getUser().getUserName();
+            String userID = useritem.getUser().getSubscriptionName();
+            previousID = userID;
+            //        System.out.println("previousID:     "+previousID);
+
+            Username.setText(name);
+            Platform.runLater(() -> {
+                //     chatBubble = hashMapOperator.get(name).getTextArea();
+                //         System.out.println(chatHolder +"                    ");
+
+                try{
+                    messageTextField.setText(hashMapOperator.get(userID).getTypedMessage());
+                    chatHolder = hashMapOperator.get(userID).getChatHolder();
+                    operatorController = hashMapOperator.get(userID).getOperatorController();
+                    historyController = hashMapOperator.get(userID).getHistoryController();
+                    messageDisplay.setContent(chatHolder);
+                    messageDisplay.setVvalue(messageDisplay.getVmax());
+
+                }
+                catch (NullPointerException e){
+                    e.printStackTrace();
+                }
+
+
+
+            });
+            if(hashMapOperator.get(userID).getChatHolder().isDisabled()) {
+                sendButton.setDisable(true);
+                messageTextField.setDisable(true);
+            }
+            else {
+                sendButton.setDisable(false);
+                messageTextField.setDisable(false);
+            }
+
+
+        }
+
+        catch (RuntimeException r ){
+            r.printStackTrace();
+        }
+    }
+
+
 
     public ChatMessage getObjectMessage(String messageText, String producerID){
         ChatMessage chatMessage =  new ChatMessage();
@@ -429,6 +481,21 @@ public class ChatController{
         return gridPane;
     }
 
+    public GridPane getChatHolder() {
+        return chatHolder;
+    }
+
+    public void setChatHolder(GridPane chatHolder) {
+        this.chatHolder = chatHolder;
+    }
+
+    public HistoryController getHistoryController() {
+        return historyController;
+    }
+
+    public void setHistoryController(HistoryController historyController) {
+        this.historyController = historyController;
+    }
 
     public OperatorController getOperatosrController() {
         return operatorController;

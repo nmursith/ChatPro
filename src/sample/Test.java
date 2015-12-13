@@ -11,6 +11,14 @@ import java.util.Scanner;
  * Created by mmursith on 11/24/2015.
  */
 public class Test {
+    //                                        controller.messageDisplay.setContent( bindOperator.getChatHolder());
+//                                        controller.getUsername().setText(controller.getListItems().get(0).getUser().getUserName());
+//                                        controller.setChatHolder(bindOperator.getChatHolder());
+//                                        controller.setOperatorController(bindOperator.getOperatorController());
+//                                        controller.setHistoryController(bindOperator.getHistoryController());
+
+
+
 
     public static void main(String []args) throws JMSException {
         OperatorController operatorController = new OperatorController("operator0", "chat.*"); //subscription name, topicnaem

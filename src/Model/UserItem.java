@@ -67,7 +67,7 @@ public class UserItem extends GridPane implements  EventHandler<javafx.event.Act
 
         closeButton.setMaxHeight(15);
         closeButton.setMaxWidth(15);
-        closeButton.setStyle("-fx-background-radius: 100; -fx-border-radius: 100; -fx-focus-color: transparent; -fx-faint-focus-color: transparent; -fx-background-insets: 0 0 0 0, 0, 0, 0;");
+        closeButton.setStyle("-fx-background-radius: 100; -fx-border-radius: 100; -fx-background-color: transparent;-fx-focus-color: transparent; -fx-faint-focus-color: transparent; -fx-background-insets: 0 0 0 0, 0, 0, 0;");
         GridPane.setHalignment(closeButton, HPos.LEFT );
         closeButton.setOnAction(this);
       // = new Image(new Label(getClass().getResourceAsStream("closeButton.png"))); //();

@@ -14,7 +14,6 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.LinkedList;
 import java.util.Queue;
-import java.util.Random;
 import java.util.Vector;
 
 /**
@@ -95,7 +94,7 @@ public class OperatorController implements MessageListener {
                     response.setText(myMessage.trim().equalsIgnoreCase("exit") ? "DIRROUTETOBOT":myMessage);
                     System.out.println("offline:   "+myMessage);
 
-                    String random = createRandomString();
+                    String random = Constant.correalationID;
                     response.setJMSCorrelationID(random);
                     operator.getMessageProducer().send(response);
 
@@ -119,14 +118,7 @@ public class OperatorController implements MessageListener {
 
     }
 
-    public String createRandomString() {
-        Random random = new Random(System.currentTimeMillis());
-        long randomLong = random.nextLong();
-        return Long.toHexString(randomLong);
-    }
-
-
-    @Override
+     @Override
     public void onMessage(Message message) {
     String producerID = null;
         System.out.println("Recieving......:      ");
@@ -152,14 +144,13 @@ public class OperatorController implements MessageListener {
             }
             else {
 
-
                 //System.out.println(text.getText());
                 ActiveMQBytesMessage activeMQBytesMessage = (ActiveMQBytesMessage) message;
-                String temp = ((ActiveMQBytesMessage) message).getDestination().getPhysicalName();
-                temp =temp.substring(temp.indexOf('.')+1);
+                String destination = ((ActiveMQBytesMessage) message).getDestination().getPhysicalName();
+                destination =destination.substring(destination.indexOf('.')+1);
 
-                System.out.println("destination: "+ temp);
-                producerID = temp;
+                System.out.println("destination: "+ destination);
+                producerID = destination;
                 //producerID = activeMQBytesMessage.getProducerId().getConnectionId();
 
 //                if(producerID!=null){
@@ -177,7 +168,7 @@ public class OperatorController implements MessageListener {
                 chatMessage.setTime(ChatMessage.dateFormat.format(ChatMessage.calendar.getTime()));
                 chatMessage.setMessage(message);
                 chatMessage.setTextMessage(messageText);
-                System.out.println("From Byte Clsient: "+ chatMessage.getTextMessage());
+                System.out.println("From Byte Client: "+ chatMessage.getTextMessage());
                 this.chatMessagess.add(chatMessage);
 //                System.out.println(chatMessagess.isEmpty());
             }
@@ -193,8 +184,8 @@ public class OperatorController implements MessageListener {
 
                 if(!producerID.equals(defaultOperator))
                     operatorController.getMessageConsumer().setMessageListener(null);
-                    BindOperator bindOperator = new BindOperator(operatorController, chatHolder);
-                    controller.getHashMapOperator().put(producerID, bindOperator);
+                BindOperator bindOperator = new BindOperator(operatorController, chatHolder);
+                controller.getHashMapOperator().put(producerID, bindOperator);
 
                 int count  = loadHistory(controller.getHashMapOperator().get(producerID));
                 operatorController.setMessageCounter(count);        //starting
@@ -298,9 +289,10 @@ public class OperatorController implements MessageListener {
                         chatMessage =durablechatMessage.remove();
                         reply = chatMessage.getTextMessage();
                         String correID = chatMessage.getMessage().getJMSCorrelationID();
-
+//                        if (correID==null)
+//                            correID = "";
                       // System.out.println(correID);
-                        if( correID == null ) {
+                        if( correID == null  ) {  //!correID.equals(Constant.correalationID)
 
                             Bubble bubble = new Bubble(reply, controller);
                          //   GridPane.setHalignment(bubble.getToBubble(), HPos.LEFT );
@@ -320,6 +312,11 @@ public class OperatorController implements MessageListener {
                             int counter = (int)bindOperator.getOperatorController().getMessageCounter();
 //                            bindOperator.getTextArea().appendText("User:  " + reply+"\n\n");
                             bindOperator.getChatHolder().addRow(counter, bubble.getToBubble());
+
+
+
+
+
                             try {
                                 Thread.sleep(100);
 
@@ -327,7 +324,23 @@ public class OperatorController implements MessageListener {
                                 e.printStackTrace();
                             }
 
-                            Platform.runLater(() -> controller.messageDisplay.setVvalue(controller.messageDisplay.getVmax()));
+                            Platform.runLater(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if(controller.getListItems().size()==1) {
+                                        System.out.println("first");
+                                        UserItem item = controller.getListItems().get(0);
+                                        controller.setUsername(item);
+
+                                    }
+
+//                                    ScrollPane messageHolder = new ScrollPane();
+//                                    messageHolder.setContent((bindOperator.getChatHolder()));
+                                    controller.messageDisplay.setVvalue(controller.messageDisplay.getVmax());
+                                    //messageDisplay.setVvalue(messageDisplay.getVmax());
+                                   //     controller.messageDisplay.setVvalue(controller.messageDisplay.getVmax());
+                                }
+                            });
                             bindOperator.getHistoryController().writehistory(counter, "user",reply);       //swriting to csv
 
                             // System.out.println(chatMessage.getMessage());
@@ -340,7 +353,7 @@ public class OperatorController implements MessageListener {
                     }
                     catch (NullPointerException e){
                         System.out.println("Null");
-                        e.printStackTrace();
+                      //  e.printStackTrace();
                         //   break;
                     }
 

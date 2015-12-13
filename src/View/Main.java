@@ -1,7 +1,6 @@
 package View;
 
 import Controller.ChatController;
-import com.guigarage.flatterfx.FlatterFX;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -15,7 +14,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception{
       //  AquaFx.style();
-        FlatterFX.style();
+    //    FlatterFX.style();
         //Parent root = FXMLLoader.load(getClass().getResource("Operator.fxml"));
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("Operator.fxml"));
 
