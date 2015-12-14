@@ -17,7 +17,7 @@ public class Bubble {
     public Bubble(String message, ChatController controller){
         //Scene scene = new Scene();
         try{
-            controller.getScene().getStylesheets().add(getClass().getResource("bubble.css").toExternalForm());
+         //   controller.getScene().getStylesheets().add(getClass().getResource("bubble.css").toExternalForm());
 
             fromBubble = new Label(message);
             fromBubble.getStyleClass().add("fromLabel");
@@ -33,7 +33,7 @@ public class Bubble {
 
         }
         catch (NullPointerException e){
-
+            System.out.println("problem with bubble");
         }
 
     }

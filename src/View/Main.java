@@ -21,7 +21,7 @@ public class Main extends Application {
         Parent root = fxmlLoader.load();
         ChatController chatController = fxmlLoader.<ChatController>getController();
         Scene scene = new Scene(root, 550, 605);
-
+        scene.getStylesheets().add(getClass().getResource("bubble.css").toExternalForm());
 
         chatController.setScene(scene, primaryStage);
         primaryStage.setTitle("vAssistant");
