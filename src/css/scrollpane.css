@@ -1,0 +1,10 @@
+.scroll-pane{
+    -fx-line-height: 12px;
+    -fx-background-color:transparent;
+    -fx-box-shadow: none;
+    -fx-padding:5px 5px 5px 5px;
+    -fx-focus-color: transparent;
+    -fx-border-color:transparent;
+}
+
+

@@ -26,29 +26,23 @@
          <items>
             <AnchorPane prefHeight="562.0" prefWidth="550.0">
                <children>
-                  <Label fx:id="Username" layoutX="217.0" layoutY="7.0" prefHeight="44.0" prefWidth="327.0" text="User ..." textOverrun="CLIP">
+                  <Label fx:id="Username" layoutX="217.0" layoutY="7.0" prefHeight="44.0" prefWidth="327.0" style="-fx-text-fill: #2c3e50;" text="User ..." textOverrun="CLIP">
                      <font>
                         <Font name="System Bold" size="24.0" />
                      </font></Label>
-                  <TextArea id="messageTextField" fx:id="messageTextField" layoutX="216.0" layoutY="447.0" maxHeight="92.0" maxWidth="335.0" minHeight="84.0" minWidth="249.0" onKeyPressed="#doSendMessage" prefHeight="92.0" prefWidth="334.0" promptText="Type Message here....." style="-fx-border-radius: 0px;" wrapText="true">
+                  <TextArea id="messageTextField" fx:id="messageTextField" layoutX="215.0" layoutY="447.0" maxHeight="92.0" maxWidth="335.0" minHeight="84.0" minWidth="249.0" onKeyPressed="#doSendMessage" prefHeight="92.0" prefWidth="334.0" promptText="Type Message here....." wrapText="true">
                      <contextMenu>
-                        <ContextMenu fx:id="variablesMenu" onAction="#setSelectedItem" />
+                        <ContextMenu fx:id="variablesMenu" onAction="#setSelectedItem" style="-fx-background-color: rgb(255.0, 255.0, 255.0, 0.95); fx-background-radius: 2.0;" />
                      </contextMenu></TextArea>
-                  <Line endX="235.0" layoutX="315.0" layoutY="57.0" startX="-100.0">
+                  <Line endX="233.0" layoutX="315.0" layoutY="57.0" startX="-100.0" stroke="#3498db">
                      <rotationAxis>
                         <Point3D />
                      </rotationAxis></Line>
-                  <Line endX="502.0" layoutX="11.0" layoutY="302.0" rotate="90.0" startX="-100.0" />
-                  <ScrollPane fx:id="messageDisplay" layoutX="215.0" layoutY="61.0" prefHeight="382.0" prefWidth="335.0" style="-fx-padding: 5px; -fx-border-radius: 0px;" />
+                  <Line endX="502.0" layoutX="11.0" layoutY="302.0" rotate="90.0" startX="-100.0" stroke="#3498db" />
+                  <ScrollPane fx:id="messageDisplay" layoutX="215.0" layoutY="58.0" prefHeight="385.0" prefWidth="335.0" stylesheets="@../css/scrollpane.css" />
                   <ListView fx:id="chatUsersList" layoutX="3.0" layoutY="8.0" onMouseClicked="#setUsername" prefHeight="594.0" prefWidth="206.0" />
-                  <Button fx:id="sendButton" layoutX="216.0" layoutY="544.0" mnemonicParsing="false" onAction="#getMyMessage" prefHeight="44.0" prefWidth="63.0" style="-fx-border-radius: 0px;-fx-background-color: transparent;">
-                     <graphic>
-                        <ImageView fitHeight="33.0" fitWidth="41.0" onMouseClicked="#getMyMessage" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../Images/send.png" />
-                           </image>
-                        </ImageView>
-                     </graphic>
+                  <Button fx:id="sendButton" layoutX="473.0" layoutY="547.0" mnemonicParsing="false" onAction="#getMyMessage" prefHeight="32.0" prefWidth="63.0" stylesheets="@../css/button.css" text="Send">
+
                   </Button>
                </children>
             </AnchorPane>

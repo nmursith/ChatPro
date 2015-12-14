@@ -28,10 +28,10 @@ public class ChatController{
     @FXML public Button CloseButton;
     @FXML public TextArea messageTextField;
     @FXML public Label Username;
-    @FXML public TextArea chatBubble;
+
     @FXML public Button AddChatBtn;
     @FXML public ListView<UserItem> chatUsersList;
-    @FXML public TextField sampleNameInput;
+
     @FXML public ScrollPane messageDisplay;
     @FXML private ContextMenu variablesMenu;
 
@@ -140,7 +140,7 @@ public class ChatController{
         });
     }
     public void sendMessage(){
-        String myMessage = messageTextField.getText().trim();
+        String myMessage = messageTextField.getText();
         ChatMessage myMessageMod = getObjectMessage(myMessage, operatorController.getSubscriptionName());
 
 
@@ -230,7 +230,7 @@ public class ChatController{
 
                 }
                 catch (NullPointerException e){
-                    e.printStackTrace();
+                    //e.printStackTrace();
                 }
 
 
@@ -249,7 +249,7 @@ public class ChatController{
         }
 
         catch (RuntimeException r ){
-                r.printStackTrace();
+        //        r.printStackTrace();
         }
     }
 
@@ -290,6 +290,7 @@ public class ChatController{
 
 
             });
+
             if(hashMapOperator.get(userID).getChatHolder().isDisabled()) {
                 sendButton.setDisable(true);
                 messageTextField.setDisable(true);
@@ -303,7 +304,7 @@ public class ChatController{
         }
 
         catch (RuntimeException r ){
-            r.printStackTrace();
+            //r.printStackTrace();
         }
     }
 
@@ -569,13 +570,7 @@ public class ChatController{
         Username = username;
     }
 
-    public TextArea getChatBubble() {
-        return chatBubble;
-    }
 
-    public void setChatBubble(TextArea chatBubble) {
-        this.chatBubble = chatBubble;
-    }
 
     public Button getAddChatBtn() {
         return AddChatBtn;
@@ -593,13 +588,7 @@ public class ChatController{
         this.chatUsersList = chatUsersList;
     }
 
-    public TextField getSampleNameInput() {
-        return sampleNameInput;
-    }
 
-    public void setSampleNameInput(TextField sampleNameInput) {
-        this.sampleNameInput = sampleNameInput;
-    }
 
     public ScrollPane getMessageDisplay() {
         return messageDisplay;

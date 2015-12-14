@@ -37,7 +37,7 @@ public class UserItem extends GridPane implements   Runnable, EventHandler<Mouse
 
         this.user = user;
         this.chatController = controller;
-        this.setPrefSize(188,32);
+        this.setPrefSize(190,35);
         setHgap(5);
         setVgap(2);
         userItem = this;                //
@@ -57,8 +57,8 @@ public class UserItem extends GridPane implements   Runnable, EventHandler<Mouse
         thumbUserName.setStyle("-fx-text-fill:#696969; -fx-font-size:11px");
         //thumbUserName.setPrefSize(119, 20); //119,20
         thumbUserName.setFont(Font.font(null, FontWeight.BOLD, 14));
-        thumbUserName.setMaxWidth(105);
-        thumbUserName.setPrefWidth(105);
+        thumbUserName.setMaxWidth(130);
+        thumbUserName.setPrefWidth(130);
         GridPane.setHalignment(thumbUserName, HPos.CENTER );
 
 
@@ -137,7 +137,12 @@ public class UserItem extends GridPane implements   Runnable, EventHandler<Mouse
         //    System.out.println("Loop: " + running);
         }
              userItem.setStyle("-fx-background-color:#00ffff;-fx-border:5px");
+        try {
+            Thread.sleep(250);
+        } catch (InterruptedException e) {
+            ///  e.printStackTrace();
 
+        }
         blink.stop();
     }
     public ImageView getUserImage() {

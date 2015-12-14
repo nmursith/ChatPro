@@ -14,19 +14,22 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception{
       //  AquaFx.style();
-    //    FlatterFX.style();
+
+
         //Parent root = FXMLLoader.load(getClass().getResource("Operator.fxml"));
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("Operator.fxml"));
 
         Parent root = fxmlLoader.load();
         ChatController chatController = fxmlLoader.<ChatController>getController();
-        Scene scene = new Scene(root, 550, 605);
+        Scene scene = new Scene(root);//, 550, 605);
         scene.getStylesheets().add(getClass().getResource("bubble.css").toExternalForm());
 
         chatController.setScene(scene, primaryStage);
         primaryStage.setTitle("vAssistant");
         primaryStage.setScene(scene);
         System.out.println("show");
+        //FlatterFX.style();
+
         primaryStage.show();
         primaryStage.setResizable(false);
         primaryStage.setOnCloseRequest(event -> {

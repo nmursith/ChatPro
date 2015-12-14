@@ -164,7 +164,7 @@ public class OperatorController implements MessageListener {
                 String destination = ((ActiveMQBytesMessage) message).getDestination().getPhysicalName();
                 destination =destination.substring(destination.indexOf('.')+1);
 
-                System.out.println("destination: "+ destination);
+//                System.out.println("destination: "+ destination);
                 producerID = destination;
                 //producerID = activeMQBytesMessage.getProducerId().getConnectionId();
 
@@ -277,7 +277,7 @@ public class OperatorController implements MessageListener {
                         controller.getMessageProducerID().add(tempName);
                         User user = new User();
                         user.setuserId(tempName);
-                        user.setUserName(tempName);
+                        user.setUserName("user "+tempName.substring(tempName.length()-2));
                         user.setSubscriptionName(tempName);
                         user.setTopicName("chat." + tempName);
 
