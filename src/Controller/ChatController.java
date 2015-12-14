@@ -14,6 +14,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 
+import javax.jms.IllegalStateException;
 import javax.jms.JMSException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -34,22 +35,23 @@ public class ChatController{
     @FXML private ContextMenu variablesMenu;
 
     private volatile  HashMap<String, BindOperator> hashMapOperator;
-    private ChatController controller =null;
+    private volatile  ChatController controller =null;
     private Scene scene;
     private GridPane chatHolder;
     private volatile String previousID; // previous opertor message
+    private Thread networkHandler;
 
 
 
     final ObservableList<UserItem> listItems = FXCollections.observableArrayList();
     private Vector<String> messageProducerID;
 
-
+    private volatile Configuration config;
     private  OperatorController operatorController ;
     private  HistoryController historyController;
-    Boolean isSet = false;
-    private String defaultOperator;
 
+    private String defaultOperator;
+    private volatile boolean isOnline;
 
     public ChatController() throws JMSException {
 
@@ -58,9 +60,38 @@ public class ChatController{
         hashMapOperator = new HashMap<>();
         controller =this;
         previousID = null;
-        Configuration config = ConfigurationController.readConfig();
+        config = ConfigurationController.readConfig();
         //operatorController = new OperatorController("operator0", "chat.*",this);
-        operatorController = new OperatorController(config.getOperator(), config.getTopic(),this);
+        this.isOnline = false;
+        this.networkHandler = new NetworkDownHandler();
+
+
+        try{
+            Operator operator = new Operator("online", "online");
+            boolean isConnected = operator.isConnected();
+
+            //         System.out.println("inside:  " + isOnline);
+            if (isConnected) {
+                isOnline = true;
+                System.out.println("connected");
+            }
+            else {
+                isOnline = false;
+                System.out.println("initial Offline");
+                networkHandler = new NetworkDownHandler();
+                networkHandler.start();
+            }
+            if(isOnline)
+                operatorController = new OperatorController(config.getOperator(), config.getTopic(),this);
+
+        }
+        catch (Exception e){
+            isOnline = false;
+            System.out.println("initial Offline exception");
+            networkHandler = new NetworkDownHandler();
+            networkHandler.start();
+
+        }
 
         //chatBubble = new TextArea();
         chatHolder = new GridPane();
@@ -84,9 +115,10 @@ public class ChatController{
                 createChatSpace();
                 applyDimensions();
                 addMenuItems();
-                hashMapOperator.put(defaultOperator, new BindOperator(operatorController, getGridPane()));
-                historyController = hashMapOperator.get(config.getSubscription()).getHistoryController();
-
+                if(isOnline) {
+                    hashMapOperator.put(defaultOperator, new BindOperator(operatorController, getGridPane()));
+                    historyController = hashMapOperator.get(config.getSubscription()).getHistoryController();
+                }
 
 
             } catch (JMSException e) {
@@ -606,6 +638,72 @@ public class ChatController{
       //  System.out.println(hashMapOperator);
         this.scene = scene;
     }
+
+    private class NetworkDownHandler extends Thread{
+        Thread thread = null;
+        public void run() {
+            thread = Thread.currentThread();
+            System.out.println(isOnline);
+
+                while (!isOnline) {
+                    try {
+                        System.out.println("Trying to resolve");
+                        Operator operator = new Operator("online", "online");
+                        boolean isConnected = operator.isConnected();
+
+                        //         System.out.println("inside:  " + isOnline);
+                        if (isConnected) {
+                            isOnline = true;
+                            System.out.println("Re-connected");
+                        }
+                        else
+                            isOnline = false;
+
+
+                    } catch (IllegalStateException e) {
+                        isOnline = false;
+                        try {
+                            Thread.sleep(100);
+                        } catch (InterruptedException e1) {
+                            e1.printStackTrace();
+                        }
+                        System.out.println("Offline: Session");
+                        System.out.println("Re-connected");
+                    } catch (JMSException e) {
+                        isOnline = false;
+                        try {
+
+                            Thread.sleep(100);
+                        } catch (InterruptedException e1) {
+                            e1.printStackTrace();
+                        }
+                        System.out.println("Offline: JMS");
+                        System.out.println("Re-connected");
+                    }
+                }
+
+            if(isOnline){
+                System.out.println("Re-connected and put the operator");
+                try {
+                    OperatorController operatorController = new OperatorController(config.getOperator(), config.getTopic(),controller);
+                    hashMapOperator.put(defaultOperator, new BindOperator(operatorController, getGridPane()));
+                    historyController = hashMapOperator.get(config.getSubscription()).getHistoryController();
+                } catch (JMSException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+
+        }
+
+        public  void stopThread(){
+            Thread t = thread;
+            thread = null;
+            t.interrupt();
+        }
+    }
+
 
 
 

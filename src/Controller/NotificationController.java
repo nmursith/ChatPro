@@ -21,7 +21,7 @@ import javafx.util.Duration;
 public class NotificationController {
 
     static int cnt = 0;
-
+    private static Stage stage = new Stage(StageStyle.UNDECORATED);
     public static Popup createPopup(final String message, final String userName) {
 
         final Popup popup = new Popup();
@@ -148,10 +148,11 @@ public class NotificationController {
 
     public static void getNotification(String message, String userName){
         cnt++;
-        Stage stage = new Stage();
+        stage.close();
+        //Stage stage = new Stage(StageStyle.UNDECORATED);
    //     System.out.println(cnt);
         stage.setTitle("Notification");
-        stage.initStyle(StageStyle.UNDECORATED);
+        //stage.initStyle();
         StackPane root = new StackPane();
         root.setStyle("-fx-background-color: TRANSPARENT; -fx-border-color: skyblue");
         Scene scene = new Scene(root, 300, 80, Color.WHITE);

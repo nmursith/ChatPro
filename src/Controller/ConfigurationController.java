@@ -76,7 +76,7 @@ import java.io.IOException;
 
 //            System.out.println("Read:       "+URL );
 //            System.out.println(destination );
-//            System.out.println(operator );
+            System.out.println(operator );
 //            System.out.println(topic );
             // loop array
 //            JSONArray msg = (JSONArray) jsonObject.get("messages");

@@ -32,7 +32,7 @@ public class OperatorController implements MessageListener {
     private NotificationController notificationController;
     private OperatorController operatorController;      //static or volatile or something
     private static String defaultOperator;
-    private static boolean isOnline;
+    private volatile boolean isOnline;
     private Thread networkHandler;
     private volatile boolean isFirstime =true;
 
@@ -64,8 +64,15 @@ public class OperatorController implements MessageListener {
         this.networkHandler = new NetworkDownHandler();
         //MessageConsumer consumer = this.getSesssion().createConsumer(getDestination());
         defaultOperator = ConfigurationController.readConfig().getOperator();//"operator1";
-        this.notificationController = new NotificationController();
-        messageConsumer= operator.getSession().createDurableSubscriber(getTopic(),getSubscriptionName());
+//        this.notificationController = new NotificationController();
+        try {
+            //if
+            messageConsumer = operator.getSession().createDurableSubscriber(getTopic(), getSubscriptionName());
+
+        }
+        catch (NullPointerException e){
+            System.out.println("Alread Answering");
+        }
         messageCounter = -1;
 
 
@@ -370,7 +377,7 @@ public class OperatorController implements MessageListener {
                             bindOperator.getHistoryController().writehistory(counter, "user",reply);       //swriting to csv
                             String username = controller.getListItems().get(controller.getMessageProducerID().indexOf(chatMessage.getProducerID())).getUser().getUserName();
 
-                       //     notificationController.getNotification(reply, username);
+                            NotificationController.getNotification(reply, username);
                             // System.out.println(chatMessage.getMessage());
                             //     System.out.print("Operator:   ");
                             //  send = in.nextLine();
