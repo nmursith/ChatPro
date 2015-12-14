@@ -5,14 +5,22 @@
     	-fx-background-color:#0B93F6;
     	-fx-border-radius:25px;
     	-fx-float: right;
-    	-fx-background-radius:15px
+    	-fx-background-radius:15px;
+    	-fx-fill-tex9t:#158ffe;
+    	-fx-fill-text:white;
+    	-fx-font-size:14px;
+    	-fx-font-family:'Segoe UI',Tahoma,Helvetica,Sans-Serif;
 }
 .toLabel{
     	-fx-position:relative;
     	-fx-padding:10px 20px;
     	-fx-color:white;
-    	-fx-background-color:#E5E5EA;
+    	-fx-background-color:#95a5a6;
     	-fx-border-radius:25px;
     	-fx-float: right;
-    	-fx-background-radius:15px
+    	-fx-background-radius:15px;
+    	-fx-fill-tex9t:#2c3e50;
+    	-fx-fill-text:white;
+    	-fx-font-size:14px;
+    	-fx-font-family:'Segoe UI',Tahoma,Helvetica,Sans-Serif;
 }

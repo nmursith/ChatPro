@@ -23,7 +23,7 @@ public class BubbleDemo {
 
         toBubble = new Label(message);
         toBubble.getStyleClass().add("toLabel");
-        //chatController.getScene().getStylesheets().add(getClass().getResource("bubble.css").toExternalForm());
+
         scene.getStylesheets().add(getClass().getResource("bubble.css").toExternalForm());
     }
 

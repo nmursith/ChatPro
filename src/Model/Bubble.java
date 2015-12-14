@@ -17,11 +17,12 @@ public class Bubble {
     public Bubble(String message, ChatController controller){
         //Scene scene = new Scene();
         try{
-         //   controller.getScene().getStylesheets().add(getClass().getResource("bubble.css").toExternalForm());
+
 
             fromBubble = new Label(message);
             fromBubble.getStyleClass().add("fromLabel");
             fromBubble.setWrapText(true);
+
 //        GridPane.setHalignment(chatMessage, i % 2 == 0 ? HPos.LEFT : HPos.RIGHT);
             GridPane.setHalignment(fromBubble, HPos.RIGHT);
 
@@ -29,7 +30,7 @@ public class Bubble {
             toBubble.getStyleClass().add("toLabel");
             toBubble.setWrapText(true);
             GridPane.setHalignment(toBubble, HPos.LEFT);
-            //chatController.getScene().getStylesheets().add(getClass().getResource("bubble.css").toExternalForm());
+
 
         }
         catch (NullPointerException e){
