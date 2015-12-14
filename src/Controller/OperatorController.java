@@ -67,7 +67,10 @@ public class OperatorController implements MessageListener {
 //        this.notificationController = new NotificationController();
         try {
             //if
-            messageConsumer = operator.getSession().createDurableSubscriber(getTopic(), getSubscriptionName());
+            if(subscriptionName.equalsIgnoreCase(defaultOperator)) {
+                messageConsumer = operator.getSession().createDurableSubscriber(getTopic(), getSubscriptionName());
+                messageConsumer.setMessageListener(this);
+            }
 
         }
         catch (NullPointerException e){
@@ -85,7 +88,7 @@ public class OperatorController implements MessageListener {
         //
 
         System.out.println("Created..");
-        messageConsumer.setMessageListener(this);
+
    //     System.out.println("Listening..");
     }
 
@@ -191,13 +194,17 @@ public class OperatorController implements MessageListener {
                 GridPane chatHolder = getGridPane();
                 OperatorController operatorController = new OperatorController(producerID, "chat."+producerID, controller);
 
-                if(!producerID.equals(defaultOperator))
-                    operatorController.getMessageConsumer().setMessageListener(null);
+//                if(!producerID.equals(defaultOperator))
+//                    operatorController.getMessageConsumer().setMessageListener(null);
                 BindOperator bindOperator = new BindOperator(operatorController, chatHolder);
                 controller.getHashMapOperator().put(producerID, bindOperator);
 
-                int count  = loadHistory(controller.getHashMapOperator().get(producerID));
-                operatorController.setMessageCounter(count);        //starting
+                Thread.sleep(100);
+                
+                if(controller!=null){
+                    int count  = loadHistory(controller.getHashMapOperator().get(producerID));
+                    operatorController.setMessageCounter(count);        //starting
+                }
 
                }
             else {

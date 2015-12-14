@@ -67,7 +67,7 @@ public class ChatController{
 
 
         try{
-            Operator operator = new Operator("online", "online");
+            Operator operator = new Operator("online111", "online111");
             boolean isConnected = operator.isConnected();
 
             //         System.out.println("inside:  " + isOnline);
@@ -468,13 +468,18 @@ public class ChatController{
 
     public void closeAllConnections() throws JMSException {
         if(!listItems.isEmpty()) {
+            String myMessage = "exit";
+
 
             for(int index=0; index< listItems.size(); index++) {
                 UserItem useritem = controller.getListItems().get(index);
 
                 String name = useritem.getUser().getSubscriptionName();
+
+                ChatMessage myMessageMod = getObjectMessage(myMessage, hashMapOperator.get(defaultOperator).getOperatorController().getSubscriptionName());
                 hashMapOperator.remove(name);
                 hashMapOperator.get(defaultOperator).getOperatorController().getMessageProduceID().remove(name);
+                hashMapOperator.get(defaultOperator).getOperatorController().sendMessage(myMessageMod, operatorController);
                 hashMapOperator.get(defaultOperator).getOperatorController().closeConnection();
                 listItems.remove(index);
                 System.out.println("Removed");
@@ -648,7 +653,7 @@ public class ChatController{
                 while (!isOnline) {
                     try {
                         System.out.println("Trying to resolve");
-                        Operator operator = new Operator("online", "online");
+                        Operator operator = new Operator("online111", "online111");
                         boolean isConnected = operator.isConnected();
 
                         //         System.out.println("inside:  " + isOnline);
