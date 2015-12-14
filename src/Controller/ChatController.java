@@ -13,6 +13,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
+import javafx.stage.Stage;
 
 import javax.jms.IllegalStateException;
 import javax.jms.JMSException;
@@ -52,6 +53,7 @@ public class ChatController{
 
     private String defaultOperator;
     private volatile boolean isOnline;
+    private Stage stage;
 
     public ChatController() throws JMSException {
 
@@ -457,7 +459,7 @@ public class ChatController{
 //        chatBubble.setEditable(false);
 
         chatHolder.setMaxSize(309, 362);
-        System.out.println("MessageDisplay"+messageDisplay);
+ //       System.out.println("MessageDisplay"+messageDisplay);
         messageDisplay.setFitToWidth(true);
         chatHolder.setVgap(7);
         ColumnConstraints c1 = new ColumnConstraints();
@@ -469,9 +471,7 @@ public class ChatController{
     public void closeAllConnections() throws JMSException {
         if(!listItems.isEmpty()) {
             String myMessage = "exit";
-
-
-            for(int index=0; index< listItems.size(); index++) {
+       for(int index=0; index< listItems.size(); index++) {
                 UserItem useritem = controller.getListItems().get(index);
 
                 String name = useritem.getUser().getSubscriptionName();
@@ -481,6 +481,8 @@ public class ChatController{
                 hashMapOperator.get(defaultOperator).getOperatorController().getMessageProduceID().remove(name);
                 hashMapOperator.get(defaultOperator).getOperatorController().sendMessage(myMessageMod, operatorController);
                 hashMapOperator.get(defaultOperator).getOperatorController().closeConnection();
+             //   hashMapOperator.get(defaultOperator).getOperatorController().getExecutor().shutdown();
+              //  while(! hashMapOperator.get(defaultOperator).getOperatorController().getExecutor().isTerminated()){}
                 listItems.remove(index);
                 System.out.println("Removed");
             }
@@ -638,10 +640,15 @@ public class ChatController{
         return scene;
     }
 
-    public void setScene(Scene scene) {
+    public Stage getStage() {
+        return stage;
+    }
+
+    public void setScene(Scene scene, Stage stage) {
        // System.out.println("setting scene");
       //  System.out.println(hashMapOperator);
         this.scene = scene;
+        this.stage = stage;
     }
 
     private class NetworkDownHandler extends Thread{

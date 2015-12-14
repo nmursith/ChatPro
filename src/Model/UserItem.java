@@ -93,7 +93,7 @@ public class UserItem extends GridPane implements   Runnable, EventHandler<Mouse
         this.setOnMouseClicked(event -> {
             System.out.println("clicked");
                // blink.interrupt();
-                stop();
+     //           stop();
                // blink = null;
                 System.out.println("stopping");
             this.setStyle("-fx-background-color:#f0ffff;-fx-border:5px");
@@ -133,11 +133,12 @@ public class UserItem extends GridPane implements   Runnable, EventHandler<Mouse
                 ///  e.printStackTrace();
 
             }
+
         //    System.out.println("Loop: " + running);
         }
              userItem.setStyle("-fx-background-color:#00ffff;-fx-border:5px");
 
-
+        blink.stop();
     }
     public ImageView getUserImage() {
         return userImage;

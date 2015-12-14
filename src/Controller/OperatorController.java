@@ -15,6 +15,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Vector;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * Created by mmursith on 11/24/2015.
@@ -35,6 +37,7 @@ public class OperatorController implements MessageListener {
     private volatile boolean isOnline;
     private Thread networkHandler;
     private volatile boolean isFirstime =true;
+    private ExecutorService executor = Executors.newFixedThreadPool(100);  // 100 blink at a time
 
     public OperatorController(String subscriptionName, String topicName) throws JMSException {
         this.operator = new Operator(subscriptionName, topicName);
@@ -200,7 +203,7 @@ public class OperatorController implements MessageListener {
                 controller.getHashMapOperator().put(producerID, bindOperator);
 
                 Thread.sleep(100);
-                
+
                 if(controller!=null){
                     int count  = loadHistory(controller.getHashMapOperator().get(producerID));
                     operatorController.setMessageCounter(count);        //starting
@@ -340,28 +343,29 @@ public class OperatorController implements MessageListener {
 
 
                             int cID = controller.getMessageProducerID().indexOf(pID);//current ID;
+                            System.out.println("cid:   "+ cID);
                             controller.getChatUsersList().getItems().get(cID).startBlink();
-                            Platform.runLater(new Runnable() {
-                                @Override
-                                public void run() {
-                                    System.out.println("firsttime:   " + isFirstime + "    " + controller.getListItems().isEmpty());
-                                    if (!controller.getListItems().isEmpty() && isFirstime) {
-                                        System.out.println("first");
-                                        isFirstime = false;
-
-                                        UserItem item = controller.getListItems().get(0);
-                                        controller.getChatUsersList().getSelectionModel().select(0);
-                                        controller.setUsername(item);
+                            //executor.execute();
 
 
-                                    }
+                            Platform.runLater(() -> {
+                                System.out.println("firsttime:   " + isFirstime + "    " + controller.getListItems().isEmpty());
+                                if (!controller.getListItems().isEmpty() && isFirstime) {
+                                    System.out.println("first");
+                                    isFirstime = false;
 
-                                    //ScrollPane messageHolder = new ScrollPane();
-                                    //messageHolder.setContent((bindOperator.getChatHolder()));
-                                    controller.messageDisplay.setVvalue(controller.messageDisplay.getVmax());
-                                    //messageDisplay.setVvalue(messageDisplay.getVmax());
-                                    //    controller.messageDisplay.setVvalue(messageHolder.getVmax());
+                                    UserItem item = controller.getListItems().get(0);
+                                    controller.getChatUsersList().getSelectionModel().select(0);
+                                    controller.setUsername(item);
+
+
                                 }
+
+                                //ScrollPane messageHolder = new ScrollPane();
+                                //messageHolder.setContent((bindOperator.getChatHolder()));
+                                controller.messageDisplay.setVvalue(controller.messageDisplay.getVmax());
+                                //messageDisplay.setVvalue(messageDisplay.getVmax());
+                                //    controller.messageDisplay.setVvalue(messageHolder.getVmax());
                             });
 
                             //need to look at it
@@ -384,7 +388,8 @@ public class OperatorController implements MessageListener {
                             bindOperator.getHistoryController().writehistory(counter, "user",reply);       //swriting to csv
                             String username = controller.getListItems().get(controller.getMessageProducerID().indexOf(chatMessage.getProducerID())).getUser().getUserName();
 
-                            NotificationController.getNotification(reply, username);
+                            if(!controller.getStage().isFocused())
+                                NotificationController.getNotification(reply, username);
                             // System.out.println(chatMessage.getMessage());
                             //     System.out.print("Operator:   ");
                             //  send = in.nextLine();
@@ -564,6 +569,10 @@ public class OperatorController implements MessageListener {
         this.networkHandler = networkHandler;
     }
 
+    public ExecutorService getExecutor() {
+        return executor;
+    }
+
     private class NetworkDownHandler extends Thread{
     Thread thread = null;
         public void run() {
@@ -572,7 +581,7 @@ public class OperatorController implements MessageListener {
         synchronized (cachedMessages) {
             while (!isOnline) {
                 try {
-                    Operator operator = new Operator("online", "online");
+                    Operator operator = new Operator("online111", "online111");
                     boolean isConnected = operator.isConnected();
 
            //         System.out.println("inside:  " + isOnline);

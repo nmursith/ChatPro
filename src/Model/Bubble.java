@@ -15,19 +15,26 @@ public class Bubble {
 
 
     public Bubble(String message, ChatController controller){
-        controller.getScene().getStylesheets().add(getClass().getResource("bubble.css").toExternalForm());
+        //Scene scene = new Scene();
+        try{
+            controller.getScene().getStylesheets().add(getClass().getResource("bubble.css").toExternalForm());
 
-        fromBubble = new Label(message);
-        fromBubble.getStyleClass().add("fromLabel");
-        fromBubble.setWrapText(true);
+            fromBubble = new Label(message);
+            fromBubble.getStyleClass().add("fromLabel");
+            fromBubble.setWrapText(true);
 //        GridPane.setHalignment(chatMessage, i % 2 == 0 ? HPos.LEFT : HPos.RIGHT);
-        GridPane.setHalignment(fromBubble, HPos.RIGHT);
+            GridPane.setHalignment(fromBubble, HPos.RIGHT);
 
-        toBubble = new Label(message);
-        toBubble.getStyleClass().add("toLabel");
-        toBubble.setWrapText(true);
-        GridPane.setHalignment(toBubble, HPos.LEFT);
-        //chatController.getScene().getStylesheets().add(getClass().getResource("bubble.css").toExternalForm());
+            toBubble = new Label(message);
+            toBubble.getStyleClass().add("toLabel");
+            toBubble.setWrapText(true);
+            GridPane.setHalignment(toBubble, HPos.LEFT);
+            //chatController.getScene().getStylesheets().add(getClass().getResource("bubble.css").toExternalForm());
+
+        }
+        catch (NullPointerException e){
+
+        }
 
     }
 

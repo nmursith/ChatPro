@@ -23,7 +23,7 @@ public class Main extends Application {
         Scene scene = new Scene(root, 550, 605);
 
 
-        chatController.setScene(scene);
+        chatController.setScene(scene, primaryStage);
         primaryStage.setTitle("vAssistant");
         primaryStage.setScene(scene);
         System.out.println("show");
