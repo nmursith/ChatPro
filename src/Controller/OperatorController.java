@@ -349,15 +349,15 @@ public class OperatorController implements MessageListener {
 
 
                             Platform.runLater(() -> {
-                                System.out.println("firsttime:   " + isFirstime + "    " + controller.getListItems().isEmpty());
+                             //   System.out.println("firsttime:   " + isFirstime + "    " + controller.getListItems().isEmpty());
                                 if (!controller.getListItems().isEmpty() && isFirstime) {
+                                    controller.getMessageTextField().setDisable(false);
                                     System.out.println("first");
                                     isFirstime = false;
 
                                     UserItem item = controller.getListItems().get(0);
                                     controller.getChatUsersList().getSelectionModel().select(0);
                                     controller.setUsername(item);
-
 
                                 }
 

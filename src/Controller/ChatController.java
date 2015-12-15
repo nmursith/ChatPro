@@ -114,6 +114,8 @@ public class ChatController{
 //        chatUsersList.setItems(listItems);
         Platform.runLater(() -> {
             try {
+                messageTextField.setDisable(true);
+                this.Username.getStyleClass().add("username");
                 createChatSpace();
                 applyDimensions();
                 addMenuItems();

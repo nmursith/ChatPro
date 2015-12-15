@@ -26,7 +26,7 @@
          <items>
             <AnchorPane prefHeight="562.0" prefWidth="550.0">
                <children>
-                  <Label fx:id="Username" layoutX="217.0" layoutY="7.0" prefHeight="44.0" prefWidth="327.0" style="-fx-text-fill: #2c3e50;" text="User ..." textOverrun="CLIP">
+                  <Label fx:id="Username" layoutX="217.0" layoutY="7.0" prefHeight="44.0" prefWidth="327.0" style="-fx-text-fill: #2c3e50;" textOverrun="CLIP">
                      <font>
                         <Font name="System Bold" size="24.0" />
                      </font></Label>
