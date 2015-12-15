@@ -6,6 +6,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 import javax.jms.JMSException;
 
@@ -23,12 +24,13 @@ public class Main extends Application {
         Scene scene = new Scene(root);//, 550, 605);
         scene.getStylesheets().add(getClass().getResource("theme.css").toExternalForm());
 
+        System.out.println(scene.getHeight());
         chatController.setScene(scene, primaryStage);
         primaryStage.setTitle("vAssistant");
         primaryStage.setScene(scene);
         System.out.println("show");
         //FlatterFX.style();
-
+        primaryStage.initStyle(StageStyle.UNDECORATED);
         primaryStage.show();
         primaryStage.setResizable(false);
         primaryStage.setOnCloseRequest(event -> {

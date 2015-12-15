@@ -334,6 +334,7 @@ public class OperatorController implements MessageListener {
 //                            bindOperator.getTextArea().appendText("User:  " + reply+"\n\n");
                             bindOperator.getChatHolder().addRow(counter, bubble.getToBubble());
 
+
                             try {
                                 Thread.sleep(100);
 
@@ -344,9 +345,21 @@ public class OperatorController implements MessageListener {
 
                             int cID = controller.getMessageProducerID().indexOf(pID);//current ID;
                             System.out.println("cid:   "+ cID);
-                            controller.getChatUsersList().getItems().get(cID).startBlink();
-                            //executor.execute();
 
+                            //executor.execute();
+                            try{
+                                int sID = controller.getChatUsersList().getSelectionModel().getSelectedIndex(); // selected ID
+
+                                System.out.println("selected   "+cID);
+                                if(sID!=cID){
+                                    System.out.println("should work");
+                                    controller.getChatUsersList().getItems().get(cID).startBlink();
+
+                                }
+                            }
+                            catch (Exception e){
+
+                            }
 
                             Platform.runLater(() -> {
                              //   System.out.println("firsttime:   " + isFirstime + "    " + controller.getListItems().isEmpty());
@@ -368,22 +381,8 @@ public class OperatorController implements MessageListener {
                                 //    controller.messageDisplay.setVvalue(messageHolder.getVmax());
                             });
 
-                            //need to look at it
-/*
-                                try{
-                                    int sID = controller.getChatUsersList().getSelectionModel().getSelectedIndex(); // selected ID
-
-                                    System.out.println("selected   "+cID);
-                                    if(sID!=cID){
-                                        System.out.println("should work");
 
 
-                                    }
-                                }
-                                catch (Exception e){
-
-                                }
-*/
 
                             bindOperator.getHistoryController().writehistory(counter, "user",reply);       //swriting to csv
                             String username = controller.getListItems().get(controller.getMessageProducerID().indexOf(chatMessage.getProducerID())).getUser().getUserName();
@@ -578,10 +577,11 @@ public class OperatorController implements MessageListener {
         public void run() {
         thread = Thread.currentThread();
         System.out.println(isOnline);
+            String ID = Constant.getRandomString();
         synchronized (cachedMessages) {
             while (!isOnline) {
                 try {
-                    Operator operator = new Operator("online111", "online111");
+                    Operator operator = new Operator(ID, ID);
                     boolean isConnected = operator.isConnected();
 
            //         System.out.println("inside:  " + isOnline);

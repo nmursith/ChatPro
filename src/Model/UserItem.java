@@ -23,7 +23,7 @@ public class UserItem extends GridPane implements   Runnable, EventHandler<Mouse
 
 
     private ImageView userImage;
-    private Label thumbUserName;
+    private volatile Label thumbUserName;
     private Rectangle statusBar;
     private Button closeButton;
     private Image thumbImage;
@@ -37,7 +37,8 @@ public class UserItem extends GridPane implements   Runnable, EventHandler<Mouse
 
         this.user = user;
         this.chatController = controller;
-        this.setPrefSize(190,35);
+        this.setPrefSize(210.2,35);
+        this.setMaxWidth(210.2);
         setHgap(5);
         setVgap(2);
 
@@ -78,14 +79,15 @@ public class UserItem extends GridPane implements   Runnable, EventHandler<Mouse
       // = new Image(new Label(getClass().getResourceAsStream("closeButton.png"))); //();
 
         close = new ImageView(new Image(getClass().getResourceAsStream("close.png")));
-        close.setFitHeight(20);
-        close.setFitWidth(20);
+        close.setFitHeight(9);
+        close.setFitWidth(9);
         close.setOnMouseClicked(this);
 
 
 
         this.addRow(0,userImage);
         this.addRow(0,thumbUserName);
+
         this.addRow(0,close);
 
 
@@ -98,10 +100,13 @@ public class UserItem extends GridPane implements   Runnable, EventHandler<Mouse
      //           stop();
                // blink = null;
                 System.out.println("stopping");
-            this.thumbUserName.setStyle("-fx-text-fill:#696969; -fx-font-size:12px; -fx-font-weight:bold;");
+            this.thumbUserName.setStyle("-fx-text-fill:#696969; -fx-font-size:12px; -fx-font-weight:bold; ");
+
             //blink = new Blink();
 
         });
+
+      System.out.println("focueed:  "+this.isFocused());
 
     }
 

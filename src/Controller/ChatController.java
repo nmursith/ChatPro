@@ -66,10 +66,10 @@ public class ChatController{
         //operatorController = new OperatorController("operator0", "chat.*",this);
         this.isOnline = false;
         this.networkHandler = new NetworkDownHandler();
-
+        String ID = Constant.getRandomString();
 
         try{
-            Operator operator = new Operator("online111", "online111");
+            Operator operator = new Operator(ID, ID);
             boolean isConnected = operator.isConnected();
 
             //         System.out.println("inside:  " + isOnline);
@@ -114,6 +114,7 @@ public class ChatController{
 //        chatUsersList.setItems(listItems);
         Platform.runLater(() -> {
             try {
+
                 messageTextField.setDisable(true);
                 this.Username.getStyleClass().add("username");
                 createChatSpace();
@@ -157,6 +158,8 @@ public class ChatController{
                 chatHolder.addRow(counter, bubble.getFromBubble());
                 //          chatBubble.appendText("Admin : "+myMessageMod);
                 messageDisplay.setContent(chatHolder);
+                //System.out.println("Max:  "+ messageDisplay.getVmax());
+                Thread.sleep(50);
                 Platform.runLater(() -> messageDisplay.setVvalue(messageDisplay.getVmax()));
 
 
@@ -166,7 +169,7 @@ public class ChatController{
                 if(!operatorController.getSubscriptionName().equals(defaultOperator)) {
 
 
-                    operatorController.sendMessage(myMessageMod, operatorController);
+//                    operatorController.sendMessage(myMessageMod, operatorController);
                     int counter = (int) operatorController.getMessageCounter();
                     //             System.out.println("value chat:  "+counter+"     ****"+operatorController);
                     Bubble bubble = new Bubble(myMessage, controller);
@@ -176,7 +179,8 @@ public class ChatController{
                     chatHolder.addRow(counter, bubble.getFromBubble());
                     //          chatBubble.appendText("Admin : "+myMessageMod);
                     messageDisplay.setContent(chatHolder);
-                    messageDisplay.setVvalue(messageDisplay.getVmax());
+                    Thread.sleep(50);
+                    Platform.runLater(() -> messageDisplay.setVvalue(messageDisplay.getVmax()));
 
                     controller.closeChat();//closeConnection();
 
@@ -193,6 +197,8 @@ public class ChatController{
 
         } catch (JMSException e) {
             e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
         messageTextField.setText("");
     }
@@ -204,14 +210,15 @@ public class ChatController{
             String message = messageTextField.getText();
             if(previousID !=null) {
              //   System.out.println("ID Selected:  "+ previousID + "     "+ hashMapOperator.get(previousID));
+                chatUsersList.getItems().get(messageProducerID.indexOf(previousID)).setStyle("-fx-background-color:transparent; -fx-border-color:#transparent;");
                 if(message!=null)
-                hashMapOperator.get(previousID).setTypedMessage(message.trim());
+                    hashMapOperator.get(previousID).setTypedMessage(message.trim());
             }
             messageTextField.setText("");
 
 
             UserItem useritem = chatUsersList.getSelectionModel().getSelectedItem();
-
+            useritem.setStyle("-fx-background-color:#e7f0f5; -fx-border-color:#e7f0f5;");
             String name = useritem.getUser().getUserName();
             String userID = useritem.getUser().getSubscriptionName();
             previousID = userID;
@@ -361,17 +368,17 @@ public class ChatController{
             messageTextField.setDisable(true);
             useritem.setDisable(true);
 
-            if(index>0) {
-                 useritem = controller.getListItems().get(index-1);
-
-                userID = useritem.getUser().getSubscriptionName();
-
-                //chatBubble = hashMapOperator.get(name).getTextArea();
-                chatHolder = hashMapOperator.get(userID).getChatHolder();
-                operatorController = hashMapOperator.get(userID).getOperatorController();
-                messageDisplay.setContent(chatHolder);
-
-            }
+//            if(index>0) {
+//                 useritem = controller.getListItems().get(index-1);
+//
+//                userID = useritem.getUser().getSubscriptionName();
+//
+//                //chatBubble = hashMapOperator.get(name).getTextArea();
+//                chatHolder = hashMapOperator.get(userID).getChatHolder();
+//                operatorController = hashMapOperator.get(userID).getOperatorController();
+//                messageDisplay.setContent(chatHolder);
+//
+//            }
 
         }
 
@@ -647,11 +654,11 @@ public class ChatController{
         public void run() {
             thread = Thread.currentThread();
             System.out.println(isOnline);
-
+            String ID = Constant.getRandomString();
                 while (!isOnline) {
                     try {
                         System.out.println("Trying to resolve");
-                        Operator operator = new Operator("online111", "online111");
+                        Operator operator = new Operator(ID, ID);
                         boolean isConnected = operator.isConnected();
 
                         //         System.out.println("inside:  " + isOnline);
