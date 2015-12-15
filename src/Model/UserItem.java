@@ -40,10 +40,12 @@ public class UserItem extends GridPane implements   Runnable, EventHandler<Mouse
         this.setPrefSize(190,35);
         setHgap(5);
         setVgap(2);
+
+        this.setStyle("-fx-background-color:transparent; -fx-border-color:transparent;");
         userItem = this;                //
 
 
-        thumbImage = new Image(getClass().getResourceAsStream("dummyImage.jpg"));
+        thumbImage = new Image(getClass().getResourceAsStream("dummyImage.png"));
         userImage = new ImageView();
         userImage.setFitHeight(30);
         userImage.setFitWidth(30);
@@ -53,8 +55,8 @@ public class UserItem extends GridPane implements   Runnable, EventHandler<Mouse
 
         thumbUserName = new Label();
         thumbUserName.setText(user.getUserName());
-
-        thumbUserName.setStyle("-fx-text-fill:#696969; -fx-font-size:11px");
+        thumbUserName.setStyle("-fx-text-fill:#696969; -fx-font-size:12px; -fx-font-weight:bold;");
+        //thumbUserName.setStyle("-fx-text-color:#fff; -fx-font-size:11px");
         //thumbUserName.setPrefSize(119, 20); //119,20
         thumbUserName.setFont(Font.font(null, FontWeight.BOLD, 14));
         thumbUserName.setMaxWidth(130);
@@ -86,7 +88,7 @@ public class UserItem extends GridPane implements   Runnable, EventHandler<Mouse
         this.addRow(0,thumbUserName);
         this.addRow(0,close);
 
-        this.setStyle("-fx-background-color:#f0ffff;-fx-border:5px");
+
       //  this.addRow(1,statusBar);
      //   System.out.println(getWidth()+"     "+getHeight());
 
@@ -96,7 +98,7 @@ public class UserItem extends GridPane implements   Runnable, EventHandler<Mouse
      //           stop();
                // blink = null;
                 System.out.println("stopping");
-            this.setStyle("-fx-background-color:#f0ffff;-fx-border:5px");
+            this.thumbUserName.setStyle("-fx-text-fill:#696969; -fx-font-size:12px; -fx-font-weight:bold;");
             //blink = new Blink();
 
         });
@@ -120,13 +122,13 @@ public class UserItem extends GridPane implements   Runnable, EventHandler<Mouse
     public void run() {
 
         for (int i = 0; i < 3; i++) {
-            userItem.setStyle("-fx-background-color:#00ffff;-fx-border:5px");
+            this.thumbUserName.setStyle("--fx-text-fill:#ffa500");
             try {
                 Thread.sleep(250);
             } catch (InterruptedException e) {
 
             }
-            userItem.setStyle("-fx-background-color:#fff8dc;-fx-border:5px");
+            this.thumbUserName.setStyle("--fx-text-fill: #1e90ff");
             try {
                 Thread.sleep(250);
             } catch (InterruptedException e) {
@@ -136,7 +138,7 @@ public class UserItem extends GridPane implements   Runnable, EventHandler<Mouse
 
         //    System.out.println("Loop: " + running);
         }
-             userItem.setStyle("-fx-background-color:#00ffff;-fx-border:5px");
+        this.thumbUserName.setStyle("--fx-text-fill:#ffa500");
         try {
             Thread.sleep(250);
         } catch (InterruptedException e) {

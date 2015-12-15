@@ -24,7 +24,7 @@ public class BubbleDemo {
         toBubble = new Label(message);
         toBubble.getStyleClass().add("toLabel");
 
-        scene.getStylesheets().add(getClass().getResource("bubble.css").toExternalForm());
+        scene.getStylesheets().add(getClass().getResource("theme.css").toExternalForm());
     }
 
     public Label getFromBubble() {

@@ -18,11 +18,10 @@ public class Main extends Application {
 
         //Parent root = FXMLLoader.load(getClass().getResource("Operator.fxml"));
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("Operator.fxml"));
-
         Parent root = fxmlLoader.load();
         ChatController chatController = fxmlLoader.<ChatController>getController();
         Scene scene = new Scene(root);//, 550, 605);
-        scene.getStylesheets().add(getClass().getResource("bubble.css").toExternalForm());
+        scene.getStylesheets().add(getClass().getResource("theme.css").toExternalForm());
 
         chatController.setScene(scene, primaryStage);
         primaryStage.setTitle("vAssistant");
