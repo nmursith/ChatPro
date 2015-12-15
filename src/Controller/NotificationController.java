@@ -1,8 +1,8 @@
 package Controller;
 
 
+import Model.UserItem;
 import javafx.animation.*;
-import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
@@ -21,7 +21,10 @@ import javafx.util.Duration;
 public class NotificationController {
 
 
+    private volatile static ChatController chatController;
+    private volatile static  int index;
 
+    private static Stage stage = new Stage(StageStyle.UNDECORATED);
     public static Popup createPopup(final String message, final String userName) {
 
         final Popup popup = new Popup();
@@ -85,7 +88,7 @@ public class NotificationController {
             public void handle(MouseEvent event) {
                 //boolean s = event.getSource().equals(closeLabel);
                 System.out.println("close button clicked");
-                Platform.exit();
+                //Platform.exit();
             }
         });
 
@@ -121,7 +124,9 @@ public class NotificationController {
             @Override
             public void handle(MouseEvent mouseEvent) {
                 //cnt--;
-                System.out.println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
+         ///       System.out.println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
+  //////////////////
+                notifyLocations();
                 stage.close();
             }
         });
@@ -130,7 +135,8 @@ public class NotificationController {
         popup.addEventFilter(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
-
+/////////////////
+                notifyLocations();
                 //cnt--;
                 //System.out.println("$$$$$$$$$$$$$$$iiii$$$$$$$$$$$$$");
                 stage.close();
@@ -139,8 +145,8 @@ public class NotificationController {
 
 
         Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
-        stage.setX(primaryScreenBounds.getMinX() + primaryScreenBounds.getWidth() - 305);
-        stage.setY(primaryScreenBounds.getMinY() + primaryScreenBounds.getHeight() - 85);// -((cnt-1)*82));
+        stage.setX(primaryScreenBounds.getMinX() + primaryScreenBounds.getWidth() - 300);
+        stage.setY(primaryScreenBounds.getMinY() + 25);//primaryScreenBounds.getHeight() - 85);// -((cnt-1)*82));
         //position[cnt-1]=true;
         stage.setAlwaysOnTop(true);
         /*if(!stage.isShowing()){
@@ -173,9 +179,17 @@ public class NotificationController {
         t.playFromStart();
     }
 
+        private static void notifyLocations(){
+            UserItem userItem = chatController.getChatUsersList().getItems().get(getIndex());
+            chatController.setUsername(userItem);
+            chatController.getStage().requestFocus();
 
+        }
 
-    public static void getNotification(String message, String userName){
+    public static void getNotification(String message, String userName, ChatController controller, int index){
+        chatController =controller;
+        setIndex(index);
+        NotificationController.index = index;
 
         stage.close();
         stage.setTitle("Notification");
@@ -212,5 +226,11 @@ public class NotificationController {
         showPopupMessage(message, stage, userName);
     }
 
-    private static Stage stage = new Stage(StageStyle.UNDECORATED);
+    public static int getIndex() {
+        return index;
+    }
+
+    public static void setIndex(int index) {
+        NotificationController.index = index;
+    }
 }

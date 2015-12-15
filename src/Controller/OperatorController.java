@@ -67,7 +67,7 @@ public class OperatorController implements MessageListener {
         this.networkHandler = new NetworkDownHandler();
         //MessageConsumer consumer = this.getSesssion().createConsumer(getDestination());
         defaultOperator = ConfigurationController.readConfig().getOperator();//"operator1";
-//        this.notificationController = new NotificationController();
+     //   this.notificationController = new NotificationController();
         try {
             //if
             if(subscriptionName.equalsIgnoreCase(defaultOperator)) {
@@ -277,7 +277,7 @@ public class OperatorController implements MessageListener {
                         controller.getMessageProducerID().add(tempName);
                         User user = new User();
                         user.setuserId(tempName);
-                        user.setUserName("user "+tempName.substring(tempName.length()-2));
+                        user.setUserName("user "+messageProduceID.size());
                         user.setSubscriptionName(tempName);
                         user.setTopicName("chat." + tempName);
 
@@ -312,8 +312,8 @@ public class OperatorController implements MessageListener {
                         pID = chatMessage.getProducerID();
 //                        if (correID==null)
 //                            correID = "";
-                      // System.out.println(correID);
-                        if( correID == null  ) {  //!correID.equals(Constant.correalationID)
+                       System.out.println(correID);
+                        if( correID==null || !correID.equals(Constant.correalationID)  ) {  //!correID.equals(Constant.correalationID)
 
                             Bubble bubble = new Bubble(reply, controller);
                          //   GridPane.setHalignment(bubble.getToBubble(), HPos.LEFT );
@@ -385,10 +385,12 @@ public class OperatorController implements MessageListener {
 
 
                             bindOperator.getHistoryController().writehistory(counter, "user",reply);       //swriting to csv
-                            String username = controller.getListItems().get(controller.getMessageProducerID().indexOf(chatMessage.getProducerID())).getUser().getUserName();
+                            int index = controller.getMessageProducerID().indexOf(chatMessage.getProducerID());
+                            String username = controller.getListItems().get(index).getUser().getUserName();
 
-                            if(!controller.getStage().isFocused())
-                                NotificationController.getNotification(reply, username);
+                            if(!controller.getStage().isFocused()) {
+                                NotificationController.getNotification(reply, username,controller,index);
+                            }
                             // System.out.println(chatMessage.getMessage());
                             //     System.out.print("Operator:   ");
                             //  send = in.nextLine();

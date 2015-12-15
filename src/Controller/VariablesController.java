@@ -79,7 +79,7 @@ public final class  VariablesController {
             while (scanner.hasNext()) {
                 JSONObject obj = (JSONObject) new JSONParser().parse(scanner.nextLine());
                 variableList.add(new Variable((String) obj.get("ID"), (String) obj.get("name")));
-              //  System.out.println(obj.get("ID")+"      "+obj.get("name"));
+       //         System.out.println(obj.get("ID")+"      "+obj.get("name"));
             }
         } catch (FileNotFoundException e) {
             setVariable();

@@ -46,7 +46,7 @@ public class ChatController{
 
     final ObservableList<UserItem> listItems = FXCollections.observableArrayList();
     private Vector<String> messageProducerID;
-
+    private ArrayList<Variable> contextMenuVariables;
     private volatile Configuration config;
     private  OperatorController operatorController ;
     private  HistoryController historyController;
@@ -99,7 +99,7 @@ public class ChatController{
         chatHolder = new GridPane();
         defaultOperator = ConfigurationController.readConfig().getOperator();// "operator1";
         messageProducerID = new Vector<>();
-
+        contextMenuVariables = VariablesController.readVariables();
 
 
    //     listItems.add("operator0");
@@ -144,12 +144,12 @@ public class ChatController{
     }
     public void sendMessage(){
         String myMessage = messageTextField.getText();
-        ChatMessage myMessageMod = getObjectMessage(myMessage, operatorController.getSubscriptionName());
+
 
 
         try {
             if(!myMessage.trim().equals("") && !myMessage.trim().equalsIgnoreCase("exit")){
-                operatorController.sendMessage(myMessageMod, operatorController);
+
                 int counter = (int) operatorController.getMessageCounter();
                 //             System.out.println("value chat:  "+counter+"     ****"+operatorController);
                 Bubble bubble = new Bubble(myMessage, controller);
@@ -158,6 +158,10 @@ public class ChatController{
                 chatHolder.addRow(counter, bubble.getFromBubble());
                 //          chatBubble.appendText("Admin : "+myMessageMod);
                 messageDisplay.setContent(chatHolder);
+                myMessage = getReplacedVariables(myMessage);
+                ChatMessage myMessageMod = getObjectMessage(myMessage, operatorController.getSubscriptionName());
+                operatorController.sendMessage(myMessageMod, operatorController);
+
                 //System.out.println("Max:  "+ messageDisplay.getVmax());
                 Thread.sleep(50);
                 Platform.runLater(() -> messageDisplay.setVvalue(messageDisplay.getVmax()));
@@ -203,6 +207,22 @@ public class ChatController{
         messageTextField.setText("");
     }
 
+    public String getReplacedVariables(String message){
+        String replacedmessage = message;
+
+        for (Variable variable:contextMenuVariables) {
+            if(replacedmessage.contains("{"+variable.getName()+"}")) {
+                String ID = "{"+variable.getID()+"}";
+                String name = "{"+variable.getName()+"}";
+                replacedmessage = replacedmessage.replace(name, ID);
+
+
+            }
+        }
+
+
+        return  replacedmessage;
+    }
     // Set usernames from the users list to Header label
     public void setUsername() {
 
@@ -210,7 +230,7 @@ public class ChatController{
             String message = messageTextField.getText();
             if(previousID !=null) {
              //   System.out.println("ID Selected:  "+ previousID + "     "+ hashMapOperator.get(previousID));
-                chatUsersList.getItems().get(messageProducerID.indexOf(previousID)).setStyle("-fx-background-color:transparent; -fx-border-color:#transparent;");
+                chatUsersList.getItems().get(messageProducerID.indexOf(previousID)).setStyle("-fx-background-color:transparent; -fx-border-color:transparent;");
                 if(message!=null)
                     hashMapOperator.get(previousID).setTypedMessage(message.trim());
             }
@@ -267,11 +287,14 @@ public class ChatController{
         try {
             String message = messageTextField.getText();
             if(previousID !=null) {
+                useritem.setStyle("-fx-background-color:transparent; -fx-border-color:transparent;");
+                useritem.getThumbUserName().setStyle("-fx-text-fill:#696969; -fx-font-size:12px; -fx-font-weight:bold; ");
                 //   System.out.println("ID Selected:  "+ previousID + "     "+ hashMapOperator.get(previousID));
                 if(message!=null)
                     hashMapOperator.get(previousID).setTypedMessage(message.trim());
             }
             messageTextField.setText("");
+            useritem.setStyle("-fx-background-color:#e7f0f5; -fx-border-color:#e7f0f5;");
 
             String name = useritem.getUser().getUserName();
             String userID = useritem.getUser().getSubscriptionName();
@@ -431,8 +454,8 @@ public class ChatController{
     }
 
     public  void addMenuItems(){
-        ArrayList<Variable> variables = VariablesController.readVariables();
-        for (Variable variable :variables) {
+
+        for (Variable variable :contextMenuVariables) {
             MenuItem menuitem = new MenuItem(variable.getName());
             menuitem.setId(variable.getID());
             variablesMenu.getItems().add(menuitem);

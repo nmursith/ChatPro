@@ -1,5 +1,5 @@
-  {"ID":"userName","name":"Username"}
-    {"ID":"introducedViolations","name":"Introduced Violations"}
-    {"ID":"openViolations", "name":"Open Violations"}
-    {"ID":"runtimeViolations","name": "Runtime Violations"}
+    {"ID":"VARUSERNAME","name":"Username"}
+    {"ID":"VARINTRODUCEDVIOLATIONS","name":"Introduced Violations"}
+    {"ID":"VAROPENVIOLATIONS", "name":"Open Violations"}
+    {"ID":"VARRUNTIMEVIOLATIONS","name": "Runtime Violations"}
 

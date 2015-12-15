@@ -24,7 +24,7 @@ public class Main extends Application {
         Scene scene = new Scene(root);//, 550, 605);
         scene.getStylesheets().add(getClass().getResource("theme.css").toExternalForm());
 
-        System.out.println(scene.getHeight());
+
         chatController.setScene(scene, primaryStage);
         primaryStage.setTitle("vAssistant");
         primaryStage.setScene(scene);
