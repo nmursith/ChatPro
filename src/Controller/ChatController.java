@@ -17,6 +17,7 @@ import javafx.stage.Stage;
 
 import javax.jms.IllegalStateException;
 import javax.jms.JMSException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Vector;
@@ -138,28 +139,38 @@ public class ChatController{
     public void getMyMessage() {
 
         sendButton.setOnMouseClicked(event -> {
-            sendMessage();
+            try {
+                sendMessage();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 
         });
     }
-    public void sendMessage(){
+    public void sendMessage() throws IOException {
         String myMessage = messageTextField.getText();
 
-
+        ChatMessage myMessageMod = getObjectMessage(myMessage, operatorController.getSubscriptionName());
 
         try {
             if(!myMessage.trim().equals("") && !myMessage.trim().equalsIgnoreCase("exit")){
 
                 int counter = (int) operatorController.getMessageCounter();
                 //             System.out.println("value chat:  "+counter+"     ****"+operatorController);
-                Bubble bubble = new Bubble(myMessage, controller);
+
+                OperatorBubble bubble = new OperatorBubble(defaultOperator, myMessageMod.getTextMessage(), myMessageMod.getTime() );
                 //       GridPane.setHalignment(bubble.getFromBubble(), HPos.RIGHT);
-                historyController.writehistory(counter, "operator",myMessage);
-                chatHolder.addRow(counter, bubble.getFromBubble());
+
+
+
+                historyController.writehistory(counter, "operator",myMessageMod);
+                chatHolder.addRow(counter, bubble.getRoot());
                 //          chatBubble.appendText("Admin : "+myMessageMod);
                 messageDisplay.setContent(chatHolder);
+
                 myMessage = getReplacedVariables(myMessage);
-                ChatMessage myMessageMod = getObjectMessage(myMessage, operatorController.getSubscriptionName());
+
+                myMessageMod = getObjectMessage(myMessage, operatorController.getSubscriptionName());
                 operatorController.sendMessage(myMessageMod, operatorController);
 
                 //System.out.println("Max:  "+ messageDisplay.getVmax());
@@ -176,11 +187,12 @@ public class ChatController{
 //                    operatorController.sendMessage(myMessageMod, operatorController);
                     int counter = (int) operatorController.getMessageCounter();
                     //             System.out.println("value chat:  "+counter+"     ****"+operatorController);
-                    Bubble bubble = new Bubble(myMessage, controller);
+
+                    OperatorBubble bubble = new OperatorBubble(defaultOperator, myMessageMod.getTextMessage(),myMessageMod.getTime() );
                     //           GridPane.setHalignment(bubble.getFromBubble(), HPos.RIGHT);
 
-                    historyController.writehistory(counter, "operator",myMessage);
-                    chatHolder.addRow(counter, bubble.getFromBubble());
+                    historyController.writehistory(counter, "operator",myMessageMod);
+                    chatHolder.addRow(counter, bubble.getRoot());
                     //          chatBubble.appendText("Admin : "+myMessageMod);
                     messageDisplay.setContent(chatHolder);
                     Thread.sleep(50);
@@ -374,7 +386,7 @@ public class ChatController{
 //    }
 
     // Remove users from the chat and ArrayList
-    public void closeChat() throws JMSException {
+    public void closeChat() throws JMSException, IOException {
 
         int index = chatUsersList.getSelectionModel().getSelectedIndex();
         System.out.println("Closing index: "+ index);
@@ -387,9 +399,11 @@ public class ChatController{
 
             operatorController.sendMessage(myMessageMod, operatorController);
             int counter = (int) operatorController.getMessageCounter();
-            Bubble bubble = new Bubble(myMessage, controller);
-            historyController.writehistory(counter, "operator",myMessage);
-            chatHolder.addRow(counter, bubble.getFromBubble());
+
+            OperatorBubble bubble = new OperatorBubble(defaultOperator, myMessageMod.getTextMessage(),myMessageMod.getTime() );
+
+            historyController.writehistory(counter, "operator",myMessageMod);
+            chatHolder.addRow(counter, bubble.getRoot());
             messageDisplay.setContent(chatHolder);
 
 
@@ -421,7 +435,7 @@ public class ChatController{
     }
 
 
-    public void closeChat(UserItem useritem) throws JMSException {
+    public void closeChat(UserItem useritem) throws JMSException, IOException {
         int index = chatUsersList.getSelectionModel().getSelectedIndex();
         System.out.println("Closing index: "+ index);
         //  operatorController.closeConnection();
@@ -434,9 +448,11 @@ public class ChatController{
             operatorController.sendMessage(myMessageMod, operatorController);
           //  System.out.println("exit");
             int counter = (int) operatorController.getMessageCounter();
-            Bubble bubble = new Bubble(myMessage, controller);
-            historyController.writehistory(counter, "operator",myMessage);
-            chatHolder.addRow(counter, bubble.getFromBubble());
+
+            OperatorBubble bubble = new OperatorBubble(defaultOperator, myMessageMod.getTextMessage(), myMessageMod.getTime() );
+
+            historyController.writehistory(counter, "operator",myMessageMod);
+            chatHolder.addRow(counter, bubble.getRoot());
             messageDisplay.setContent(chatHolder);
 
 
@@ -455,7 +471,7 @@ public class ChatController{
 
 
     }
-    public void doSendMessage(Event event) {
+    public void doSendMessage(Event event) throws IOException {
 
         if (((KeyEvent)event).getCode().equals(KeyCode.ENTER)){
             sendMessage();

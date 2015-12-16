@@ -14,6 +14,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
 import javax.jms.JMSException;
+import java.io.IOException;
 
 /**
  * Created by PPNPERERA on 11/24/2015.
@@ -219,7 +220,11 @@ public class UserItem extends GridPane implements   Runnable, EventHandler<Mouse
     public void handle(MouseEvent event) {
         try {
 
-            chatController.closeChat(this);
+            try {
+                chatController.closeChat(this);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             //chatController.closeChat((UserItem)event.getTarget());
         } catch (JMSException e) {
             System.out.println("problem");

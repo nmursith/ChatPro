@@ -4,6 +4,7 @@ package Controller;
  * Created by mmursith on 12/9/2015.
  */
 
+import Model.ChatMessage;
 import com.csvreader.CsvReader;
 import com.csvreader.CsvWriter;
 
@@ -25,7 +26,7 @@ public class HistoryController {
 
     }
 
-    public void writehistory(int id, String from, String message){
+    public void writehistory(int id, String from, ChatMessage message){
 
 
         // before we open the file check to see if it already exists
@@ -46,7 +47,7 @@ public class HistoryController {
                 csvOutput.write("id");
                 csvOutput.write("from");
                 csvOutput.write("message");
-                //csvOutput.write("time");
+                csvOutput.write("time");
                 csvOutput.endRecord();
             }
             // else assume that the file already has the correct header line
@@ -54,9 +55,9 @@ public class HistoryController {
             // write out a few records
             csvOutput.write(id+"");
             csvOutput.write(from);
-            csvOutput.write(message);
-//            csvOutput.write(chatMessage.getTextMessage());
-//            csvOutput.write(chatMessage.getTime());
+            //csvOutput.write(message);
+            csvOutput.write(message.getTextMessage());
+            csvOutput.write(message.getTime());
 
             csvOutput.endRecord();
 

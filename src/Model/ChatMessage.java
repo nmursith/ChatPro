@@ -12,7 +12,7 @@ public class ChatMessage {
 
     private Message message;
     private String producerID;
-
+    private String userName;
     private String time;
     private String textMessage;
 
@@ -64,5 +64,13 @@ public class ChatMessage {
 
     public String getTextMessage() {
         return textMessage;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 }

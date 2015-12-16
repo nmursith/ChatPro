@@ -13,13 +13,13 @@
         <Label fx:id="bubble_triangle_label" layoutX="50.0" layoutY="10.0" prefHeight="29.0" prefWidth="25.0" rotate="45.0" style="-fx-background-color: #BFE9F9;" />
         <GridPane fx:id="chat_bubble_pane" layoutX="55.0" prefWidth="276.0" style="-fx-background-color: #BFE9F9; -fx-background-radius: 10px;">
             <children>
-                <Label fx:id="username" layoutX="10.0" layoutY="5.0" maxHeight="15.0" maxWidth="200.0" opacity="0.6" prefHeight="15.0" prefWidth="150.0" style="-fx-font-weight: bold;" >
+                <Label fx:id="username" layoutX="10.0" layoutY="5.0" maxHeight="15.0" maxWidth="200.0" opacity="0.6" prefHeight="15.0" text="" prefWidth="150.0" style="-fx-font-weight: bold;" >
                     <font>
                         <Font size="11.0" />
                     </font>
             </Label>
-                <Label fx:id="usermessage" alignment="TOP_LEFT" layoutX="10.0" layoutY="31.0" maxWidth="276.0"  prefWidth="276.0" style="-fx-font-weight: bold;"  wrapText="true" GridPane.rowIndex="1" />
-                <Label fx:id="time" alignment="BOTTOM_RIGHT" layoutX="234.0" layoutY="5.0" maxHeight="16.0" maxWidth="273.0" opacity="0.6" prefHeight="16.0" prefWidth="273.0" style="-fx-font-weight: bold;"  GridPane.rowIndex="2">
+                <Label fx:id="usermessage" alignment="TOP_LEFT" layoutX="10.0" layoutY="31.0" maxWidth="276.0"  prefWidth="276.0" text="" style="-fx-font-weight: bold;"  wrapText="true" GridPane.rowIndex="1" />
+                <Label fx:id="time" alignment="BOTTOM_RIGHT" layoutX="234.0" layoutY="5.0" maxHeight="16.0" maxWidth="273.0" text="" opacity="0.6" prefHeight="16.0" prefWidth="273.0" style="-fx-font-weight: bold;"  GridPane.rowIndex="2">
                     <font>
                         <Font size="11.0" />
                     </font>

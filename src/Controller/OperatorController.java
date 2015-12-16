@@ -274,6 +274,7 @@ public class OperatorController implements MessageListener {
 
                     if (!controller.getMessageProducerID().contains(tempName) && !tempName.equals(null) && !tempName.equals(defaultOperator)) {
                         controller.getMessageProducerID().add(tempName);
+
                         User user = new User();
                         user.setuserId(tempName);
                         user.setUserName("user "+messageProduceID.size());
@@ -311,10 +312,11 @@ public class OperatorController implements MessageListener {
                         pID = chatMessage.getProducerID();
 //                        if (correID==null)
 //                            correID = "";
-                       System.out.println(correID);
+//                       System.out.println(correID);
                         if( correID==null || !correID.equals(Constant.correalationID)  ) {  //!correID.equals(Constant.correalationID)
 
-                            Bubble bubble = new Bubble(reply, controller);
+              //              Bubble bubble = new Bubble(reply, controller);
+                            UserBubble bubble = new UserBubble("User", chatMessage.getTextMessage(), chatMessage.getTime());
                          //   GridPane.setHalignment(bubble.getToBubble(), HPos.LEFT );
 
                             System.out.println("User:  " + reply);
@@ -331,7 +333,7 @@ public class OperatorController implements MessageListener {
                             BindOperator bindOperator =  controller.getHashMapOperator().get(chatMessage.getProducerID());
                             int counter = (int)bindOperator.getOperatorController().getMessageCounter();
 //                            bindOperator.getTextArea().appendText("User:  " + reply+"\n\n");
-                            bindOperator.getChatHolder().addRow(counter, bubble.getToBubble());
+                            bindOperator.getChatHolder().addRow(counter, bubble.getRoot());
 
 
                             try {
@@ -383,7 +385,7 @@ public class OperatorController implements MessageListener {
 
 
 
-                            bindOperator.getHistoryController().writehistory(counter, "user",reply);       //swriting to csv
+                            bindOperator.getHistoryController().writehistory(counter, "user",chatMessage);       //swriting to csv
                             int index = controller.getMessageProducerID().indexOf(chatMessage.getProducerID());
                             String username = controller.getListItems().get(index).getUser().getUserName();
 
@@ -402,6 +404,8 @@ public class OperatorController implements MessageListener {
                         System.out.println("Null");
                       //  e.printStackTrace();
                         //   break;
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
 
                 }
@@ -424,18 +428,20 @@ public class OperatorController implements MessageListener {
                     String ID = messages.get("id");
                     String from = messages.get("from");
                     String message = messages.get("message");
+                    String time = messages.get("time");
                     int id = Integer.parseInt(ID);
-                    Bubble bubble = new Bubble(message, controller);
+////working here
+
 
                     if(from.equalsIgnoreCase("user")) {
-
+                        UserBubble bubble = new UserBubble("user", message, time);
                //         GridPane.setHalignment(bubble.getToBubble(), HPos.LEFT);
-                        bindOperator.getChatHolder().addRow(id, bubble.getToBubble());
+                        bindOperator.getChatHolder().addRow(id, bubble.getRoot());
                     }
                     else {
-
+                        OperatorBubble bubble = new OperatorBubble(defaultOperator, message, time);
                     //    GridPane.setHalignment(bubble.getFromBubble(), HPos.RIGHT);
-                        bindOperator.getChatHolder().addRow(id, bubble.getFromBubble());
+                        bindOperator.getChatHolder().addRow(id, bubble.getRoot());
                     }
 
 
