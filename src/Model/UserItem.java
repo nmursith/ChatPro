@@ -141,7 +141,7 @@ public class UserItem extends GridPane implements   Runnable, EventHandler<Mouse
 
         //    System.out.println("Loop: " + running);
         }
-        if(chatController.getChatUsersList().getSelectionModel().getSelectedItem().equals(userItem)) {
+        if(chatController.getChatUsersList().getSelectionModel().getSelectedItem().equals(userItem) && userItem!=null) {
 
             this.thumbUserName.setStyle("-fx-text-fill:#696969; -fx-font-size:12px; -fx-font-weight:bold; ");
         }

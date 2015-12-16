@@ -3,6 +3,8 @@ package Controller;
 import Model.*;
 import com.csvreader.CsvReader;
 import javafx.application.Platform;
+import javafx.concurrent.Service;
+import javafx.concurrent.Task;
 import javafx.scene.layout.GridPane;
 import org.apache.activemq.command.ActiveMQBytesMessage;
 import org.apache.activemq.util.ByteSequence;
@@ -77,7 +79,7 @@ public class OperatorController implements MessageListener {
 
         }
         catch (NullPointerException e){
-            System.out.println("Alread Answering");
+            System.out.println("Already Answering");
         }
         messageCounter = -1;
 
@@ -226,7 +228,8 @@ public class OperatorController implements MessageListener {
             }
 
 
-
+            /********/
+/*
             CountDownLatch countDownLatch = new CountDownLatch(1);
             Platform.runLater( () -> {
                 try {
@@ -240,6 +243,35 @@ public class OperatorController implements MessageListener {
                 countDownLatch.countDown();
         });
             countDownLatch.await();
+*/
+
+            Service<Void> service = new Service<Void>() {
+                @Override
+                protected Task<Void> createTask() {
+                    return new Task<Void>() {
+                        @Override
+                        protected Void call() throws Exception {
+                            //Background work
+                            final CountDownLatch latch = new CountDownLatch(1);
+                            Platform.runLater(new Runnable() {
+                                @Override
+                                public void run() {
+                                    try {
+                                        if(controller!=null)
+                                            routeChat();
+                                    } catch (JMSException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            });
+                            latch.await();
+                            //Keep with the background work
+                            return null;
+                        }
+                    };
+                }
+            };
+            service.start();
 
         /***********/
 
@@ -363,10 +395,10 @@ public class OperatorController implements MessageListener {
                             try{
                                 int sID = controller.getChatUsersList().getSelectionModel().getSelectedIndex(); // selected ID
 
-                                //System.out.println("selected   "+cID);
+                            //    System.out.println("selected   "+cID);
                                 if(sID!=cID){
-                                    System.out.println("should work");
-                                    controller.getChatUsersList().getItems().get(cID).startBlink();
+                                 //   System.out.println("should work");
+                                    Platform.runLater(() -> controller.getChatUsersList().getItems().get(cID).startBlink());
 
                                 }
                             }
@@ -402,9 +434,22 @@ public class OperatorController implements MessageListener {
                             username = controller.getListItems().get(index).getUser().getUserName();
 
 
-                            if(!controller.getStage().isFocused()) {
-                                NotificationController.getNotification(reply, username,controller,index);
-                            }
+
+                            final int Index = index;
+                            final String uName = username;
+                            final String rep = reply;
+
+                            Platform.runLater( () -> {
+                                if(!controller.getStage().isFocused()) {
+                                    NotificationController.getNotification(rep, uName,controller,Index);
+                                }
+
+
+                            });
+
+
+
+
                             // System.out.println(chatMessage.getMessage());
                             //     System.out.print("Operator:   ");
                             //  send = in.nextLine();

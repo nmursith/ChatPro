@@ -229,7 +229,7 @@ public class ChatController{
 
         for (Variable variable:contextMenuVariables) {
             if(replacedmessage.contains("{"+variable.getName()+"}")) {
-                String ID = "{"+variable.getID()+"}";
+                String ID = variable.getID();
                 String name = "{"+variable.getName()+"}";
                 replacedmessage = replacedmessage.replace(name, ID);
 
