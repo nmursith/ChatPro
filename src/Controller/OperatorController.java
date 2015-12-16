@@ -150,7 +150,6 @@ public class OperatorController implements MessageListener {
                 ChatMessage chatMessage =  new ChatMessage();
 
                 chatMessage.setProducerID("");
-                chatMessage.setTime(ChatMessage.dateFormat.format(ChatMessage.calendar.getTime()));
                 chatMessage.setMessage(message);
                 chatMessage.setTextMessage(messageText);
                 this.chatMessagess.add(chatMessage);
@@ -180,7 +179,7 @@ public class OperatorController implements MessageListener {
 
                 ChatMessage chatMessage =  new ChatMessage();
                 chatMessage.setProducerID(producerID);
-                chatMessage.setTime(ChatMessage.dateFormat.format(ChatMessage.calendar.getTime()));
+
                 chatMessage.setMessage(message);
                 chatMessage.setTextMessage(messageText);
 //                System.out.println("From Byte Client: "+ chatMessage.getTextMessage());

@@ -72,6 +72,24 @@
   }
 
 
+/*context menu*/
+
+.context-menu {
+    -fx-background-color: rgb(255.0, 255.0, 255.0, 0.95);
+    -fx-background-radius: 2.0;
+}
+
+.context-menu .label {
+    -fx-text-fill: derive(black, 15%);
+}
+
+
+
+.menu-item:focused {
+    -fx-background-color: rgb(94.0, 203.0, 234.0);
+}
+
+
 
 
 

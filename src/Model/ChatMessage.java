@@ -1,17 +1,14 @@
 package Model;
 
 import javax.jms.Message;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Created by mmursith on 11/24/2015.
  */
 public class ChatMessage {
 
-    public static DateFormat dateFormat;
-    public static Calendar calendar;
 
     private Message message;
     private String producerID;
@@ -22,23 +19,19 @@ public class ChatMessage {
 
 
     public ChatMessage(){
-        dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-        calendar = Calendar.getInstance();
+        Date dNow = new Date( );
+        SimpleDateFormat ft = new SimpleDateFormat ("E yyyy/MM/dd  hh:mm a ");
+        time = ft.format(dNow);
+
+
     }
     public static void main(String []args) {
         ChatMessage chatMessage = new ChatMessage();
-        System.out.println(chatMessage.getDateFormat().format(chatMessage.getCalendar().getTime()));
-    }
+        //System.out.println(chatMessage.ft.format(chatMessage.dNow));
 
-    public Calendar getCalendar() {
-        return calendar;
     }
 
 
-
-    public DateFormat getDateFormat() {
-        return dateFormat;
-    }
 
     public Message getMessage() {
         return message;

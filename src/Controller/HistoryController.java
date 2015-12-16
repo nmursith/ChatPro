@@ -46,6 +46,7 @@ public class HistoryController {
                 csvOutput.write("id");
                 csvOutput.write("from");
                 csvOutput.write("message");
+                //csvOutput.write("time");
                 csvOutput.endRecord();
             }
             // else assume that the file already has the correct header line
@@ -54,6 +55,9 @@ public class HistoryController {
             csvOutput.write(id+"");
             csvOutput.write(from);
             csvOutput.write(message);
+//            csvOutput.write(chatMessage.getTextMessage());
+//            csvOutput.write(chatMessage.getTime());
+
             csvOutput.endRecord();
 
 

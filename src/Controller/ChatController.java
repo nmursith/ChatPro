@@ -239,6 +239,7 @@ public class ChatController{
 
             UserItem useritem = chatUsersList.getSelectionModel().getSelectedItem();
             useritem.setStyle("-fx-background-color:#e7f0f5; -fx-border-color:#e7f0f5;");
+            useritem.getThumbUserName().setStyle("-fx-text-fill:#696969; -fx-font-size:12px; -fx-font-weight:bold; ");
             String name = useritem.getUser().getUserName();
             String userID = useritem.getUser().getSubscriptionName();
             previousID = userID;
@@ -287,14 +288,16 @@ public class ChatController{
         try {
             String message = messageTextField.getText();
             if(previousID !=null) {
-                useritem.setStyle("-fx-background-color:transparent; -fx-border-color:transparent;");
-                useritem.getThumbUserName().setStyle("-fx-text-fill:#696969; -fx-font-size:12px; -fx-font-weight:bold; ");
+                chatUsersList.getItems().get(messageProducerID.indexOf(previousID)).setStyle("-fx-background-color:transparent; -fx-border-color:transparent;");
+                chatUsersList.getItems().get(messageProducerID.indexOf(previousID)).getThumbUserName().setStyle("-fx-text-fill:#696969; -fx-font-size:12px; -fx-font-weight:bold; ");
                 //   System.out.println("ID Selected:  "+ previousID + "     "+ hashMapOperator.get(previousID));
                 if(message!=null)
                     hashMapOperator.get(previousID).setTypedMessage(message.trim());
             }
             messageTextField.setText("");
             useritem.setStyle("-fx-background-color:#e7f0f5; -fx-border-color:#e7f0f5;");
+
+
 
             String name = useritem.getUser().getUserName();
             String userID = useritem.getUser().getSubscriptionName();
@@ -313,12 +316,15 @@ public class ChatController{
                     historyController = hashMapOperator.get(userID).getHistoryController();
                     messageDisplay.setContent(chatHolder);
                     messageDisplay.setVvalue(messageDisplay.getVmax());
+                    Thread.sleep(10);
+                    useritem.getThumbUserName().setStyle("-fx-text-fill:#696969; -fx-font-size:12px; -fx-font-weight:bold; ");
 
                 }
                 catch (NullPointerException e){
                     e.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
-
 
 
             });
@@ -331,6 +337,13 @@ public class ChatController{
                 sendButton.setDisable(false);
                 messageTextField.setDisable(false);
             }
+
+//            try {
+//                Thread.sleep(100);
+//                Platform.runLater(() -> useritem.getThumbUserName().setStyle("-fx-text-fill:#696969; -fx-font-size:12px; -fx-font-weight:bold; "));
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
 
 
         }
@@ -345,7 +358,6 @@ public class ChatController{
     public ChatMessage getObjectMessage(String messageText, String producerID){
         ChatMessage chatMessage =  new ChatMessage();
         chatMessage.setProducerID(producerID);
-        chatMessage.setTime(ChatMessage.dateFormat.format(ChatMessage.calendar.getTime()));
         chatMessage.setTextMessage(messageText);
         return chatMessage;
     }

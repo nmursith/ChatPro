@@ -91,9 +91,6 @@ public class UserItem extends GridPane implements   Runnable, EventHandler<Mouse
         this.addRow(0,close);
 
 
-      //  this.addRow(1,statusBar);
-     //   System.out.println(getWidth()+"     "+getHeight());
-
         this.setOnMouseClicked(event -> {
             System.out.println("clicked");
                // blink.interrupt();
@@ -143,14 +140,23 @@ public class UserItem extends GridPane implements   Runnable, EventHandler<Mouse
 
         //    System.out.println("Loop: " + running);
         }
-        this.thumbUserName.setStyle("-fx-text-fill:#ffa500; -fx-font-size:12px; -fx-font-weight:bold;");
+        if(chatController.getChatUsersList().getSelectionModel().getSelectedItem().equals(userItem)) {
+
+            this.thumbUserName.setStyle("-fx-text-fill:#696969; -fx-font-size:12px; -fx-font-weight:bold; ");
+        }
+        else
+            this.thumbUserName.setStyle("-fx-text-fill:#ffa500; -fx-font-size:12px; -fx-font-weight:bold;");
+
+
         try {
             Thread.sleep(250);
         } catch (InterruptedException e) {
             ///  e.printStackTrace();
 
         }
-        blink.stop();
+
+
+
     }
     public ImageView getUserImage() {
         return userImage;

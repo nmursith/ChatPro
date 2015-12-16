@@ -182,6 +182,7 @@ public class NotificationController {
         private static void notifyLocations(){
             UserItem userItem = chatController.getChatUsersList().getItems().get(getIndex());
             chatController.setUsername(userItem);
+            chatController.getChatUsersList().getSelectionModel().select(getIndex());
             chatController.getStage().requestFocus();
 
         }
