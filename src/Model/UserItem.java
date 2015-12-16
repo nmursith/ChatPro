@@ -117,7 +117,7 @@ public class UserItem extends GridPane implements   Runnable, EventHandler<Mouse
 
 
     public void stop(){
-
+//
     }
 
 
