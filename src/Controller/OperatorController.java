@@ -385,9 +385,10 @@ public class OperatorController implements MessageListener {
 
 
 
-                            bindOperator.getHistoryController().writehistory(counter, "user",chatMessage);       //swriting to csv
+
                             int index = controller.getMessageProducerID().indexOf(chatMessage.getProducerID());
                             String username = controller.getListItems().get(index).getUser().getUserName();
+                            bindOperator.getHistoryController().writehistory(counter, username,chatMessage);       //swriting to csv
 
                             if(!controller.getStage().isFocused()) {
                                 NotificationController.getNotification(reply, username,controller,index);
