@@ -37,7 +37,7 @@ public class NotificationController {
         user_name.setPrefHeight(20);
         user_name.setWrapText(true);
         user_name.relocate(65,10);
-        user_name.setTextFill(Color.BLACK);
+        user_name.setTextFill(Color.WHITE);
         user_name.setStyle("-fx-font-size: 16px; -fx-font-weight: BOLD; -fx-background-image: url('Background.png')");
         user_name.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
@@ -65,7 +65,7 @@ public class NotificationController {
         label.setPrefHeight(20);
         label.setWrapText(true);
         label.relocate(65,40);
-        label.setTextFill(Color.BLACK);
+        label.setTextFill(Color.WHITE);
         label.setStyle("-fx-font-size: 11px; -fx-font-weight: BOLD;");
         label.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
@@ -109,8 +109,8 @@ public class NotificationController {
                 popup.setX(stage.getX()+10);
                 popup.setY(stage.getY()+5);
                 //stage.getScene().setFill(Color.valueOf("#f4f4f4"));
-                stage.getScene().setFill(Color.valueOf("#00AFF0"));
-                PauseTransition delay = new PauseTransition(Duration.seconds(10));
+                stage.getScene().setFill(Color.valueOf("#0B3861"));
+                PauseTransition delay = new PauseTransition(Duration.seconds(5));
                 //PauseTransition delay1 = new PauseTransition(Duration.seconds(2));
                 delay.setOnFinished( event -> stage.close() );
                 //delay1.setOnFinished( event -> stage.getScene().setFill(Color.valueOf("#00AFF0")));
@@ -124,8 +124,8 @@ public class NotificationController {
             @Override
             public void handle(MouseEvent mouseEvent) {
                 //cnt--;
-         ///       System.out.println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
-  //////////////////
+                ///       System.out.println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
+                //////////////////
                 notifyLocations();
                 stage.close();
             }
@@ -175,17 +175,17 @@ public class NotificationController {
                 new KeyFrame(Duration.millis(600), new KeyValue(popup.opacityProperty(), 0, bugFixInterpolator))
         );
         t.setAutoReverse(true);
-        t.setCycleCount(6);
+        t.setCycleCount(4);
         t.playFromStart();
     }
 
-        private static void notifyLocations(){
-            UserItem userItem = chatController.getChatUsersList().getItems().get(getIndex());
-            chatController.setUsername(userItem);
-            chatController.getChatUsersList().getSelectionModel().select(getIndex());
-            chatController.getStage().requestFocus();
+    private static void notifyLocations(){
+        UserItem userItem = chatController.getChatUsersList().getItems().get(getIndex());
+        chatController.setUsername(userItem);
+        chatController.getChatUsersList().getSelectionModel().select(getIndex());
+        chatController.getStage().requestFocus();
 
-        }
+    }
 
     public static void getNotification(String message, String userName, ChatController controller, int index){
         chatController =controller;
@@ -196,8 +196,8 @@ public class NotificationController {
         stage.setTitle("Notification");
         //stage.initStyle(StageStyle.UNDECORATED);
         StackPane root = new StackPane();
-        root.setStyle("-fx-background-color: TRANSPARENT; -fx-border-color: #00AFF0");
-        Scene scene = new Scene(root, 300, 80, Color.valueOf("#00AFF0"));
+        root.setStyle("-fx-background-color: TRANSPARENT; -fx-border-color: #0B3861");
+        Scene scene = new Scene(root, 300, 80, Color.valueOf("#0B3861"));
         stage.setScene(scene);
 
         //stage.initOwner(stageINIT);

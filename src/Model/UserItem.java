@@ -81,29 +81,30 @@ public class UserItem extends GridPane implements   Runnable, EventHandler<Mouse
         close = new ImageView(new Image(getClass().getResourceAsStream("close.png")));
         close.setFitHeight(9);
         close.setFitWidth(9);
-        close.setOnMouseClicked(this);
-
-
+        Label closeLabel = new Label("", close);
+        closeLabel.setOnMouseClicked(this);
 
         this.addRow(0,userImage);
         this.addRow(0,thumbUserName);
+        this.addRow(0,closeLabel);
 
-        this.addRow(0,close);
+
+
 
 
         this.setOnMouseClicked(event -> {
-            System.out.println("clicked");
+        //    System.out.println("clicked");
                // blink.interrupt();
      //           stop();
                // blink = null;
-                System.out.println("stopping");
+       //         System.out.println("stopping");
             this.thumbUserName.setStyle("-fx-text-fill:#696969; -fx-font-size:12px; -fx-font-weight:bold; ");
 
             //blink = new Blink();
 
         });
 
-      System.out.println("focueed:  "+this.isFocused());
+   //   System.out.println("focueed:  "+this.isFocused());
 
     }
 

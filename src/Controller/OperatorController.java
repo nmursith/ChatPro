@@ -14,6 +14,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Vector;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -89,7 +90,7 @@ public class OperatorController implements MessageListener {
         }
         //
 
-        System.out.println("Created..");
+
 
    //     System.out.println("Listening..");
     }
@@ -135,7 +136,7 @@ public class OperatorController implements MessageListener {
      @Override
     public void onMessage(Message message) {
     String producerID = null;
-        System.out.println("Recieving......:      ");
+   //     System.out.println("Recieving......:      ");
         try {
 
 
@@ -200,7 +201,7 @@ public class OperatorController implements MessageListener {
                 BindOperator bindOperator = new BindOperator(operatorController, chatHolder);
                 controller.getHashMapOperator().put(producerID, bindOperator);
 
-                Thread.sleep(100);
+                Thread.sleep(20);
 
                 if(controller!=null){
                     int count  = loadHistory(controller.getHashMapOperator().get(producerID));
@@ -224,18 +225,23 @@ public class OperatorController implements MessageListener {
                 }
             }
 
-           Platform.runLater(new Runnable(){
 
-               @Override
-               public void run() {
-                   if(controller!=null)
-                       try {
-                           routeChat();
-                       } catch (JMSException e) {
-                           e.printStackTrace();
-                       }
-               }
-           });
+
+            CountDownLatch countDownLatch = new CountDownLatch(1);
+            Platform.runLater( () -> {
+                try {
+                    if(controller!=null)
+                        routeChat();
+                } catch (JMSException e) {
+                    e.printStackTrace();
+                }
+
+
+                countDownLatch.countDown();
+        });
+            countDownLatch.await();
+
+        /***********/
 
 
 
@@ -325,7 +331,7 @@ public class OperatorController implements MessageListener {
                             UserBubble bubble = new UserBubble(username, chatMessage.getTextMessage(), chatMessage.getTime());
                          //   GridPane.setHalignment(bubble.getToBubble(), HPos.LEFT );
 
-                            System.out.println("User:  " + reply);
+                            //System.out.println("User:  " + reply);
 //                            BindOperator bindOperator =  controller.getHashMapOperator().get("operator0");
 //                            //  bindOperator.getTextArea().appendText("User:  " + reply+"\n\n");
 //      //                      System.out.println(bindOperator);
@@ -343,7 +349,7 @@ public class OperatorController implements MessageListener {
 
 
                             try {
-                                Thread.sleep(100);
+                                Thread.sleep(20);
 
                             } catch (InterruptedException e) {
                                 e.printStackTrace();
@@ -351,13 +357,13 @@ public class OperatorController implements MessageListener {
 
 
                             int cID = controller.getMessageProducerID().indexOf(pID);//current ID;
-                            System.out.println("cid:   "+ cID);
+                            //System.out.println("cid:   "+ cID);
 
                             //executor.execute();
                             try{
                                 int sID = controller.getChatUsersList().getSelectionModel().getSelectedIndex(); // selected ID
 
-                                System.out.println("selected   "+cID);
+                                //System.out.println("selected   "+cID);
                                 if(sID!=cID){
                                     System.out.println("should work");
                                     controller.getChatUsersList().getItems().get(cID).startBlink();
@@ -619,7 +625,7 @@ public class OperatorController implements MessageListener {
                     try {
 
 
-                        Thread.sleep(100);
+                        Thread.sleep(20);
                     } catch (InterruptedException e1) {
                         e1.printStackTrace();
                     }
@@ -630,7 +636,7 @@ public class OperatorController implements MessageListener {
 
                     try {
 
-                        Thread.sleep(100);
+                        Thread.sleep(20);
                     } catch (InterruptedException e1) {
                         e1.printStackTrace();
                     }

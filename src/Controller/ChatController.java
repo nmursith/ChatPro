@@ -174,7 +174,7 @@ public class ChatController{
 
                 historyController.writehistory(counter, defaultOperator,myMessageMod);
                 chatHolder.addRow(counter, bubble.getRoot());
-                System.out.println(chatHolder.getWidth());
+
                 messageDisplay.setContent(chatHolder);
 
                 myMessage = getReplacedVariables(myMessage);
@@ -481,7 +481,7 @@ public class ChatController{
         if (((KeyEvent)event).getCode().equals(KeyCode.ENTER)){
             sendMessage();
             event.consume();
-            System.out.println("sending");
+            //System.out.println("sending");
 
         }
     }
@@ -597,6 +597,31 @@ public class ChatController{
                 stage.setY(event.getScreenY() + yOffset);
             }
         });
+    }
+
+
+    public void hoverCloseLabel(){
+        closeLabel.setOnMouseEntered(event1 -> closeLabel.setOpacity(0.2));
+    }
+
+    public void exitOnClose(){
+        closeLabel.setOnMouseExited(event1 -> closeLabel.setOpacity(1));
+    }
+
+    public void hoverMinimizeLabel(){
+        minimizeLabel.setOnMouseEntered(event1 -> minimizeLabel.setOpacity(0.2));
+    }
+
+    public void exitOnMinimize(){
+        minimizeLabel.setOnMouseExited(event1 -> minimizeLabel.setOpacity(1));
+    }
+
+    public void hoverSendButton(){
+        sendButton.setOnMouseEntered(event1 -> sendButton.setOpacity(0.6));
+    }
+
+    public void exitOnSend(){
+        sendButton.setOnMouseExited(event1 -> sendButton.setOpacity(1));
     }
 
 
