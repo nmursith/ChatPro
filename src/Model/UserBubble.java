@@ -1,4 +1,4 @@
-package sample;
+package Model;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -10,13 +10,13 @@ import java.io.IOException;
  */
 public class UserBubble {
     private Parent root;
-
     public static void main(String [] args){
 
     }
     public UserBubble() throws IOException {
 
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("userbubble.fxml"));
+
         root = fxmlLoader.load();
 
     }
