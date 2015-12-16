@@ -8,8 +8,6 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
-import javax.jms.JMSException;
-
 public class Main extends Application {
 
     @Override
@@ -34,14 +32,7 @@ public class Main extends Application {
         primaryStage.initStyle(StageStyle.UNDECORATED);
         primaryStage.show();
         primaryStage.setResizable(false);
-        primaryStage.setOnCloseRequest(event -> {
-            try {
-                chatController.closeAllConnections();
-                System.exit(0);
-            } catch (JMSException e) {
 
-            }
-        });
 
 
 

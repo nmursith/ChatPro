@@ -110,6 +110,7 @@ public class ChatController{
 
         //chatBubble = new TextArea();
         chatHolder = new GridPane();
+
         defaultOperator = ConfigurationController.readConfig().getOperator();// "operator1";
         messageProducerID = new Vector<>();
         contextMenuVariables = VariablesController.readVariables();
@@ -126,22 +127,18 @@ public class ChatController{
         }
 //        chatUsersList.setItems(listItems);
         Platform.runLater(() -> {
-            try {
 
-                messageTextField.setDisable(true);
-                this.Username.getStyleClass().add("username");
-                createChatSpace();
-                applyDimensions();
-                addMenuItems();
-                if(isOnline) {
-                    hashMapOperator.put(defaultOperator, new BindOperator(operatorController, getGridPane()));
-                    historyController = hashMapOperator.get(config.getSubscription()).getHistoryController();
-                }
-
-
-            } catch (JMSException e) {
-                e.printStackTrace();
+            messageTextField.setDisable(true);
+            this.Username.getStyleClass().add("username");
+            messageDisplay.setContent(chatHolder);
+            messageDisplay.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+            addMenuItems();
+            if(isOnline) {
+                hashMapOperator.put(defaultOperator, new BindOperator(operatorController, getGridPane()));
+                historyController = hashMapOperator.get(config.getSubscription()).getHistoryController();
             }
+
+
         });
 
 
@@ -175,9 +172,9 @@ public class ChatController{
 
 
 
-                historyController.writehistory(counter, "operator",myMessageMod);
+                historyController.writehistory(counter, defaultOperator,myMessageMod);
                 chatHolder.addRow(counter, bubble.getRoot());
-                //          chatBubble.appendText("Admin : "+myMessageMod);
+                System.out.println(chatHolder.getWidth());
                 messageDisplay.setContent(chatHolder);
 
                 myMessage = getReplacedVariables(myMessage);
@@ -195,25 +192,21 @@ public class ChatController{
             else if(myMessage.trim().equalsIgnoreCase("exit")){
                 if(!operatorController.getSubscriptionName().equals(defaultOperator)) {
 
-
 //                    operatorController.sendMessage(myMessageMod, operatorController);
-                    int counter = (int) operatorController.getMessageCounter();
+//                    int counter = (int) operatorController.getMessageCounter();
                     //             System.out.println("value chat:  "+counter+"     ****"+operatorController);
 
-                    OperatorBubble bubble = new OperatorBubble(defaultOperator, myMessageMod.getTextMessage(),myMessageMod.getTime() );
-                    //           GridPane.setHalignment(bubble.getFromBubble(), HPos.RIGHT);
-
-                    historyController.writehistory(counter, "operator",myMessageMod);
-                    chatHolder.addRow(counter, bubble.getRoot());
-                    //          chatBubble.appendText("Admin : "+myMessageMod);
-                    messageDisplay.setContent(chatHolder);
-                    Thread.sleep(50);
-                    Platform.runLater(() -> messageDisplay.setVvalue(messageDisplay.getVmax()));
+//                    OperatorBubble bubble = new OperatorBubble(defaultOperator, myMessageMod.getTextMessage(),myMessageMod.getTime() );
+//                    //           GridPane.setHalignment(bubble.getFromBubble(), HPos.RIGHT);
+//
+//                    historyController.writehistory(counter, "operator",myMessageMod);
+//                    chatHolder.addRow(counter, bubble.getRoot());
+//                    //          chatBubble.appendText("Admin : "+myMessageMod);
+//                    messageDisplay.setContent(chatHolder);
+//                    Thread.sleep(50);
+//                    Platform.runLater(() -> messageDisplay.setVvalue(messageDisplay.getVmax()));
 
                     controller.closeChat();//closeConnection();
-
-
-
                 }
                 else {
 
@@ -409,15 +402,15 @@ public class ChatController{
             String myMessage = "exit";
             ChatMessage myMessageMod = getObjectMessage(myMessage, operatorController.getSubscriptionName());
 
-            operatorController.sendMessage(myMessageMod, operatorController);
+
             int counter = (int) operatorController.getMessageCounter();
 
             OperatorBubble bubble = new OperatorBubble(defaultOperator, myMessageMod.getTextMessage(),myMessageMod.getTime() );
 
-            historyController.writehistory(counter, "operator",myMessageMod);
+            historyController.writehistory(counter, defaultOperator,myMessageMod);
             chatHolder.addRow(counter, bubble.getRoot());
             messageDisplay.setContent(chatHolder);
-
+            operatorController.sendMessage(myMessageMod, operatorController);
 
             UserItem useritem = controller.getListItems().get(index);
             String userID = useritem.getUser().getSubscriptionName();
@@ -463,7 +456,7 @@ public class ChatController{
 
             OperatorBubble bubble = new OperatorBubble(defaultOperator, myMessageMod.getTextMessage(), myMessageMod.getTime() );
 
-            historyController.writehistory(counter, "operator",myMessageMod);
+            historyController.writehistory(counter, defaultOperator,myMessageMod);
             chatHolder.addRow(counter, bubble.getRoot());
             messageDisplay.setContent(chatHolder);
 
@@ -501,45 +494,41 @@ public class ChatController{
             variablesMenu.getItems().add(menuitem);
         }
     }
-    public void createChatSpace() throws JMSException {
-
-//        chatBubble.setPrefSize(309,362);
-//        chatBubble.setLayoutX(0);
-//        chatBubble.setLayoutY(0);
-//        chatBubble.setEditable(false);
-
-
-        chatHolder.setMaxSize(309, 362);
-        messageDisplay.setFitToWidth(true);
-        chatHolder.setVgap(7);
-        ColumnConstraints c1 = new ColumnConstraints();
-        c1.setPercentWidth(100);
-        chatHolder.getColumnConstraints().add(c1);
-
-        messageDisplay.setContent(chatHolder);
-
-
-   //     isSet = true;
-
-        System.out.println("Click2");
-
-
-    }
-    private  void applyDimensions(){
-//        chatBubble.setPrefSize(309,362);
-//        chatBubble.setLayoutX(0);
-//        chatBubble.setLayoutY(0);
-//        chatBubble.setEditable(false);
-
-        chatHolder.setMaxSize(309, 362);
- //       System.out.println("MessageDisplay"+messageDisplay);
-        messageDisplay.setFitToWidth(true);
-        chatHolder.setVgap(7);
-        ColumnConstraints c1 = new ColumnConstraints();
-        c1.setPercentWidth(100);
-        chatHolder.getColumnConstraints().add(c1);
-        messageDisplay.setContent(chatHolder);
-    }
+//    public void createChatSpace() throws JMSException {
+//
+////        chatBubble.setPrefSize(309,362);
+////        chatBubble.setLayoutX(0);
+////        chatBubble.setLayoutY(0);
+////        chatBubble.setEditable(false);
+//
+//
+//     chatHolder = getGridPane();
+//
+//        messageDisplay.setContent(chatHolder);
+//
+//
+//   //     isSet = true;
+//
+//
+//
+//    }
+//    private  void applyDimensions(){
+////        chatBubble.setPrefSize(309,362);
+////        chatBubble.setLayoutX(0);
+////        chatBubble.setLayoutY(0);
+////        chatBubble.setEditable(false);
+//            chatHolder = getGridPane();
+////        chatHolder.setMaxSize(431, 413);
+//// //       System.out.println("MessageDisplay"+messageDisplay);
+////        //messageDisplay.setFitToWidth(true);
+////
+////
+////        chatHolder.setVgap(7);
+////        ColumnConstraints c1 = new ColumnConstraints();
+////        c1.setPercentWidth(100);
+////        chatHolder.getColumnConstraints().add(c1);
+//        messageDisplay.setContent(chatHolder);
+//    }
 
     public void closeAllConnections() throws JMSException {
         if(!listItems.isEmpty()) {
@@ -576,7 +565,8 @@ public class ChatController{
     }
 
 
-    public void closeApp(){
+    public void closeApp() throws JMSException {
+        controller.closeAllConnections();
         closeLabel.setOnMousePressed(event -> System.exit(0));
         closeLabel.setOnMouseClicked(event -> System.exit(0));
 
@@ -584,7 +574,7 @@ public class ChatController{
     }
 
     public void minimizeApp() throws JMSException {
-        controller.closeAllConnections();
+
         minimizeLabel.setOnMousePressed(event -> stage.setIconified(true));
         minimizeLabel.setOnMouseClicked(event -> stage.setIconified(true));
         //minimizeLabel.setOnMouseReleased(event -> stage.setIconified(true));
@@ -614,7 +604,12 @@ public class ChatController{
 
     public GridPane getGridPane() {
         GridPane gridPane = new GridPane();
-        gridPane.setMaxSize(309, 362);
+        //gridPane.setMaxSize(431, 413);
+        int width = 400;
+        gridPane.setPrefWidth(width);
+        gridPane.setMinWidth(width);
+        gridPane.setMaxWidth(width);
+        gridPane.setPrefHeight(413);
         gridPane.setVgap(7);
         ColumnConstraints c1 = new ColumnConstraints();
         c1.setPercentWidth(100);

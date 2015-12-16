@@ -3,7 +3,6 @@ package Controller;
 import Model.*;
 import com.csvreader.CsvReader;
 import javafx.application.Platform;
-import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import org.apache.activemq.command.ActiveMQBytesMessage;
 import org.apache.activemq.util.ByteSequence;
@@ -136,7 +135,7 @@ public class OperatorController implements MessageListener {
      @Override
     public void onMessage(Message message) {
     String producerID = null;
-     //   System.out.println("Recieving......:      ");
+        System.out.println("Recieving......:      ");
         try {
 
 
@@ -225,14 +224,19 @@ public class OperatorController implements MessageListener {
                 }
             }
 
-            Platform.runLater(() -> {
-                if(controller!=null)
-                    try {
-                        routeChat();
-                    } catch (JMSException e) {
-                        e.printStackTrace();
-                    }
-            });
+           Platform.runLater(new Runnable(){
+
+               @Override
+               public void run() {
+                   if(controller!=null)
+                       try {
+                           routeChat();
+                       } catch (JMSException e) {
+                           e.printStackTrace();
+                       }
+               }
+           });
+
 
 
         } catch (JMSException e) {
@@ -316,7 +320,9 @@ public class OperatorController implements MessageListener {
                         if( correID==null || !correID.equals(Constant.correalationID)  ) {  //!correID.equals(Constant.correalationID)
 
               //              Bubble bubble = new Bubble(reply, controller);
-                            UserBubble bubble = new UserBubble("User", chatMessage.getTextMessage(), chatMessage.getTime());
+                            int index = controller.getMessageProducerID().indexOf(chatMessage.getProducerID());
+                            String username = controller.getListItems().get(index).getUser().getUserName();
+                            UserBubble bubble = new UserBubble(username, chatMessage.getTextMessage(), chatMessage.getTime());
                          //   GridPane.setHalignment(bubble.getToBubble(), HPos.LEFT );
 
                             System.out.println("User:  " + reply);
@@ -385,10 +391,10 @@ public class OperatorController implements MessageListener {
 
 
 
-
-                            int index = controller.getMessageProducerID().indexOf(chatMessage.getProducerID());
-                            String username = controller.getListItems().get(index).getUser().getUserName();
                             bindOperator.getHistoryController().writehistory(counter, username,chatMessage);       //swriting to csv
+                            index = controller.getMessageProducerID().indexOf(chatMessage.getProducerID());
+                            username = controller.getListItems().get(index).getUser().getUserName();
+
 
                             if(!controller.getStage().isFocused()) {
                                 NotificationController.getNotification(reply, username,controller,index);
@@ -418,6 +424,7 @@ public class OperatorController implements MessageListener {
     public int loadHistory(BindOperator bindOperator) {
 
         int count = 0;
+
         CsvReader messages = bindOperator.getHistoryController().readHistory();
         if(messages != null){
 
@@ -434,14 +441,16 @@ public class OperatorController implements MessageListener {
 ////working here
 
 
-                    if(from.equalsIgnoreCase("user")) {
-                        UserBubble bubble = new UserBubble("user", message, time);
-               //         GridPane.setHalignment(bubble.getToBubble(), HPos.LEFT);
+                    if(from.equalsIgnoreCase(defaultOperator)) {
+                        OperatorBubble bubble = new OperatorBubble(defaultOperator, message, time);
+                        //    GridPane.setHalignment(bubble.getFromBubble(), HPos.RIGHT);
                         bindOperator.getChatHolder().addRow(id, bubble.getRoot());
+
+
                     }
                     else {
-                        OperatorBubble bubble = new OperatorBubble(defaultOperator, message, time);
-                    //    GridPane.setHalignment(bubble.getFromBubble(), HPos.RIGHT);
+                        UserBubble bubble = new UserBubble(from, message, time);
+                        //         GridPane.setHalignment(bubble.getToBubble(), HPos.LEFT);
                         bindOperator.getChatHolder().addRow(id, bubble.getRoot());
                     }
 
@@ -473,13 +482,17 @@ public class OperatorController implements MessageListener {
 
 
     public GridPane getGridPane() {
-        GridPane gridPane = new GridPane();
-        gridPane.setMaxSize(309, 362);
-        gridPane.setVgap(7);
-        ColumnConstraints c1 = new ColumnConstraints();
-        c1.setPercentWidth(100);
-        gridPane.getColumnConstraints().add(c1);
-        return gridPane;
+//        GridPane gridPane = new GridPane();
+//        //gridPane.setMaxSize(431, 413);
+//        gridPane.setPrefWidth(431);
+//        gridPane.setMinWidth(431);
+//        gridPane.setMaxWidth(431);
+//        gridPane.setPrefHeight(413);
+//        gridPane.setVgap(7);
+//        ColumnConstraints c1 = new ColumnConstraints();
+//        c1.setPercentWidth(100);
+//        gridPane.getColumnConstraints().add(c1);
+        return controller.getGridPane();
     }
 
     public Queue<ChatMessage> getChatMessagess() {

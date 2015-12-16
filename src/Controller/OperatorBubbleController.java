@@ -21,13 +21,6 @@ public class OperatorBubbleController implements Initializable {
     public  OperatorBubbleController(){
     }
 
-//    public OperatorBubbleController(String name, String message, String time){
-////        Platform.runLater(() -> {
-////            this.operatormessage.setText(message);
-////            this.operatorname.setText(name);
-////            this.time.setText(time);
-////        });
-//    }
 
     public void setOperatorname(String operatorname) {
         this.operatorname.setText(operatorname);

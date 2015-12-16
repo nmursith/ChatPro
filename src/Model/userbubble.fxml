@@ -8,42 +8,42 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane fx:id="chat_block_pane" maxWidth="325.0" prefWidth="325.0" style="-fx-background-color: transparent; -fx-background-radius: 5px;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.UserBubbleController">
+<AnchorPane fx:id="chat_block_pane" maxWidth="335.0" minWidth="335.0" prefHeight="77.0" prefWidth="335.0" style="-fx-background-color: transparent; -fx-background-radius: 5px;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.UserBubbleController">
     <children>
-        <Label fx:id="bubble_triangle_label" layoutX="50.0" layoutY="10.0" prefHeight="29.0" prefWidth="25.0" rotate="45.0" style="-fx-background-color: #BFE9F9;" />
-        <GridPane fx:id="chat_bubble_pane" layoutX="55.0" prefWidth="276.0" style="-fx-background-color: #BFE9F9; -fx-background-radius: 10px;">
+        <Label fx:id="bubble_triangle_label" layoutX="42.0" layoutY="5.0" prefHeight="29.0" prefWidth="25.0" rotate="45.0" style="-fx-background-color: #BFE9F9;" />
+        <GridPane fx:id="chat_bubble_pane" layoutX="45.0" maxWidth="290.0" minWidth="290.0" prefWidth="290.0" style="-fx-background-color: #BFE9F9; -fx-background-radius: 10px;">
             <children>
-                <Label fx:id="username" layoutX="10.0" layoutY="5.0" maxHeight="15.0" maxWidth="200.0" opacity="0.6" prefHeight="15.0" text="" prefWidth="150.0" style="-fx-font-weight: bold;" >
+                <Label fx:id="username" layoutX="10.0" layoutY="5.0" maxHeight="15.0" maxWidth="200.0" opacity="0.6" prefHeight="15.0" prefWidth="150.0" style="-fx-font-weight: bold;" text="">
                     <font>
                         <Font size="11.0" />
                     </font>
-            </Label>
-                <Label fx:id="usermessage" alignment="TOP_LEFT" layoutX="10.0" layoutY="31.0" maxWidth="276.0"  prefWidth="276.0" text="" style="-fx-font-weight: bold;"  wrapText="true" GridPane.rowIndex="1" />
-                <Label fx:id="time" alignment="BOTTOM_RIGHT" layoutX="234.0" layoutY="5.0" maxHeight="16.0" maxWidth="273.0" text="" opacity="0.6" prefHeight="16.0" prefWidth="273.0" style="-fx-font-weight: bold;"  GridPane.rowIndex="2">
+                </Label>
+                <Label fx:id="usermessage" alignment="TOP_LEFT" layoutX="10.0" layoutY="31.0" maxWidth="276.0" prefWidth="276.0" style="-fx-font-weight: bold;" text="" wrapText="true" GridPane.rowIndex="1" />
+                <Label fx:id="time" alignment="BOTTOM_RIGHT" layoutX="234.0" layoutY="5.0" maxHeight="16.0" maxWidth="273.0" opacity="0.6" prefHeight="16.0" prefWidth="273.0" style="-fx-font-weight: bold;" text="" GridPane.rowIndex="2">
                     <font>
                         <Font size="11.0" />
                     </font>
-            </Label>
+                </Label>
             </children>
-         <columnConstraints>
-            <ColumnConstraints />
-         </columnConstraints>
-         <rowConstraints>
-            <RowConstraints minHeight="10.0" prefHeight="30.0" />
-            <RowConstraints />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" />
-         </rowConstraints>
-         <padding>
-            <Insets left="5.0" right="5.0" />
-         </padding>
+            <columnConstraints>
+                <ColumnConstraints />
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" />
+                <RowConstraints />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" />
+            </rowConstraints>
+            <padding>
+                <Insets left="5.0" right="5.0" />
+            </padding>
         </GridPane>
-        <Label fx:id="user_picture_label" layoutY="10.0" prefHeight="34.0" prefWidth="38.0" style="-fx-background-color: transparent; -fx-graphic: url('Background.png');">
-         <graphic>
-                <ImageView fx:id="user_pic_image_view" fitHeight="35.0" fitWidth="35.0" y="5.0">
+        <Label fx:id="user_picture_label" layoutX="3.0" layoutY="7.0" minHeight="10.0" minWidth="10.0" prefHeight="30.0" prefWidth="30.0" style="-fx-background-color: transparent; -fx-graphic: url('Background.png');">
+            <graphic>
+                <ImageView fx:id="user_pic_image_view" fitHeight="30.0" fitWidth="30.0" y="5.0">
                     <image>
                         <Image url="@Background.png" />
                     </image>
                 </ImageView>
-         </graphic></Label>
+            </graphic></Label>
     </children>
 </AnchorPane>

@@ -21,13 +21,6 @@ public class UserBubbleController implements Initializable {
     public UserBubbleController(){
 
     }
-//    public UserBubbleController(String name, String message, String time){
-//
-////            this.usermessage = new Label();
-////            this.username = new Label();
-////            this.time = new Label();
-//
-//    }
 
     public void setUsernamename(String operatorname) {
 //        System.out.println("seetting");

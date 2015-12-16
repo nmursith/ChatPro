@@ -14,6 +14,7 @@ public class BindOperator {
     private HistoryController historyController;
     private GridPane chatHolder;
     private String typedMessage;
+
     public BindOperator(OperatorController operatorController, GridPane gridPane){
         this.operatorController = operatorController;
         this.chatHolder = gridPane;
