@@ -6,13 +6,16 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 import javax.jms.IllegalStateException;
@@ -25,6 +28,12 @@ import java.util.Vector;
 
 public class ChatController{
 
+
+
+    @FXML public Label closeLabel;
+    @FXML public Label minimizeLabel;
+    @FXML public Pane titleBar;
+
     @FXML public Button sendButton;
     @FXML public Button CloseButton;
     @FXML public TextArea messageTextField;
@@ -35,6 +44,9 @@ public class ChatController{
 
     @FXML public ScrollPane messageDisplay;
     @FXML private ContextMenu variablesMenu;
+
+    private double xOffset;
+    private double yOffset;
 
     private volatile  HashMap<String, BindOperator> hashMapOperator;
     private volatile  ChatController controller =null;
@@ -562,6 +574,42 @@ public class ChatController{
         }
         return  controller;
     }
+
+
+    public void closeApp(){
+        closeLabel.setOnMousePressed(event -> System.exit(0));
+        closeLabel.setOnMouseClicked(event -> System.exit(0));
+
+        //closeLabel.setOnMouseReleased(event -> System.exit(0));
+    }
+
+    public void minimizeApp() throws JMSException {
+        controller.closeAllConnections();
+        minimizeLabel.setOnMousePressed(event -> stage.setIconified(true));
+        minimizeLabel.setOnMouseClicked(event -> stage.setIconified(true));
+        //minimizeLabel.setOnMouseReleased(event -> stage.setIconified(true));
+        //minimizeLabel.setOnMousePressed(event -> System.out.println("minimized"));
+    }
+
+    public void moveApp(){
+        titleBar.setOnMousePressed(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                xOffset = stage.getX() - event.getScreenX();
+                yOffset = stage.getY() - event.getScreenY();
+            }
+        });
+
+        titleBar.setOnMouseDragged(new EventHandler<MouseEvent>() {;
+            @Override
+            public void handle(MouseEvent event) {
+                stage.setX(event.getScreenX() + xOffset);
+                stage.setY(event.getScreenY() + yOffset);
+            }
+        });
+    }
+
+
 
 
     public GridPane getGridPane() {
