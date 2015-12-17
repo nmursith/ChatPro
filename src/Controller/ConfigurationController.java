@@ -5,15 +5,13 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 
 /**
  * Created by mmursith on 12/9/2015.
  */
- public final class  ConfigurationController {
+ final class  ConfigurationController {
     private static Configuration configuration = null;
 
 //    public static void main(String[] args) {
@@ -25,34 +23,7 @@ import java.io.IOException;
 //
 //    }
 
-    public void writeConfig(){
-        JSONObject obj = new JSONObject();
-        obj.put("operator", "operator0");
-        obj.put("topic", "chat.*");
-        obj.put("subscription", "chat.*");
-        obj.put("destination", "chat.*");
-        obj.put("URL", "tcp://cmterainsight:61616?trace=false&soTimeout=60000");
 
-//        JSONArray list = new JSONArray();
-//        list.add("msg 1");
-//        list.add("msg 2");
-//        list.add("msg 3");
-//
-//        obj.put("messages", list);
-
-        try {
-
-            FileWriter file = new FileWriter("config.json");
-            file.write(obj.toJSONString());
-            file.flush();
-            file.close();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        System.out.println(obj);
-    }
 
     public static Configuration readConfig(){
         JSONParser parser = new JSONParser();
@@ -85,13 +56,7 @@ import java.io.IOException;
 //                System.out.println(iterator.next());
 //            }
 
-        } catch (FileNotFoundException e) {
-            setConfiguration();
-        //    e.printStackTrace();
-        } catch (IOException e) {
-            setConfiguration();
-      //      e.printStackTrace();
-        } catch (ParseException e) {
+        } catch (IOException | ParseException e) {
             setConfiguration();
       //      e.printStackTrace();
         }

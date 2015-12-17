@@ -6,13 +6,11 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
@@ -48,23 +46,21 @@ public class ChatController{
     private double xOffset;
     private double yOffset;
 
-    private volatile  HashMap<String, BindOperator> hashMapOperator;
+    private final HashMap<String, BindOperator> hashMapOperator;
     private volatile  ChatController controller =null;
     private Scene scene;
     private GridPane chatHolder;
     private volatile String previousID; // previous opertor message
-    private Thread networkHandler;
-
 
 
     final ObservableList<UserItem> listItems = FXCollections.observableArrayList();
     private Vector<String> messageProducerID;
-    private ArrayList<Variable> contextMenuVariables;
-    private volatile Configuration config;
+    private final ArrayList<Variable> contextMenuVariables;
+    private final Configuration config;
     private  OperatorController operatorController ;
     private  HistoryController historyController;
 
-    private String defaultOperator;
+    private final String defaultOperator;
     private volatile boolean isOnline;
     private Stage stage;
 
@@ -78,7 +74,7 @@ public class ChatController{
         config = ConfigurationController.readConfig();
         //operatorController = new OperatorController("operator0", "chat.*",this);
         this.isOnline = false;
-        this.networkHandler = new NetworkDownHandler();
+        Thread networkHandler = new NetworkDownHandler();
         String ID = Constant.getRandomString();
 
         try{
@@ -121,22 +117,18 @@ public class ChatController{
 
         defaultOperator = ConfigurationController.readConfig().getOperator();// "operator1";
         messageProducerID = new Vector<>();
-        contextMenuVariables = VariablesController.readVariables();
+        contextMenuVariables = (ArrayList<Variable>) VariablesController.readVariables();
 
 
    //     listItems.add("operator0");
     //    System.out.println(hashMapOperator);
 
-        try {
-            Thread.sleep(100);
 
-        } catch (InterruptedException e) {
-
-        }
 //        chatUsersList.setItems(listItems);
         Platform.runLater(() -> {
 
             messageTextField.setDisable(true);
+            sendButton.setDisable(true);
             this.Username.getStyleClass().add("username");
             messageDisplay.setContent(chatHolder);
             messageDisplay.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
@@ -224,9 +216,7 @@ public class ChatController{
 
 
 
-        } catch (JMSException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
+        } catch (JMSException | InterruptedException e) {
             e.printStackTrace();
         }
         messageTextField.setText("");
@@ -345,9 +335,7 @@ public class ChatController{
                     useritem.getThumbUserName().setStyle("-fx-text-fill:#696969; -fx-font-size:12px; -fx-font-weight:bold; ");
 
                 }
-                catch (NullPointerException e){
-                    e.printStackTrace();
-                } catch (InterruptedException e) {
+                catch (NullPointerException | InterruptedException e){
                     e.printStackTrace();
                 }
 
@@ -598,34 +586,28 @@ public class ChatController{
 
     static boolean firstClick = false;
     public void moveApp(){
-        titleBar.setOnMousePressed(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                if(!firstClick){
-                    firstClick = true;
-                }else{
-                    //Do nothing
-                }
-                xOffset = stage.getX() - event.getScreenX();
-                yOffset = stage.getY() - event.getScreenY();
+        titleBar.setOnMousePressed(event -> {
+            if(!firstClick){
+                firstClick = true;
+            }else{
+                //Do nothing
             }
+            xOffset = stage.getX() - event.getScreenX();
+            yOffset = stage.getY() - event.getScreenY();
         });
 
-        titleBar.setOnMouseDragged(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                if(!firstClick){
-                    xOffset = stage.getX() - event.getScreenX();
-                    yOffset = stage.getY() - event.getScreenY();
-                    firstClick=true;
-                    stage.setX(event.getScreenX() + xOffset);
-                    stage.setY(event.getScreenY() + yOffset);
-                }else{
-                    stage.setX(event.getScreenX() + xOffset);
-                    stage.setY(event.getScreenY() + yOffset);
-                }
-
+        titleBar.setOnMouseDragged(event -> {
+            if(!firstClick){
+                xOffset = stage.getX() - event.getScreenX();
+                yOffset = stage.getY() - event.getScreenY();
+                firstClick=true;
+                stage.setX(event.getScreenX() + xOffset);
+                stage.setY(event.getScreenY() + yOffset);
+            }else{
+                stage.setX(event.getScreenX() + xOffset);
+                stage.setY(event.getScreenY() + yOffset);
             }
+
         });
     }
 
@@ -777,8 +759,7 @@ public class ChatController{
         this.messageProducerID = messageProducerID;
     }
 
-    public void sendMyMessage(ActionEvent actionEvent) {
-    }
+
 
     public String getPreviousID() {
         return previousID;

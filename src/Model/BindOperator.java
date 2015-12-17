@@ -34,17 +34,12 @@ public class BindOperator {
         return chatHolder;
     }
 
-    public void setChatHolder(GridPane chatHolder) {
-        this.chatHolder = chatHolder;
-    }
 
     public HistoryController getHistoryController() {
         return historyController;
     }
 
-    public void setHistoryController(HistoryController historyController) {
-        this.historyController = historyController;
-    }
+
 
     public String getTypedMessage() {
         return typedMessage;

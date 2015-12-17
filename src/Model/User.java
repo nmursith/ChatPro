@@ -24,7 +24,7 @@ public class User {
 
     }
 
-    public User(String userId, String topicName) throws JMSException {
+    public User(String userId, String topicName) {
         this.userId = userId;
         this.topicName = topicName;
 
@@ -32,7 +32,7 @@ public class User {
 
     }
 
-    public User(String userId, String topicName, String subscriptionName) throws JMSException {
+    public User(String userId, String topicName, String subscriptionName) {
         this.userId = userId;
         this.topicName = topicName;
         this.subscriptionName=subscriptionName;

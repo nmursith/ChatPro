@@ -3,7 +3,6 @@ package Controller;
 
 import Model.UserItem;
 import javafx.animation.*;
-import javafx.event.EventHandler;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -12,52 +11,48 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
-import javafx.stage.*;
+import javafx.stage.Popup;
+import javafx.stage.Screen;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.util.Duration;
 
 /**
  * Created by dwijewardana on 12/13/2015.
  */
-public class NotificationController {
+class NotificationController {
 
 
     private volatile static ChatController chatController;
     private volatile static  int index;
-
-    private static Stage stage = new Stage(StageStyle.UNDECORATED);
-    public static Popup createPopup(final String message, final String userName) {
+    private static final Stage stage = new Stage(StageStyle.UNDECORATED);
+    private static Popup createPopup(final String message, final String userName) {
 
         final Popup popup = new Popup();
         popup.setAutoFix(true);
         popup.setHideOnEscape(true);
 
-        String usernamelabel = userName;
-        Label user_name = new Label(usernamelabel);
+
+        Label user_name = new Label(userName);
         user_name.setPrefWidth(200);
         user_name.setPrefHeight(20);
         user_name.setWrapText(true);
         user_name.relocate(65,10);
         user_name.setTextFill(Color.WHITE);
         user_name.setStyle("-fx-font-size: 16px; -fx-font-weight: BOLD; -fx-background-image: url('Background.png')");
-        user_name.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                System.out.println("user name clicked");
-                // ADD CODE TO FOCUS TO THE APPLICATION
-            }
+        user_name.setOnMouseClicked(event -> {
+            System.out.println("user name clicked");
+            // ADD CODE TO FOCUS TO THE APPLICATION
         });
 
         Image image = new Image(NotificationController.class.getResourceAsStream("Background.png"));
         Label user_pic = new Label("", new ImageView(image));
         user_pic.relocate(3,10);
-        user_pic.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
+        user_pic.setOnMouseClicked(event -> {
 
 
-                System.out.println("user pic clicked");
-                // ADD CODE TO FOCUS TO THE APPLICATION
-            }
+            System.out.println("user pic clicked");
+            // ADD CODE TO FOCUS TO THE APPLICATION
         });
 
         Label label = new Label(message);
@@ -67,12 +62,9 @@ public class NotificationController {
         label.relocate(65,40);
         label.setTextFill(Color.WHITE);
         label.setStyle("-fx-font-size: 11px; -fx-font-weight: BOLD;");
-        label.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                System.out.println(" message clicked");
-                // ADD CODE TO FOCUS TO THE APPLICATION
-            }
+        label.setOnMouseClicked(event -> {
+            System.out.println(" message clicked");
+            // ADD CODE TO FOCUS TO THE APPLICATION
         });
 
         Image image1 = new Image(NotificationController.class.getResourceAsStream("close.png"));
@@ -83,13 +75,10 @@ public class NotificationController {
         closeLabel.setMaxSize(5,5);
         closeLabel.setLayoutX(270);
         closeLabel.setLayoutY(0);
-        closeLabel.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                //boolean s = event.getSource().equals(closeLabel);
-                System.out.println("close button clicked");
-                //Platform.exit();
-            }
+        closeLabel.setOnMouseClicked(event -> {
+            //boolean s = event.getSource().equals(closeLabel);
+            System.out.println("close button clicked");
+            //Platform.exit();
         });
 
         popup.getContent().add(closeLabel);
@@ -99,48 +88,39 @@ public class NotificationController {
         return popup;
     }
 
-    public static void showPopupMessage(final String message, final Stage stage, final String userName) {
+    private static void showPopupMessage(final String message,  Stage stage,  String userName) {
 
         Popup popup = createPopup(message, userName);
 
-        popup.setOnShown(new EventHandler<WindowEvent>() {
-            @Override
-            public void handle(WindowEvent e) {
-                popup.setX(stage.getX()+10);
-                popup.setY(stage.getY()+5);
-                //stage.getScene().setFill(Color.valueOf("#f4f4f4"));
-                stage.getScene().setFill(Color.valueOf("#0B3861"));
-                PauseTransition delay = new PauseTransition(Duration.seconds(5));
-                //PauseTransition delay1 = new PauseTransition(Duration.seconds(2));
-                delay.setOnFinished( event -> stage.close() );
-                //delay1.setOnFinished( event -> stage.getScene().setFill(Color.valueOf("#00AFF0")));
-                //delay1.setOnFinished( event -> stage.getScene().setFill(Color.valueOf("#708090")));
-                delay.play();
-                //delay1.play();
-            }
+        popup.setOnShown(e -> {
+            popup.setX(stage.getX()+10);
+            popup.setY(stage.getY()+5);
+            //stage.getScene().setFill(Color.valueOf("#f4f4f4"));
+            stage.getScene().setFill(Color.valueOf("#0B3861"));
+            PauseTransition delay = new PauseTransition(Duration.seconds(5));
+            //PauseTransition delay1 = new PauseTransition(Duration.seconds(2));
+            delay.setOnFinished( event -> stage.close() );
+            //delay1.setOnFinished( event -> stage.getScene().setFill(Color.valueOf("#00AFF0")));
+            //delay1.setOnFinished( event -> stage.getScene().setFill(Color.valueOf("#708090")));
+            delay.play();
+            //delay1.play();
         });
 
-        stage.addEventFilter(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                //cnt--;
-                ///       System.out.println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
-                //////////////////
-                notifyLocations();
-                stage.close();
-            }
+        stage.addEventFilter(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
+            //cnt--;
+            ///       System.out.println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
+            //////////////////
+            notifyLocations();
+            stage.close();
         });
 
 
-        popup.addEventFilter(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
+        popup.addEventFilter(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
 /////////////////
-                notifyLocations();
-                //cnt--;
-                //System.out.println("$$$$$$$$$$$$$$$iiii$$$$$$$$$$$$$");
-                stage.close();
-            }
+            notifyLocations();
+            //cnt--;
+            //System.out.println("$$$$$$$$$$$$$$$iiii$$$$$$$$$$$$$");
+            stage.close();
         });
 
 
@@ -188,11 +168,16 @@ public class NotificationController {
 
     }
 
-    public static void getNotification(String message, String userName, ChatController controller, int index){
+    public static synchronized  void getNotification(String message, String userName, ChatController controller, int index){
         chatController =controller;
         setIndex(index);
         NotificationController.index = index;
 
+        try {
+            Thread.sleep(50);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         stage.close();
         stage.setTitle("Notification");
         //stage.initStyle(StageStyle.UNDECORATED);
@@ -228,11 +213,11 @@ public class NotificationController {
         showPopupMessage(message, stage, userName);
     }
 
-    public static int getIndex() {
+    private static int getIndex() {
         return index;
     }
 
-    public static void setIndex(int index) {
+    private static void setIndex(int index) {
         NotificationController.index = index;
     }
 }

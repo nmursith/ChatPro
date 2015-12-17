@@ -12,14 +12,12 @@ public class Operator{
     private Connection connection;
     private Session session;
     private MessageProducer messageProducer;
-    private ConnectionFactory connectionFactory;
     private String topicName;
     private Topic topic;
     private Destination destination;
 
     private static int ackMode;
     private static String messageBrokerUrl;
-    private boolean transacted = false;
     private boolean isConnected;
 
 
@@ -39,12 +37,13 @@ public class Operator{
     }
 
 
-    public void create() throws JMSException {
+    private void create() {
 
         try {
-            connectionFactory = new ActiveMQConnectionFactory(messageBrokerUrl);
-            connection =connectionFactory.createConnection();
+            ConnectionFactory connectionFactory = new ActiveMQConnectionFactory(messageBrokerUrl);
+            connection = connectionFactory.createConnection();
             connection.setClientID(subscriptionName);
+            boolean transacted = false;
             session =connection.createSession(transacted, ackMode);
             destination = this.session.createTopic(topicName);
             topic = session.createTopic(topicName);
@@ -92,9 +91,6 @@ public class Operator{
         this.messageProducer = messageProducer;
     }
 
-    public String getTopicName() {
-        return topicName;
-    }
 
     public void setTopicName(String topicName) {
         this.topicName = topicName;

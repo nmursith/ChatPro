@@ -16,6 +16,7 @@ public class UserBubbleController implements Initializable {
     @FXML
     Label usermessage;
     @FXML
+    private
     Label time ;
 
     public UserBubbleController(){

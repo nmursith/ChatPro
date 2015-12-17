@@ -30,10 +30,9 @@ public class UserItem extends GridPane implements   Runnable, EventHandler<Mouse
     private Image thumbImage;
     private User user;
     private ChatController chatController;
-    private volatile Thread blink;        //addded lates
     private static UserItem userItem;  //addded latest
     private volatile Boolean running;
-    private ImageView close;
+
     public UserItem(User user, ChatController controller){
 
         this.user = user;
@@ -78,7 +77,7 @@ public class UserItem extends GridPane implements   Runnable, EventHandler<Mouse
 //        closeButton.setOnAction(this);
       // = new Image(new Label(getClass().getResourceAsStream("closeButton.png"))); //();
 
-        close = new ImageView(new Image(getClass().getResourceAsStream("close.png")));
+        ImageView close = new ImageView(new Image(getClass().getResourceAsStream("close.png")));
         close.setFitHeight(9);
         close.setFitWidth(9);
         Label closeLabel = new Label("", close);
@@ -109,16 +108,14 @@ public class UserItem extends GridPane implements   Runnable, EventHandler<Mouse
     }
 
     public void startBlink(){
-        blink = new Thread (this, user.getUserName());
+        Thread blink = new Thread(this, user.getUserName());
         blink.start ();
 
     }
 
 
 
-    public void stop(){
-//
-    }
+
 
 
     @Override
@@ -138,9 +135,9 @@ public class UserItem extends GridPane implements   Runnable, EventHandler<Mouse
                 ///  e.printStackTrace();
 
             }
-
         //    System.out.println("Loop: " + running);
         }
+
         if(chatController.getChatUsersList().getSelectionModel().getSelectedItem().equals(userItem) && userItem!=null) {
 
             this.thumbUserName.setStyle("-fx-text-fill:#696969; -fx-font-size:12px; -fx-font-weight:bold; ");

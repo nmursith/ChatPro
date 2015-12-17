@@ -14,9 +14,6 @@ import java.io.IOException;
 public class OperatorBubble {
     private Parent root;
 
-    public static void main(String [] args){
-
-    }
 
     public OperatorBubble(String name, String  chatMessage, String time) throws IOException {
 
@@ -31,6 +28,9 @@ public class OperatorBubble {
     }
 
     public Parent getRoot() {
+        root.setCache(true);
+      //  root.setCacheHint(CacheHint.SCALE);
+
         GridPane.setHalignment(root, HPos.RIGHT);
 
         return root;

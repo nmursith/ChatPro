@@ -12,7 +12,7 @@ public class ChatMessage {
 
     private Message message;
     private String producerID;
-    private String userName;
+
     private String time;
     private String textMessage;
 
@@ -25,11 +25,7 @@ public class ChatMessage {
 
 
     }
-    public static void main(String []args) {
-        ChatMessage chatMessage = new ChatMessage();
-        //System.out.println(chatMessage.ft.format(chatMessage.dNow));
 
-    }
 
 
 
@@ -53,9 +49,6 @@ public class ChatMessage {
         return time;
     }
 
-    public void setTime(String time) {
-        this.time = time;
-    }
 
 
     public void setTextMessage(String textMessage) {
@@ -66,11 +59,5 @@ public class ChatMessage {
         return textMessage;
     }
 
-    public String getUserName() {
-        return userName;
-    }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
 }

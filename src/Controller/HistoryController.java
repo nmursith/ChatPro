@@ -9,7 +9,6 @@ import com.csvreader.CsvReader;
 import com.csvreader.CsvWriter;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 
@@ -73,8 +72,6 @@ public class HistoryController {
         CsvReader messages = null;
         try {
             messages = new CsvReader(fileName);
-        } catch (FileNotFoundException e) {
-            // e.printStackTrace();
         } catch (IOException e) {
             //e.printStackTrace();
         }

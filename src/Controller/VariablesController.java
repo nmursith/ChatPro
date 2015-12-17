@@ -14,7 +14,7 @@ import java.util.ArrayList;
  * Created by mmursith on 12/12/2015.
  */
 
-public final class  VariablesController {
+final class  VariablesController {
 
     private static ArrayList<Variable> variableList;
     public static void main(String[] args) {
@@ -75,14 +75,10 @@ public final class  VariablesController {
 
             }
 
-        } catch (FileNotFoundException e) {
+        } catch (FileNotFoundException | ParseException e) {
             setVariable();
             e.printStackTrace();
-        } catch (ParseException e) {
-            setVariable();
-            e.printStackTrace();
-        }
-        catch (Exception e){
+        } catch (Exception e){
 
         }
 

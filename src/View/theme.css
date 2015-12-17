@@ -230,6 +230,8 @@ scrollbar
 .list-cell:filled:selected {
     -fx-background-color: #D6D6D6 ;
     -fx-text-fill: white;
+    -fx-text-fill:#696969; -fx-font-size:12px; -fx-font-weight:bold;
+
 }
 /*
 .list-cell:even {

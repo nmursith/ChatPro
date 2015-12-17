@@ -15,9 +15,7 @@ import java.util.Vector;
 public class UserBubble {
     private Parent root;
     private Vector<Object> list = new Vector<>();
-    public static void main(String [] args){
 
-    }
     public UserBubble(String name, String  chatMessage, String time) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("userbubble.fxml"));
         root = fxmlLoader.load();
@@ -34,6 +32,9 @@ public class UserBubble {
     }
 
     public Parent getRoot() {
+        root.setCache(true);
+    //    root.setCacheHint(CacheHint.SCALE);
+
         GridPane.setHalignment(root, HPos.LEFT);
         return root;
     }
