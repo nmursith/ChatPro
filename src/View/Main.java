@@ -19,12 +19,14 @@ public class Main extends Application {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("Operator.fxml"));
         Parent root = fxmlLoader.load();
 
-        ChatController chatController = fxmlLoader.<ChatController>getController();
         Scene scene = new Scene(root);//, 550, 605);
         scene.getStylesheets().add(getClass().getResource("theme.css").toExternalForm());
-
+        System.out.println("ChatController Starting");
+        ChatController chatController = fxmlLoader.<ChatController>getController();
+        System.out.println("ChatController Started");
 
         chatController.setScene(scene, primaryStage);
+
         primaryStage.setTitle("vAssistant");
         primaryStage.setScene(scene);
         System.out.println("show");

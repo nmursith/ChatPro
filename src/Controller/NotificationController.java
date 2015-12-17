@@ -183,6 +183,7 @@ public class NotificationController {
         UserItem userItem = chatController.getChatUsersList().getItems().get(getIndex());
         chatController.setUsername(userItem);
         chatController.getChatUsersList().getSelectionModel().select(getIndex());
+        chatController.getStage().setIconified(false);
         chatController.getStage().requestFocus();
 
     }

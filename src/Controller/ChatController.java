@@ -70,7 +70,7 @@ public class ChatController{
 
     public ChatController() throws JMSException {
 
-        System.out.println("ChatController Started");
+
 
         hashMapOperator = new HashMap<>();
         controller =this;
@@ -85,7 +85,8 @@ public class ChatController{
             Operator operator = new Operator(ID, ID);
             boolean isConnected = operator.isConnected();
 
-            //         System.out.println("inside:  " + isOnline);
+
+                     System.out.println("startup:  " + isConnected);
             if (isConnected) {
                 isOnline = true;
                 System.out.println("connected");
@@ -93,8 +94,15 @@ public class ChatController{
             else {
                 isOnline = false;
                 System.out.println("initial Offline");
-                networkHandler = new NetworkDownHandler();
-                networkHandler.start();
+
+
+//                final CountDownLatch latch = new CountDownLatch(1);
+//                Platform.runLater(() -> {
+                    networkHandler = new NetworkDownHandler();
+                    networkHandler.start();
+//                });
+//                latch.await();
+
             }
             if(isOnline)
                 operatorController = new OperatorController(config.getOperator(), config.getTopic(),this);
@@ -247,7 +255,7 @@ public class ChatController{
             String message = messageTextField.getText();
             if(previousID !=null) {
              //   System.out.println("ID Selected:  "+ previousID + "     "+ hashMapOperator.get(previousID));
-                chatUsersList.getItems().get(messageProducerID.indexOf(previousID)).setStyle("-fx-background-color:transparent; -fx-border-color:transparent;");
+             //   chatUsersList.getItems().get(messageProducerID.indexOf(previousID)).setStyle("-fx-background-color:transparent; -fx-border-color:transparent;");
                 if(message!=null)
                     hashMapOperator.get(previousID).setTypedMessage(message.trim());
             }
@@ -255,7 +263,7 @@ public class ChatController{
 
 
             UserItem useritem = chatUsersList.getSelectionModel().getSelectedItem();
-            useritem.setStyle("-fx-background-color:#e7f0f5; -fx-border-color:#e7f0f5;");
+         //   useritem.setStyle("-fx-background-color:#e7f0f5; -fx-border-color:#e7f0f5;");
             useritem.getThumbUserName().setStyle("-fx-text-fill:#696969; -fx-font-size:12px; -fx-font-weight:bold; ");
             String name = useritem.getUser().getUserName();
             String userID = useritem.getUser().getSubscriptionName();
@@ -305,14 +313,14 @@ public class ChatController{
         try {
             String message = messageTextField.getText();
             if(previousID !=null) {
-                chatUsersList.getItems().get(messageProducerID.indexOf(previousID)).setStyle("-fx-background-color:transparent; -fx-border-color:transparent;");
+               // chatUsersList.getItems().get(messageProducerID.indexOf(previousID)).setStyle("-fx-background-color:transparent; -fx-border-color:transparent;");
                 chatUsersList.getItems().get(messageProducerID.indexOf(previousID)).getThumbUserName().setStyle("-fx-text-fill:#696969; -fx-font-size:12px; -fx-font-weight:bold; ");
                 //   System.out.println("ID Selected:  "+ previousID + "     "+ hashMapOperator.get(previousID));
                 if(message!=null)
                     hashMapOperator.get(previousID).setTypedMessage(message.trim());
             }
             messageTextField.setText("");
-            useritem.setStyle("-fx-background-color:#e7f0f5; -fx-border-color:#e7f0f5;");
+            //useritem.setStyle("-fx-background-color:#e7f0f5; -fx-border-color:#e7f0f5;");
 
 
 
@@ -572,14 +580,21 @@ public class ChatController{
 
         //closeLabel.setOnMouseReleased(event -> System.exit(0));
     }
-
-    public void minimizeApp() throws JMSException {
-
-        minimizeLabel.setOnMousePressed(event -> stage.setIconified(true));
-        minimizeLabel.setOnMouseClicked(event -> stage.setIconified(true));
-        //minimizeLabel.setOnMouseReleased(event -> stage.setIconified(true));
-        //minimizeLabel.setOnMousePressed(event -> System.out.println("minimized"));
-    }
+//
+//    public void minimizeApp() throws JMSException {
+//       // stage.setFocused(false);
+//        //System.out.println(stage.isFocused());
+//
+//        minimizeLabel.setOnMouseClicked(event -> {
+//
+//
+//
+//        });
+//
+//        //minimizeLabel.setOnMouseClicked(event -> stage.setIconified(true));
+//        //minimizeLabel.setOnMouseReleased(event -> stage.setIconified(true));
+//        //minimizeLabel.setOnMousePressed(event -> System.out.println("minimized"));
+//    }
 
     public void moveApp(){
         titleBar.setOnMousePressed(new EventHandler<MouseEvent>() {
@@ -599,6 +614,10 @@ public class ChatController{
         });
     }
 
+    public void minimizeApp(Event event) {
+        stage.setIconified(true);
+
+    }
 
     public void hoverCloseLabel(){
         closeLabel.setOnMouseEntered(event1 -> closeLabel.setOpacity(0.2));
@@ -767,6 +786,8 @@ public class ChatController{
         this.scene = scene;
         this.stage = stage;
     }
+
+
 
     private class NetworkDownHandler extends Thread{
         Thread thread = null;

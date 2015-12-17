@@ -253,15 +253,12 @@ public class OperatorController implements MessageListener {
                         protected Void call() throws Exception {
                             //Background work
                             final CountDownLatch latch = new CountDownLatch(1);
-                            Platform.runLater(new Runnable() {
-                                @Override
-                                public void run() {
-                                    try {
-                                        if(controller!=null)
-                                            routeChat();
-                                    } catch (JMSException e) {
-                                        e.printStackTrace();
-                                    }
+                            Platform.runLater(() -> {
+                                try {
+                                    if(controller!=null)
+                                        routeChat();
+                                } catch (JMSException e) {
+                                    e.printStackTrace();
                                 }
                             });
                             latch.await();
@@ -440,7 +437,8 @@ public class OperatorController implements MessageListener {
                             final String rep = reply;
 
                             Platform.runLater( () -> {
-                                if(!controller.getStage().isFocused()) {
+                                if(!controller.getStage().isFocused() || controller.getStage().isIconified()) {
+                                    
                                     NotificationController.getNotification(rep, uName,controller,Index);
                                 }
 
