@@ -59,7 +59,7 @@ public class ChatController{
     private final Configuration config;
     private  OperatorController operatorController ;
     private  HistoryController historyController;
-
+    private NetworkDownHandler networkHandler;
     private final String defaultOperator;
     private volatile boolean isOnline;
     private Stage stage;
@@ -74,7 +74,8 @@ public class ChatController{
         config = ConfigurationController.readConfig();
         //operatorController = new OperatorController("operator0", "chat.*",this);
         this.isOnline = false;
-        Thread networkHandler = new NetworkDownHandler();
+
+
         String ID = Constant.getRandomString();
 
         try{
@@ -85,6 +86,7 @@ public class ChatController{
                      System.out.println("startup:  " + isConnected);
             if (isConnected) {
                 isOnline = true;
+                networkHandler = null;
                 System.out.println("connected");
             }
             else {
@@ -93,10 +95,10 @@ public class ChatController{
 
 
 //                final CountDownLatch latch = new CountDownLatch(1);
-//                Platform.runLater(() -> {
+                Platform.runLater(() -> {
                     networkHandler = new NetworkDownHandler();
                     networkHandler.start();
-//                });
+                });
 //                latch.await();
 
             }
@@ -132,6 +134,7 @@ public class ChatController{
             this.Username.getStyleClass().add("username");
             messageDisplay.setContent(chatHolder);
             messageDisplay.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+
             addMenuItems();
             if(isOnline) {
                 hashMapOperator.put(defaultOperator, new BindOperator(operatorController, getGridPane()));
@@ -787,7 +790,7 @@ public class ChatController{
 
 
     private class NetworkDownHandler extends Thread{
-        Thread thread = null;
+        Thread thread = this;
         public void run() {
             thread = Thread.currentThread();
             System.out.println(isOnline);
@@ -841,7 +844,7 @@ public class ChatController{
 
             }
 
-
+            stopThread();
         }
 
         public  void stopThread(){

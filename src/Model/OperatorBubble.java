@@ -3,6 +3,7 @@ package Model;
 import Controller.OperatorBubbleController;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.HPos;
+import javafx.scene.CacheHint;
 import javafx.scene.Parent;
 import javafx.scene.layout.GridPane;
 
@@ -29,7 +30,7 @@ public class OperatorBubble {
 
     public Parent getRoot() {
         root.setCache(true);
-      //  root.setCacheHint(CacheHint.SCALE);
+        root.setCacheHint(CacheHint.DEFAULT);
 
         GridPane.setHalignment(root, HPos.RIGHT);
 

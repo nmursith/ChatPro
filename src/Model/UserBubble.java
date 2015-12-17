@@ -3,6 +3,7 @@ package Model;
 import Controller.UserBubbleController;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.HPos;
+import javafx.scene.CacheHint;
 import javafx.scene.Parent;
 import javafx.scene.layout.GridPane;
 
@@ -33,7 +34,7 @@ public class UserBubble {
 
     public Parent getRoot() {
         root.setCache(true);
-    //    root.setCacheHint(CacheHint.SCALE);
+        root.setCacheHint(CacheHint.DEFAULT);
 
         GridPane.setHalignment(root, HPos.LEFT);
         return root;

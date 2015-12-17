@@ -9,8 +9,8 @@ import javafx.scene.layout.GridPane;
 import org.apache.activemq.command.ActiveMQBytesMessage;
 import org.apache.activemq.util.ByteSequence;
 
-import javax.jms.*;
 import javax.jms.IllegalStateException;
+import javax.jms.*;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.LinkedList;
@@ -38,7 +38,7 @@ public class OperatorController implements MessageListener {
     private OperatorController operatorController;      //static or volatile or something
     private static String defaultOperator;
     private volatile boolean isOnline;
-    private Thread networkHandler;
+    private NetworkDownHandler networkHandler;
     private volatile boolean isFirstime =true;
     private final Queue<ChatMessage> cachedMessages =  new LinkedList<>();
     private volatile Queue<Notification> pendingNotification;
@@ -111,9 +111,11 @@ public class OperatorController implements MessageListener {
                     isOnline = false;
 
            //         networkHandler.stop();
-                    if(networkHandler.isAlive())
+                    if(networkHandler.isAlive()) {
+                            networkHandler.stopThread();
+                    }
                         isOnline = true;
-                    cachedMessages.add(chatMessage);
+                        cachedMessages.add(chatMessage);
               //      System.out.println("Message Added:  "+ chatMessage.getTextMessage() +"   "+cachedMessages.size());
                     networkHandler = new NetworkDownHandler();
                     networkHandler.start();
@@ -231,11 +233,13 @@ public class OperatorController implements MessageListener {
                             //Background work
                             final CountDownLatch latch = new CountDownLatch(1);
                             Platform.runLater(() -> {
-                                try {
-                                    if(controller!=null)
+                                if(controller!=null && !chatMessagess.isEmpty()) {
+                                    System.out.println("Routing    "+ chatMessagess.size());
+                                    try {
                                         routeChat();
-                                } catch (JMSException e) {
-                                    e.printStackTrace();
+                                    } catch (JMSException e) {
+                                        e.printStackTrace();
+                                    }
                                 }
                             });
                             latch.await();
@@ -670,7 +674,7 @@ public class OperatorController implements MessageListener {
                         String producerID =useritem.getUser().getSubscriptionName();
                         System.out.println(producerID);
                         OperatorController operatorController = new OperatorController(producerID, "chat." + producerID, controller);
-                        operatorController.getMessageConsumer().setMessageListener(null);
+
                         ChatMessage chat = new ChatMessage();
                         chat.setTextMessage("sdfsdfssdgs");
                       //  operatorController.sendMessage(chat, operatorController);
@@ -689,7 +693,7 @@ public class OperatorController implements MessageListener {
                         sendMessage(chatMessage, bindOperator.getOperatorController());
                     }
                 //    stop();
-                    //stopThread();
+                    stopThread();
 
                 } catch (JMSException e) {
                     System.out.println("JMS problem");
@@ -703,6 +707,12 @@ public class OperatorController implements MessageListener {
 
 
 
+        }
+
+        public  void stopThread(){
+            Thread t = thread;
+            thread = null;
+            t.interrupt();
         }
 
     }

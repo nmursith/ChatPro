@@ -3,6 +3,7 @@ package View;
 import Controller.ChatController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.CacheHint;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -20,7 +21,7 @@ public class Main extends Application {
         Parent root = fxmlLoader.load();
 
         root.setCache(true);
-        //root.setCacheHint(CacheHint.SCALE);
+        root.setCacheHint(CacheHint.DEFAULT);
 
         Scene scene = new Scene(root);//, 550, 605);
         scene.getStylesheets().add(getClass().getResource("theme.css").toExternalForm());
