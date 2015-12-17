@@ -438,7 +438,7 @@ public class OperatorController implements MessageListener {
 
                             Platform.runLater( () -> {
                                 if(!controller.getStage().isFocused() || controller.getStage().isIconified()) {
-                                    
+
                                     NotificationController.getNotification(rep, uName,controller,Index);
                                 }
 
@@ -739,5 +739,11 @@ public class OperatorController implements MessageListener {
         }
     }
 
+    private class NotificationHandler extends Thread{
+        @Override
+        public void run() {
+            super.run();
+        }
+    }
 
 }

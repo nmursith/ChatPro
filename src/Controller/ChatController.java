@@ -596,23 +596,39 @@ public class ChatController{
 //        //minimizeLabel.setOnMousePressed(event -> System.out.println("minimized"));
 //    }
 
+    static boolean firstClick = false;
     public void moveApp(){
         titleBar.setOnMousePressed(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
+                if(!firstClick){
+                    firstClick = true;
+                }else{
+                    //Do nothing
+                }
                 xOffset = stage.getX() - event.getScreenX();
                 yOffset = stage.getY() - event.getScreenY();
             }
         });
 
-        titleBar.setOnMouseDragged(new EventHandler<MouseEvent>() {;
+        titleBar.setOnMouseDragged(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                stage.setX(event.getScreenX() + xOffset);
-                stage.setY(event.getScreenY() + yOffset);
+                if(!firstClick){
+                    xOffset = stage.getX() - event.getScreenX();
+                    yOffset = stage.getY() - event.getScreenY();
+                    firstClick=true;
+                    stage.setX(event.getScreenX() + xOffset);
+                    stage.setY(event.getScreenY() + yOffset);
+                }else{
+                    stage.setX(event.getScreenX() + xOffset);
+                    stage.setY(event.getScreenY() + yOffset);
+                }
+
             }
         });
     }
+
 
     public void minimizeApp(Event event) {
         stage.setIconified(true);

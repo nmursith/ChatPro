@@ -41,7 +41,7 @@ public class UserItem extends GridPane implements   Runnable, EventHandler<Mouse
         this.setPrefSize(210.2,35);
         this.setMaxWidth(210.2);
 
-        this.setHgap(5);
+        this.setHgap(8);
         this.setStyle("-fx-background-color:transparent; -fx-border-color:transparent;");
         userItem = this;                //
 
