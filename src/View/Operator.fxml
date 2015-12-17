@@ -1,105 +1,92 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.geometry.Point3D?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.effect.*?>
+<?import javafx.geometry.*?>
 <?import javafx.scene.image.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.shape.Line?>
-<?import javafx.scene.text.Font?>
-<GridPane fx:id="parentGrid" alignment="center" prefHeight="641.0" prefWidth="650.0"
-          style="-fx-border-color: white; -fx-border-width: 0px;" xmlns="http://javafx.com/javafx/8"
-          xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.ChatController">
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+
+<GridPane fx:id="parentGrid" alignment="center" prefHeight="641.0" prefWidth="650.0" style="-fx-border-color: white; -fx-border-width: 0.25px;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.ChatController">
    <columnConstraints>
-      <ColumnConstraints/>
+      <ColumnConstraints />
    </columnConstraints>
    <rowConstraints>
-      <RowConstraints minHeight="10.0" prefHeight="50.0"/>
-      <RowConstraints/>
+      <RowConstraints minHeight="10.0" prefHeight="50.0" />
+      <RowConstraints />
    </rowConstraints>
+   <children>
+      <SplitPane prefHeight="634.0" prefWidth="650.0" style="-fx-background-color: transparent;" GridPane.rowIndex="1">
+         <items>
+            <AnchorPane prefHeight="611.0" prefWidth="650.0" style="-fx-background-color: white; -fx-border-color: transparent;">
+               <children>
+                  <Label fx:id="Username" layoutX="217.0" layoutY="7.0" prefHeight="44.0" prefWidth="327.0" style="-fx-text-fill: #2c3e50;" textOverrun="CLIP">
+                     <font>
+                        <Font name="System Bold" size="24.0" />
+                     </font></Label>
+                  <TextArea id="messageTextField" fx:id="messageTextField" layoutX="215.0" layoutY="474.0" maxHeight="121.0" maxWidth="430.0" minHeight="80.0" minWidth="249.0" onKeyPressed="#doSendMessage" prefHeight="80.0" prefWidth="430.0" promptText="Type Message here....." wrapText="true">
+                     <contextMenu>
+                        <ContextMenu fx:id="variablesMenu" onAction="#setSelectedItem" style="-fx-background-color: rgb(255.0, 255.0, 255.0, 0.95); fx-background-radius: 2.0;" />
+                     </contextMenu></TextArea>
+                  <Line endX="330.0" layoutX="315.0" layoutY="57.0" startX="-100.0" stroke="#3498db">
+                     <rotationAxis>
+                        <Point3D />
+                     </rotationAxis></Line>
+                  <Line endX="502.0" layoutX="11.0" layoutY="302.0" rotate="90.0" startX="-100.0" stroke="#3498db" />
+                  <ScrollPane fx:id="messageDisplay" layoutX="214.0" layoutY="58.0" maxHeight="413.0" maxWidth="431.0" minHeight="413.0" minWidth="431.0" prefHeight="413.0" prefWidth="431.0" style="-fx-background-color: transparent;" />
+                  <ListView fx:id="chatUsersList" maxWidth="210" minWidth="210.0" onMouseClicked="#setUsername" prefHeight="604.0" prefWidth="210" />
+                  <Button fx:id="sendButton" layoutX="574.0" layoutY="567.0" mnemonicParsing="false" onAction="#getMyMessage" prefHeight="32.0" prefWidth="63.0" style="-fx-background-color: #00AFF0; -fx-font-weight: bold;" text="Send">
+
+                  </Button>
+               </children>
+            </AnchorPane>
+         </items>
+      </SplitPane>
+      <Pane fx:id="titleBar" onMouseDragged="#moveApp" onMousePressed="#moveApp" prefHeight="42.0" prefWidth="650.0" style="-fx-background-color: #00AFF0;">
+         <children>
+            <Label layoutX="295.0" layoutY="6.0" style="-fx-background-color: transparent; -fx-font-weight: bold; -fx-text-fill: white; -fx-font-size: 12px;" text="vAssist" />
+            <Label fx:id="statusIcon" layoutX="5.0" layoutY="3.0" maxHeight="22.0" maxWidth="22.0" minHeight="22.0" minWidth="22.0" prefHeight="22.0" prefWidth="22.0">
+               <graphic>
+                  <ImageView fx:id="statusImageView" fitHeight="22.0" fitWidth="22.0">
+                     <!--<image>-->
+                     <!--<Image url="@img/chat-icon.png" />-->
+                     <!--</image>-->
+                  </ImageView>
+               </graphic>
+            </Label>
+            <Button fx:id="closeButton" layoutX="630.0" layoutY="8.0" maxHeight="10.0" maxWidth="10.0" minHeight="10.0" minWidth="10.0" mnemonicParsing="false" onAction="#closeApp" prefHeight="10.0" prefWidth="10.0">
+               <graphic>
+                  <ImageView fitHeight="10.0" fitWidth="10.0">
+                     <image>
+                        <Image url="@img/cross.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+            <Button fx:id="minimizeButton" layoutX="598.0" layoutY="9.0" maxHeight="10.0" maxWidth="10.0" minHeight="10.0" minWidth="10.0" mnemonicParsing="false" onAction="#minimizeApp" prefHeight="10.0" prefWidth="10.0" style="-fx-background-color: transparent;">
+               <graphic>
+                  <ImageView fitHeight="10.0" fitWidth="10.0">
+                     <image>
+                        <Image url="@img/calculation.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+         </children>
+      </Pane>
+   </children>
    <effect>
-      <DropShadow blurType="GAUSSIAN" height="117.12" radius="53.2425" spread="0.33" width="97.85"/>
+      <DropShadow blurType="GAUSSIAN" height="117.12" radius="53.2425" spread="0.33" width="97.85" />
    </effect>
    <opaqueInsets>
-      <Insets/>
+      <Insets />
    </opaqueInsets>
-   <SplitPane prefHeight="634.0" prefWidth="650.0" style="-fx-background-color: transparent;" GridPane.rowIndex="1">
-      <items>
-         <AnchorPane prefHeight="611.0" prefWidth="650.0"
-                     style="-fx-background-color: white; -fx-border-color: transparent;">
-            <children>
-               <Label fx:id="Username" layoutX="217.0" layoutY="7.0" prefHeight="44.0" prefWidth="327.0"
-                      style="-fx-text-fill: #2c3e50;" textOverrun="CLIP">
-                  <font>
-                     <Font name="System Bold" size="24.0"/>
-                  </font>
-               </Label>
-               <TextArea id="messageTextField" fx:id="messageTextField" layoutX="215.0" layoutY="474.0"
-                         maxHeight="121.0" maxWidth="430.0" minHeight="80.0" minWidth="249.0"
-                         onKeyPressed="#doSendMessage" prefHeight="80.0" prefWidth="430.0"
-                         promptText="Type Message here....." wrapText="true">
-                  <contextMenu>
-                     <ContextMenu fx:id="variablesMenu" onAction="#setSelectedItem"
-                                  style="-fx-background-color: rgb(255.0, 255.0, 255.0, 0.95); fx-background-radius: 2.0;"/>
-                  </contextMenu>
-               </TextArea>
-               <Line endX="330.0" layoutX="315.0" layoutY="57.0" startX="-100.0" stroke="#3498db">
-                  <rotationAxis>
-                     <Point3D/>
-                  </rotationAxis>
-               </Line>
-               <Line endX="502.0" layoutX="11.0" layoutY="302.0" rotate="90.0" startX="-100.0" stroke="#3498db"/>
-               <ScrollPane fx:id="messageDisplay" layoutX="214.0" layoutY="58.0" maxHeight="413.0" maxWidth="431.0"
-                           minHeight="413.0" minWidth="431.0" prefHeight="413.0" prefWidth="431.0"
-                           style="-fx-background-color: transparent;"/>
-               <ListView fx:id="chatUsersList" maxWidth="210" minWidth="210.0" onMouseClicked="#setUsername"
-                         prefHeight="604.0" prefWidth="210"/>
-               <Button fx:id="sendButton" layoutX="574.0" layoutY="567.0" mnemonicParsing="false"
-                       onAction="#getMyMessage" onMouseEntered="#hoverSendButton" onMouseExited="#exitOnSend"
-                       prefHeight="32.0" prefWidth="63.0" style="-fx-background-color: #00AFF0; -fx-font-weight: bold;"
-                       text="Send">
-
-               </Button>
-            </children>
-         </AnchorPane>
-      </items>
-   </SplitPane>
-   <Pane fx:id="titleBar" onMouseDragged="#moveApp" onMousePressed="#moveApp" prefHeight="42.0" prefWidth="650.0"
-         style="-fx-background-color: #00AFF0;">
-      <children>
-         <Label fx:id="closeLabel" layoutX="626.0" layoutY="5.0" onMouseClicked="#closeApp"
-                onMouseEntered="#hoverCloseLabel" onMouseExited="#exitOnClose" onMousePressed="#closeApp"
-                prefHeight="20.0" prefWidth="20.0" style="-fx-background-color: transparent;">
-            <graphic>
-               <ImageView fitHeight="10.0" fitWidth="10.0">
-                  <Image url="@img/cross.png"/>
-               </ImageView>
-            </graphic>
-         </Label>
-         <Label fx:id="minimizeLabel" layoutX="595.0" layoutY="5.0" onMouseClicked="#minimizeApp"
-                onMouseEntered="#hoverMinimizeLabel" onMouseExited="#exitOnMinimize" onMousePressed="#minimizeApp"
-                prefHeight="20.0" prefWidth="20.0" style="-fx-background-color: transparent;">
-            <graphic>
-               <ImageView fitHeight="15.0" fitWidth="12.0">
-                  <image>
-                     <Image url="@img/calculation.png"/>
-                  </image>
-               </ImageView>
-            </graphic>
-         </Label>
-         <Label layoutX="295.0" layoutY="6.0"
-                style="-fx-background-color: transparent; -fx-font-weight: bold; -fx-text-fill: white; -fx-font-size: 12px;"
-                text="vAssist"/>
-         <Label layoutX="5.0" layoutY="3.0" prefHeight="24.0" prefWidth="24.0">
-            <graphic>
-               <ImageView fitHeight="22.0" fitWidth="22.0">
-                  <image>
-                     <Image url="@img/chat-icon.png"/>
-                  </image>
-               </ImageView>
-            </graphic>
-         </Label>
-      </children>
-   </Pane>
 </GridPane>

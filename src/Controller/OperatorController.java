@@ -5,6 +5,7 @@ import com.csvreader.CsvReader;
 import javafx.application.Platform;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
+import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
 import org.apache.activemq.command.ActiveMQBytesMessage;
 import org.apache.activemq.util.ByteSequence;
@@ -49,10 +50,10 @@ public class OperatorController implements MessageListener {
 
     public OperatorController(String subscriptionName, String topicName, ChatController controller) throws JMSException {
         this.operator = new Operator(subscriptionName, topicName);
-        this.isOnline = true;
+        this.isOnline = false;
         this.messageProduceID = new Vector<>();
         this.chatMessagess= new LinkedList<>();
-
+        networkHandler = new NetworkDownHandler();
         this.controller = controller.getInstance();
         this.operatorController = this;
         this.networkHandler = new NetworkDownHandler();
@@ -100,24 +101,27 @@ public class OperatorController implements MessageListener {
 
                     response.setText(myMessage.trim().equalsIgnoreCase("exit") ? "DIRROUTETOBOT":myMessage);
                     System.out.println("offline:   "+myMessage);
-
                     String random = Constant.correalationID;
                     response.setJMSCorrelationID(random);
                     operator.getMessageProducer().send(response);
 
 
                 }
-                catch (IllegalStateException | NullPointerException e){
-                    isOnline = false;
-           //         networkHandler.stop();
-                    if(networkHandler.isAlive()) {
-                            networkHandler.stopThread();
-                    }
 
-                        cachedMessages.add(chatMessage);
-              //      System.out.println("Message Added:  "+ chatMessage.getTextMessage() +"   "+cachedMessages.size());
-                    networkHandler = new NetworkDownHandler();
-                    networkHandler.start();
+                catch (IllegalStateException | NullPointerException e){
+
+                  if(!isOnline){
+                      //         networkHandler.stop();
+                      if(networkHandler.isAlive()) {
+
+                          networkHandler.stopThread();
+                      }
+
+                      cachedMessages.add(chatMessage);
+                      //      System.out.println("Message Added:  "+ chatMessage.getTextMessage() +"   "+cachedMessages.size());
+                      networkHandler = new NetworkDownHandler();
+                      networkHandler.start();
+                  }
 
                 }
 
@@ -608,13 +612,18 @@ public class OperatorController implements MessageListener {
     }
 
     private class NetworkDownHandler extends Thread{
+
+        Image image_offline = new Image(getClass().getResourceAsStream("offline.png")); //==========================
+        Image image_online = new Image(getClass().getResourceAsStream("online.png"));   //===========================
+
+
         Thread thread = this;
         String ID = Constant.getRandomString();
 
         public void run() {
             super.run();
         //thread = Thread.currentThread();
-        System.out.println(isOnline);
+        System.out.println("isOnline:    "+isOnline);
 
         synchronized (cachedMessages) {
             while (!isOnline) {
@@ -625,11 +634,13 @@ public class OperatorController implements MessageListener {
                     System.out.println("inside:  " + isOnline);
                     if (isConnected) {
                         isOnline = true;
+                        controller.statusImageView.setImage(image_online); //==========================
                         System.out.println("Re-connected");
                     }
-                    else
+                    else {
+                        controller.statusImageView.setImage(image_offline); //========================
                         isOnline = false;
-
+                    }
 
                 }  catch (Exception e) {
                     isOnline = false;
@@ -645,15 +656,15 @@ public class OperatorController implements MessageListener {
 
                         UserItem useritem = controller.getListItems().get(index);
                         String producerID =useritem.getUser().getSubscriptionName();
-                        System.out.println(producerID);
+                        System.out.println("producerID:     "+producerID);
                         OperatorController operatorController = new OperatorController(producerID, "chat." + producerID, controller);
 
 //                        ChatMessage chat = new ChatMessage();
 //                        chat.setTextMessage("sdfsdfssdgs");
                       //  operatorController.sendMessage(chat, operatorController);
                         controller.getHashMapOperator().get(producerID).setOperatorController(operatorController);
-
                     }
+
                     OperatorController operatorController = new OperatorController(OperatorController.defaultOperator, "chat.*", controller);
                     controller.getHashMapOperator().get(OperatorController.defaultOperator).setOperatorController(operatorController);
                     setOperatorController(controller.getHashMapOperator().get(OperatorController.defaultOperator).getOperatorController());

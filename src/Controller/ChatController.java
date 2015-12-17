@@ -9,6 +9,8 @@ import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.ColumnConstraints;
@@ -27,9 +29,16 @@ import java.util.Vector;
 public class ChatController{
 
 
+    @FXML public Button closeButton; //=========================
+    @FXML public Button minimizeButton; // ============================
 
-    @FXML public Label closeLabel;
-    @FXML public Label minimizeLabel;
+    @FXML public Label statusIcon; // =========================== new
+    @FXML public ImageView statusImageView; // ===================== new
+
+
+
+
+
     @FXML public Pane titleBar;
 
     @FXML public Button sendButton;
@@ -66,6 +75,9 @@ public class ChatController{
 
     public ChatController() throws JMSException {
 
+
+        Image image_offline = new Image(getClass().getResourceAsStream("offline.png")); // =========================== NEW
+        Image image_online = new Image(getClass().getResourceAsStream("online.png"));   // =========================== NEW
 
 
         hashMapOperator = new HashMap<>();
@@ -128,6 +140,17 @@ public class ChatController{
 
 //        chatUsersList.setItems(listItems);
         Platform.runLater(() -> {
+
+            if(isOnline){
+                statusImageView.setImage(image_online);
+            }else{
+                statusImageView.setImage(image_offline);
+            }
+            this.closeButton.setContentDisplay(ContentDisplay.CENTER);
+            this.closeButton.getStyleClass().add("closeButton");
+            this.minimizeButton.getStyleClass().add("minimizeButton");
+            this.sendButton.getStyleClass().add("sendButton");
+
 
             messageTextField.setDisable(true);
             sendButton.setDisable(true);
@@ -575,8 +598,8 @@ public class ChatController{
 
     public void closeApp() throws JMSException {
         controller.closeAllConnections();
-        closeLabel.setOnMousePressed(event -> System.exit(0));
-        closeLabel.setOnMouseClicked(event -> System.exit(0));
+        closeButton.setOnMousePressed(event -> System.exit(0));
+        //closeButton.setOnMouseClicked(event -> System.exit(0));
 
         //closeLabel.setOnMouseReleased(event -> System.exit(0));
     }
@@ -629,29 +652,7 @@ public class ChatController{
 
     }
 
-    public void hoverCloseLabel(){
-        closeLabel.setOnMouseEntered(event1 -> closeLabel.setOpacity(0.2));
-    }
 
-    public void exitOnClose(){
-        closeLabel.setOnMouseExited(event1 -> closeLabel.setOpacity(1));
-    }
-
-    public void hoverMinimizeLabel(){
-        minimizeLabel.setOnMouseEntered(event1 -> minimizeLabel.setOpacity(0.2));
-    }
-
-    public void exitOnMinimize(){
-        minimizeLabel.setOnMouseExited(event1 -> minimizeLabel.setOpacity(1));
-    }
-
-    public void hoverSendButton(){
-        sendButton.setOnMouseEntered(event1 -> sendButton.setOpacity(0.6));
-    }
-
-    public void exitOnSend(){
-        sendButton.setOnMouseExited(event1 -> sendButton.setOpacity(1));
-    }
 
 
 
@@ -799,6 +800,11 @@ public class ChatController{
 
 
     private class NetworkDownHandler extends Thread{
+        Image image_offline = new Image(getClass().getResourceAsStream("offline.png")); //===========================
+        Image image_online = new Image(getClass().getResourceAsStream("online.png"));   //===========================
+
+
+
         Thread thread = this;
         public void run() {
             thread = Thread.currentThread();
@@ -812,12 +818,14 @@ public class ChatController{
 
                         //         System.out.println("inside:  " + isOnline);
                         if (isConnected) {
+                            statusImageView.setImage(image_online); //==========================
                             isOnline = true;
                             System.out.println("Re-connected");
                         }
-                        else
+                        else {
+                            statusImageView.setImage(image_offline);//===========================
                             isOnline = false;
-
+                        }
 
                     } catch (IllegalStateException e) {
                         isOnline = false;

@@ -250,3 +250,44 @@ scrollbar
      -fx-background-color: #A1A1A1;
      -fx-text-fill: white;
  }
+
+ .closeButton{
+     -fx-background-color: #00AFF0;
+ }
+
+ .closeButton:hover{
+        -fx-opacity: 0.5;
+        -fx-effect: dropshadow( gaussian , rgba(0,0,0,100) , 10,0,0,1 );
+ }
+
+ .closeButton:pressed{
+     -fx-background-color: gray;
+     -fx-effect: innershadow( gaussian , rgba(0,0,0,1) , 10,0,0,1 );
+ }
+
+ .minimizeButton{
+     -fx-background-color: #00AFF0;
+ }
+
+ .minimizeButton:hover{
+    -fx-opacity: 0.5;
+    -fx-effect: dropshadow( gaussian , rgba(100,100,100,100) , 10,0,0,1 );
+ }
+
+ .minimizeButton:pressed{
+    -fx-border-color: black;
+    -fx-effect: innershadow( gaussian , rgba(0,0,0,1) , 10,0,0,1 );
+ }
+
+ .sendButton{
+     -fx-opacity: 0.8;
+ }
+
+ .sendButton:hover{
+    /*-fx-opacity: 0.5;*/
+    -fx-effect: dropshadow( gaussian , rgba(0,0,0,25) , 10,0,0,1 );
+ }
+
+ .sendButton:pressed{
+     -fx-text-fill: gray;
+ }
