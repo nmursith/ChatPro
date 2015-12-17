@@ -159,11 +159,10 @@ public class ChatController{
 
         });
     }
+
     public void sendMessage() throws IOException {
         String myMessage = messageTextField.getText();
-
         ChatMessage myMessageMod = getObjectMessage(myMessage, operatorController.getSubscriptionName());
-
         try {
             if(!myMessage.trim().equals("") && !myMessage.trim().equalsIgnoreCase("exit")){
 
@@ -172,8 +171,6 @@ public class ChatController{
 
                 OperatorBubble bubble = new OperatorBubble(defaultOperator, myMessageMod.getTextMessage(), myMessageMod.getTime() );
                 //       GridPane.setHalignment(bubble.getFromBubble(), HPos.RIGHT);
-
-
 
                 historyController.writehistory(counter, defaultOperator,myMessageMod);
                 chatHolder.addRow(counter, bubble.getRoot());
@@ -186,7 +183,7 @@ public class ChatController{
                 operatorController.sendMessage(myMessageMod, operatorController);
 
                 //System.out.println("Max:  "+ messageDisplay.getVmax());
-                Thread.sleep(50);
+                Thread.sleep(10);
                 Platform.runLater(() -> messageDisplay.setVvalue(messageDisplay.getVmax()));
 
 
@@ -224,6 +221,20 @@ public class ChatController{
         }
         messageTextField.setText("");
     }
+
+
+    public void sendMessage(ChatMessage chatMessage, OperatorController operatorController) throws IOException {
+        String myMessage = chatMessage.getTextMessage();
+        ChatMessage myMessageMod = getObjectMessage(myMessage, operatorController.getSubscriptionName());
+        try {
+            operatorController.sendMessage(myMessageMod, operatorController);
+        } catch (JMSException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
 
     public String getReplacedVariables(String message){
         String replacedmessage = message;
@@ -334,11 +345,11 @@ public class ChatController{
                     historyController = hashMapOperator.get(userID).getHistoryController();
                     messageDisplay.setContent(chatHolder);
                     messageDisplay.setVvalue(messageDisplay.getVmax());
-                    Thread.sleep(10);
+                    //Thread.sleep(10);
                     useritem.getThumbUserName().setStyle("-fx-text-fill:#696969; -fx-font-size:12px; -fx-font-weight:bold; ");
 
                 }
-                catch (NullPointerException | InterruptedException e){
+                catch (NullPointerException e){
                     e.printStackTrace();
                 }
 
@@ -452,9 +463,7 @@ public class ChatController{
             operatorController.sendMessage(myMessageMod, operatorController);
           //  System.out.println("exit");
             int counter = (int) operatorController.getMessageCounter();
-
             OperatorBubble bubble = new OperatorBubble(defaultOperator, myMessageMod.getTextMessage(), myMessageMod.getTime() );
-
             historyController.writehistory(counter, defaultOperator,myMessageMod);
             chatHolder.addRow(counter, bubble.getRoot());
             messageDisplay.setContent(chatHolder);
@@ -813,7 +822,7 @@ public class ChatController{
                     } catch (IllegalStateException e) {
                         isOnline = false;
                         try {
-                            Thread.sleep(100);
+                            sleep(100);
                         } catch (InterruptedException e1) {
                             e1.printStackTrace();
                         }
@@ -823,7 +832,7 @@ public class ChatController{
                         isOnline = false;
                         try {
 
-                            Thread.sleep(100);
+                            sleep(100);
                         } catch (InterruptedException e1) {
                             e1.printStackTrace();
                         }

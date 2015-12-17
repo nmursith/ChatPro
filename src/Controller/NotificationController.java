@@ -20,7 +20,7 @@ import javafx.util.Duration;
 /**
  * Created by dwijewardana on 12/13/2015.
  */
-class NotificationController {
+public class NotificationController {
 
 
     private volatile static ChatController chatController;
@@ -173,11 +173,6 @@ class NotificationController {
         setIndex(index);
         NotificationController.index = index;
 
-        try {
-            Thread.sleep(50);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
         stage.close();
         stage.setTitle("Notification");
         //stage.initStyle(StageStyle.UNDECORATED);

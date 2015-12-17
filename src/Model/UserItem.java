@@ -32,7 +32,7 @@ public class UserItem extends GridPane implements   Runnable, EventHandler<Mouse
     private ChatController chatController;
     private static UserItem userItem;  //addded latest
     private volatile Boolean running;
-
+    private Thread blink;
     public UserItem(User user, ChatController controller){
 
         this.user = user;
@@ -108,7 +108,8 @@ public class UserItem extends GridPane implements   Runnable, EventHandler<Mouse
     }
 
     public void startBlink(){
-        Thread blink = new Thread(this, user.getUserName());
+        blink = null;
+        blink = new Thread(this, user.getUserName());
         blink.start ();
 
     }
@@ -124,13 +125,13 @@ public class UserItem extends GridPane implements   Runnable, EventHandler<Mouse
         for (int i = 0; i < 3; i++) {
             this.thumbUserName.setStyle("-fx-text-fill:#ffa500; -fx-font-size:12px; -fx-font-weight:bold;");
             try {
-                Thread.sleep(250);
+                blink.sleep(250);
             } catch (InterruptedException e) {
 
             }
             this.thumbUserName.setStyle("-fx-text-fill: #1e90ff; -fx-font-size:12px; -fx-font-weight:bold;");
             try {
-                Thread.sleep(250);
+                blink.sleep(250);
             } catch (InterruptedException e) {
                 ///  e.printStackTrace();
 
@@ -147,7 +148,7 @@ public class UserItem extends GridPane implements   Runnable, EventHandler<Mouse
 
 
         try {
-            Thread.sleep(250);
+            blink.sleep(250);
         } catch (InterruptedException e) {
             ///  e.printStackTrace();
 

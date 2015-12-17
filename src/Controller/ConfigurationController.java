@@ -11,7 +11,7 @@ import java.io.IOException;
 /**
  * Created by mmursith on 12/9/2015.
  */
- final class  ConfigurationController {
+ public class  ConfigurationController {
     private static Configuration configuration = null;
 
 //    public static void main(String[] args) {

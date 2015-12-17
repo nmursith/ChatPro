@@ -1,5 +1,6 @@
 package Model;
 
+import Controller.ConfigurationController;
 import org.apache.activemq.ActiveMQConnectionFactory;
 
 import javax.jms.*;
@@ -22,8 +23,8 @@ public class Operator{
 
 
     static {
-      //  messageBrokerUrl = ConfigurationController.readConfig().getURL();////ActiveMQConnection.DEFAULT_BROKER_URL;//"tcp://localhost:61616";
-       messageBrokerUrl ="tcp://localhost:61616";
+        messageBrokerUrl = ConfigurationController.readConfig().getURL();////ActiveMQConnection.DEFAULT_BROKER_URL;//"tcp://localhost:61616";
+      // messageBrokerUrl ="tcp://localhost:61616";
         ackMode = Session.AUTO_ACKNOWLEDGE;
 
     }

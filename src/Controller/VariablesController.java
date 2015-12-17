@@ -14,7 +14,7 @@ import java.util.ArrayList;
  * Created by mmursith on 12/12/2015.
  */
 
-final class  VariablesController {
+public class  VariablesController {
 
     private static ArrayList<Variable> variableList;
     public static void main(String[] args) {
