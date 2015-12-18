@@ -73,7 +73,7 @@ public class OperatorController implements MessageListener {
 
                     @Override
                     public void run() {
-                        System.out.println("Timer Working online :  "+ isOnline);
+                 //       System.out.println("Timer Working online :  "+ isOnline);
 
                             if(networkHandler.isAlive())
                                 networkHandler.stopThread();
@@ -345,10 +345,10 @@ public class OperatorController implements MessageListener {
 
                     if (!controller.getMessageProducerID().contains(tempName) && !tempName.equals(null) && !tempName.equals(defaultOperator)) {
                         controller.getMessageProducerID().add(tempName);
-
+                        String username=Constant.usernames[messageProduceID.size()-1];
                         User user = new User();
                         user.setuserId(tempName);
-                        user.setUserName("user "+messageProduceID.size());
+                        user.setUserName(username);
                         user.setSubscriptionName(tempName);
                         user.setTopicName("chat." + tempName);
 

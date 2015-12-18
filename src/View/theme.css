@@ -118,10 +118,10 @@ scrollbar
 
 .scroll-pane{
     -fx-line-height: 12px;
-    -fx-background-color:white;
+    -fx-background-color:transparent;
     -fx-box-shadow: none;
-    -fx-padding:5px 5px 5px 5px;
-    -fx-focus-color: white;
+    -fx-padding:0px 0px 0px 0px;
+    -fx-focus-color: transparent;
     -fx-border-color:white;
 }
 
@@ -146,6 +146,7 @@ scrollbar
 }
 
 .scroll-bar:vertical .thumb {
+    -fx-background-color: derive(black,100%);/*-flatter-blue;/**/
     -fx-background-color: derive(black,100%);/*-flatter-blue;/**/
 	-fx-background-insets: 0, 0, 0;
 	-fx-background-radius: 0em;
@@ -260,9 +261,9 @@ scrollbar
         -fx-effect: dropshadow( gaussian , rgba(0,0,0,100) , 10,0,0,1 );
  }
 
- .closeButton:pressed{
-     -fx-background-color: gray;
-     -fx-effect: innershadow( gaussian , rgba(0,0,0,1) , 10,0,0,1 );
+ .closeButton:hover:pressed{
+     -fx-background-color: black;
+     -fx-effect: dropshadow( gaussian , rgba(0,0,0,100) , 10,0,0,1 );
  }
 
  .minimizeButton{
@@ -274,7 +275,7 @@ scrollbar
     -fx-effect: dropshadow( gaussian , rgba(100,100,100,100) , 10,0,0,1 );
  }
 
- .minimizeButton:pressed{
+ .minimizeButton:hover:pressed{
     -fx-border-color: black;
     -fx-effect: innershadow( gaussian , rgba(0,0,0,1) , 10,0,0,1 );
  }
@@ -291,3 +292,4 @@ scrollbar
  .sendButton:pressed{
      -fx-text-fill: gray;
  }
+

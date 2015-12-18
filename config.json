@@ -1,7 +1,7 @@
 {
     "destination":"chat.*",
     "topic":"chat.*",
-    "subscription":"operator111",
-    "operator":"operator111",
+    "subscription":"Operator",
+    "operator":"Operator",
     "URL":"tcp:\/\/cmterainsight:61616?trace=false&soTimeout=60000"
 }
