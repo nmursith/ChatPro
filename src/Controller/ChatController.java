@@ -185,12 +185,13 @@ public class ChatController{
 
     public void sendMessage() throws IOException {
         String myMessage = messageTextField.getText();
+
         ChatMessage myMessageMod = getObjectMessage(myMessage, operatorController.getSubscriptionName());
         try {
             if(!myMessage.trim().equals("") && !myMessage.trim().equalsIgnoreCase("exit")){
 
-                int counter = (int) operatorController.getMessageCounter();
-                //             System.out.println("value chat:  "+counter+"     ****"+operatorController);
+                int counter =  operatorController.getMessageCounter();
+                System.out.println("value chat:  "+counter+"     ****"+operatorController);
 
                 OperatorBubble bubble = new OperatorBubble(defaultOperator, myMessageMod.getTextMessage(), myMessageMod.getTime() );
                 //       GridPane.setHalignment(bubble.getFromBubble(), HPos.RIGHT);
@@ -205,7 +206,7 @@ public class ChatController{
                 myMessageMod = getObjectMessage(myMessage, operatorController.getSubscriptionName());
                 operatorController.sendMessage(myMessageMod, operatorController);
 
-                //System.out.println("Max:  "+ messageDisplay.getVmax());
+                System.out.println("Message sent");
                 Thread.sleep(10);
                 Platform.runLater(() -> messageDisplay.setVvalue(messageDisplay.getVmax()));
 
@@ -870,6 +871,8 @@ public class ChatController{
             t.interrupt();
         }
     }
+
+
 
 
 
