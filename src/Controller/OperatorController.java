@@ -49,7 +49,7 @@ public class OperatorController implements MessageListener {
 
     public OperatorController(String subscriptionName, String topicName, ChatController controller) throws JMSException {
         this.operator = new Operator(subscriptionName, topicName);
-        this.isOnline = true;
+
         this.messageProduceID = new Vector<>();
         this.chatMessagess= new LinkedList<>();
         this.networkHandler = new NetworkDownHandler();
@@ -116,8 +116,8 @@ public class OperatorController implements MessageListener {
                 try{
 
                     TextMessage response = operator.getSesssion().createTextMessage();
+                    System.out.println("Re - Sending: "+ response);
                     String myMessage = chatMessage.getTextMessage();
-
                     response.setText(myMessage.trim().equalsIgnoreCase("exit") ? "DIRROUTETOBOT":myMessage);
                     System.out.println("offline:   "+myMessage);
                     String random = Constant.correalationID;
@@ -145,7 +145,8 @@ public class OperatorController implements MessageListener {
 
                 }
             catch (NullPointerException e){
-                e.printStackTrace();
+                System.out.println("Error caused  " +e.getClass() +"  "+ e.getMessage());
+
             }
 
 
@@ -248,8 +249,6 @@ public class OperatorController implements MessageListener {
 
 
             /********/
-
-
             Service<Void> service = new Service<Void>() {
                 @Override
                 protected Task<Void> createTask() {
@@ -452,7 +451,7 @@ public class OperatorController implements MessageListener {
 
                                 if(!controller.getStage().isFocused() || controller.getStage().isIconified()) {
 
-                                    pendingNotification.add(new Notification(reply, username, index));
+                           //         pendingNotification.add(new Notification(reply, username, index));
                                     //System.out.println("pending noti  "+ pendingNotification.size());
 
 
@@ -707,7 +706,7 @@ public class OperatorController implements MessageListener {
                     while (!cachedMessages.isEmpty()) {
 
                         ChatMessage chatMessage = cachedMessages.remove();
-                        System.out.println("Re - Sending: "+ chatMessage);
+
                         BindOperator bindOperator = controller.getHashMapOperator().get(chatMessage.getProducerID());
                         controller.sendMessage(chatMessage, bindOperator.getOperatorController());
                     }
