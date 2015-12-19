@@ -14,7 +14,7 @@
     <RowConstraints maxHeight="386.0" minHeight="0.0" prefHeight="301.0" vgrow="SOMETIMES" />
   </rowConstraints>
    <children>
-      <TabPane prefHeight="337.0" prefWidth="600.0" style="-fx-background-color: white;" tabClosingPolicy="UNAVAILABLE" GridPane.rowIndex="1">
+      <TabPane prefHeight="337.0" prefWidth="600.0" style="-fx-background-color: white;" stylesheets="@settings.css" tabClosingPolicy="UNAVAILABLE" GridPane.rowIndex="1">
         <tabs>
           <Tab text="Configuration">
             <content>
@@ -89,7 +89,7 @@
                <graphic>
                   <ImageView fitHeight="10.0" fitWidth="10.0">
                      <image>
-                        <Image url="@img/cross.png" />
+                        <Image url="@../View/img/cross.png" />
                      </image>
                   </ImageView>
                </graphic>

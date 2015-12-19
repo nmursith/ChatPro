@@ -211,7 +211,7 @@ public class ChatController{
                 operatorController.sendMessage(myMessageMod, operatorController);
 
             //    System.out.println("Message sent");
-                Thread.sleep(10);
+                Thread.sleep(50);
                 Platform.runLater(() -> messageDisplay.setVvalue(messageDisplay.getVmax()));
 
 
