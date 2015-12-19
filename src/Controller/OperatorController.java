@@ -58,8 +58,6 @@ public class OperatorController implements MessageListener {
         this.offlineNetworkDownHandler = new OfflineNetworkDownHandler();
         this.pendingNotification = new LinkedList<>();
 
-
-
         defaultOperator = ConfigurationController.readConfig().getOperator();//"operator1";
      //   this.notificationController = new NotificationController();
         try {
