@@ -64,7 +64,7 @@ public class ChatController{
 
     final ObservableList<UserItem> listItems = FXCollections.observableArrayList();
     private Vector<String> messageProducerID;
-    private final ArrayList<Variable> contextMenuVariables;
+    private ArrayList<Variable> contextMenuVariables;
     private final Configuration config;
     private  OperatorController operatorController ;
     private  HistoryController historyController;
@@ -72,6 +72,7 @@ public class ChatController{
     private final String defaultOperator;
     private volatile boolean isOnline;
     private Stage stage;
+
 
     public ChatController() throws JMSException {
 
@@ -84,6 +85,7 @@ public class ChatController{
         controller =this;
         previousID = null;
         config = ConfigurationController.readConfig();
+
         //operatorController = new OperatorController("operator0", "chat.*",this);
         this.isOnline = false;
 
@@ -191,12 +193,14 @@ public class ChatController{
             if(!myMessage.trim().equals("") && !myMessage.trim().equalsIgnoreCase("exit")){
 
                 int counter =  operatorController.getMessageCounter();
-                System.out.println("value chat:  "+counter+"     ****"+operatorController);
+          //      System.out.println("value chat:  "+counter+"     ****"+operatorController);
 
                 OperatorBubble bubble = new OperatorBubble(defaultOperator, myMessageMod.getTextMessage(), myMessageMod.getTime() );
                 //       GridPane.setHalignment(bubble.getFromBubble(), HPos.RIGHT);
 
+               // Parent root = bubble.getRoot(defaultOperator, myMessageMod.getTextMessage(), myMessageMod.getTime());
                 historyController.writehistory(counter, defaultOperator,myMessageMod);
+
                 chatHolder.addRow(counter, bubble.getRoot());
 
                 messageDisplay.setContent(chatHolder);
@@ -206,7 +210,7 @@ public class ChatController{
                 myMessageMod = getObjectMessage(myMessage, operatorController.getSubscriptionName());
                 operatorController.sendMessage(myMessageMod, operatorController);
 
-                System.out.println("Message sent");
+            //    System.out.println("Message sent");
                 Thread.sleep(10);
                 Platform.runLater(() -> messageDisplay.setVvalue(messageDisplay.getVmax()));
 
@@ -519,11 +523,15 @@ public class ChatController{
     }
 
     public  void addMenuItems(){
+        contextMenuVariables = (ArrayList<Variable>) VariablesController.readVariables();
+        variablesMenu.getItems().remove(0, variablesMenu.getItems().size()-1);
 
         for (Variable variable :contextMenuVariables) {
-            MenuItem menuitem = new MenuItem(variable.getName());
-            menuitem.setId(variable.getID());
-            variablesMenu.getItems().add(menuitem);
+            {
+                MenuItem menuitem = new MenuItem(variable.getName());
+                menuitem.setId(variable.getID());
+                variablesMenu.getItems().add(menuitem);
+            }
         }
     }
 //    public void createChatSpace() throws JMSException {
@@ -566,18 +574,17 @@ public class ChatController{
         if(!listItems.isEmpty()) {
             String myMessage = "exit";
        for(int index=0; index< listItems.size(); index++) {
-                UserItem useritem = controller.getListItems().get(index);
-
-                String name = useritem.getUser().getSubscriptionName();
+  //              UserItem useritem = controller.getListItems().get(index);
+//                String name = useritem.getUser().getSubscriptionName();
 
                 ChatMessage myMessageMod = getObjectMessage(myMessage, hashMapOperator.get(defaultOperator).getOperatorController().getSubscriptionName());
-                hashMapOperator.remove(name);
-                hashMapOperator.get(defaultOperator).getOperatorController().getMessageProduceID().remove(name);
+       //         hashMapOperator.remove(name);
+       //         hashMapOperator.get(defaultOperator).getOperatorController().getMessageProduceID().remove(name);
                 hashMapOperator.get(defaultOperator).getOperatorController().sendMessage(myMessageMod, operatorController);
-                hashMapOperator.get(defaultOperator).getOperatorController().closeConnection();
+        ///        hashMapOperator.get(defaultOperator).getOperatorController().closeConnection();
              //   hashMapOperator.get(defaultOperator).getOperatorController().getExecutor().shutdown();
               //  while(! hashMapOperator.get(defaultOperator).getOperatorController().getExecutor().isTerminated()){}
-                listItems.remove(index);
+       //         listItems.remove(index);
                 System.out.println("Removed");
             }
 
@@ -599,7 +606,7 @@ public class ChatController{
 
     public void closeApp() throws JMSException {
         controller.closeAllConnections();
-        closeButton.setOnMousePressed(event -> System.exit(0));
+        System.exit(0);
         //closeButton.setOnMouseClicked(event -> System.exit(0));
 
         //closeLabel.setOnMouseReleased(event -> System.exit(0));

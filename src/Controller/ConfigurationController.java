@@ -6,6 +6,7 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 
 /**
@@ -22,6 +23,35 @@ import java.io.IOException;
 //
 //
 //    }
+
+    public void writeConfig(Configuration configuration){
+        JSONObject obj = new JSONObject();
+        obj.put("operator", configuration.getOperator());
+        obj.put("topic", configuration.getTopic());
+        obj.put("subscription", configuration.getSubscription());
+        obj.put("destination", configuration.getDestination());
+        obj.put("URL",configuration.getURL());
+
+//        JSONArray list = new JSONArray();
+//        list.add("msg 1");
+//        list.add("msg 2");
+//        list.add("msg 3");
+//
+//        obj.put("messages", list);
+
+        try {
+
+            FileWriter file = new FileWriter("config.json");
+            file.write(obj.toJSONString());
+            file.flush();
+            file.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    //    System.out.println(obj);
+    }
 
 
 
@@ -47,7 +77,7 @@ import java.io.IOException;
 
 //            System.out.println("Read:       "+URL );
 //            System.out.println(destination );
-            System.out.println(operator );
+//            System.out.println(operator );
 //            System.out.println(topic );
             // loop array
 //            JSONArray msg = (JSONArray) jsonObject.get("messages");
