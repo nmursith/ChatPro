@@ -169,7 +169,7 @@ public class ChatController{
             addMenuItems();
             if(isOnline) {
                 hashMapOperator.put(defaultOperator, new BindOperator(operatorController, getGridPane()));
-                historyController = hashMapOperator.get(config.getSubscription()).getHistoryController();
+              //  historyController = hashMapOperator.get(config.getSubscription()).getHistoryController();
             }
 
 
@@ -932,7 +932,7 @@ public class ChatController{
                 try {
                     OperatorController operatorController = new OperatorController(config.getOperator(), config.getTopic(),controller);
                     hashMapOperator.put(defaultOperator, new BindOperator(operatorController, getGridPane()));
-                    historyController = hashMapOperator.get(config.getSubscription()).getHistoryController();
+                 //   historyController = hashMapOperator.get(config.getSubscription()).getHistoryController();
                 } catch (JMSException e) {
                     e.printStackTrace();
                 }
