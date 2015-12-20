@@ -2,12 +2,16 @@ package View;
 
 import Controller.ChatController;
 import javafx.application.Application;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.CacheHint;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import javafx.stage.WindowEvent;
+
+import javax.jms.JMSException;
 
 public class Main extends Application {
 
@@ -32,6 +36,16 @@ public class Main extends Application {
 
         chatController.setScene(scene, primaryStage);
 
+        primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            @Override
+            public void handle(WindowEvent event) {
+                try {
+                    chatController.closeAllConnections();
+                } catch (JMSException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
         primaryStage.setTitle("vAssistant");
         primaryStage.setScene(scene);
         System.out.println("show");

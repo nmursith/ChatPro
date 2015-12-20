@@ -80,7 +80,7 @@
                <graphic>
                   <ImageView fx:id="statusImageView" fitHeight="15.0" fitWidth="15.0">
                      <image>
-                        <Image url="@../Controller/gear39.png" />
+                        <Image url="@gear39.png" />
                      </image>
                   </ImageView>
                </graphic>

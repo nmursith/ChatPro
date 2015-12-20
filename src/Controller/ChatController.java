@@ -72,7 +72,7 @@ public class ChatController{
     private final String defaultOperator;
     private volatile boolean isOnline;
     private Stage stage;
-
+    private SettingsController settingsController;
 
     public ChatController() throws JMSException {
 
@@ -85,7 +85,11 @@ public class ChatController{
         controller =this;
         previousID = null;
         config = ConfigurationController.readConfig();
-
+        try {
+            settingsController = new SettingsController(controller);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         //operatorController = new OperatorController("operator0", "chat.*",this);
         this.isOnline = false;
 
@@ -577,10 +581,13 @@ public class ChatController{
   //              UserItem useritem = controller.getListItems().get(index);
 //                String name = useritem.getUser().getSubscriptionName();
 
-                ChatMessage myMessageMod = getObjectMessage(myMessage, hashMapOperator.get(defaultOperator).getOperatorController().getSubscriptionName());
+
        //         hashMapOperator.remove(name);
        //         hashMapOperator.get(defaultOperator).getOperatorController().getMessageProduceID().remove(name);
-                hashMapOperator.get(defaultOperator).getOperatorController().sendMessage(myMessageMod, operatorController);
+           if(isOnline) {
+               ChatMessage myMessageMod = getObjectMessage(myMessage, hashMapOperator.get(defaultOperator).getOperatorController().getSubscriptionName());
+               hashMapOperator.get(defaultOperator).getOperatorController().sendMessage(myMessageMod, operatorController);
+           }
         ///        hashMapOperator.get(defaultOperator).getOperatorController().closeConnection();
              //   hashMapOperator.get(defaultOperator).getOperatorController().getExecutor().shutdown();
               //  while(! hashMapOperator.get(defaultOperator).getOperatorController().getExecutor().isTerminated()){}
@@ -660,6 +667,13 @@ public class ChatController{
 
     }
 
+    public void showSettings(Event event) {
+        try {
+            settingsController.showSettingsWindow();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
 
 

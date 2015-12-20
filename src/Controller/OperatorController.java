@@ -79,6 +79,7 @@ public class OperatorController implements MessageListener {
                             networkHandler = new NetworkDownHandler();
                             networkHandler.start();
 
+
                     }
                 };
 
