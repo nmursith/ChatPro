@@ -1,8 +1,9 @@
 package Controller;
 
 import Model.Configuration;
+import javafx.application.Platform;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.scene.CacheHint;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -13,30 +14,30 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 import java.io.IOException;
-import java.util.ResourceBundle;
 
 /**
  * Created by mmursith on 12/19/2015.
  */
-public class SettingsController  implements Initializable {
-    public TextField destination;
-    public TextField topic;
-    public TextField subscription;
-    public TextField operator;
-    public TextField URL;
+public class SettingsController  {
+    @FXML private TextField destination;
+    @FXML private TextField topic;
+    @FXML private TextField subscription;
+    @FXML private TextField operator;
+    @FXML private TextField URL;
 
-    public Button cancelConfiguration;
-    public Button okConfiguration;
-    public Button applyConfiguration;
+    @FXML private Button cancelConfiguration;
+    @FXML private Button okConfiguration;
+    @FXML private Button applyConfiguration;
 
-    public Button cancelVariable;
-    public Button okVariable;
-    public Button applyVariable;
-    public Button addVariable;
-    public Button deleteVariable;
-    public TableView tableVariables;
-    public Button settings_closeButton;
+    @FXML private Button cancelVariable;
+    @FXML private Button okVariable;
+    @FXML private Button applyVariable;
+    @FXML private Button addVariable;
+    @FXML private Button deleteVariable;
+    @FXML private TableView tableVariables;
+    @FXML private Button settings_closeButton;
 
+    private SettingsController settingController;
     private ChatController controller;
     private Stage settingsStage;
 
@@ -44,13 +45,15 @@ public class SettingsController  implements Initializable {
     public SettingsController(){
 
     }
+
     public SettingsController(ChatController controller) throws IOException {
         this.controller = controller;
         this.settingsStage = new Stage();
 
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("Settings.fxml"));
         Parent root = fxmlLoader.load();
-
+        SettingsController settingsC= fxmlLoader.<SettingsController>getController();
+        settingController = settingsC;
         root.setCache(true);
         root.setCacheHint(CacheHint.DEFAULT);
 
@@ -61,7 +64,6 @@ public class SettingsController  implements Initializable {
         System.out.println("show");
         //FlatterFX.style();
         settingsStage.initStyle(StageStyle.UNDECORATED);
-
         settingsStage.setResizable(false);
 
     }
@@ -71,12 +73,14 @@ public class SettingsController  implements Initializable {
       //  controller.getStage().toBack();
         System.out.println(settingsStage);
        // setting.start(settingsStage);
-
-
-
         settingsStage.show();
-        fillConfiguration();
-        fillVariable();
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                fillConfiguration();
+                fillVariable();
+            }
+        });
     }
 
     private void fillVariable() {
@@ -89,19 +93,16 @@ public class SettingsController  implements Initializable {
 //        subscription;
 //        operator;
 //        URL;
-        destination.setText(oldConfiguration.getDestination());
-        topic.setText(oldConfiguration.getTopic());
-        subscription.setText(oldConfiguration.getSubscription());
-        operator.setText(oldConfiguration.getOperator());
-        URL.setText(oldConfiguration.getURL());
+        System.out.println("old Configuration "+ settingController.destination +"    "+ settingController.topic);
+        settingController.destination.setText(oldConfiguration.getDestination());
+        settingController.topic.setText(oldConfiguration.getTopic());
+        settingController.subscription.setText(oldConfiguration.getSubscription());
+        settingController.operator.setText(oldConfiguration.getOperator());
+        settingController.URL.setText(oldConfiguration.getURL());
     }
 
 
 
-    @Override
-    public void initialize(java.net.URL location, ResourceBundle resources) {
-
-    }
 
 
 }
