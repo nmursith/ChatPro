@@ -180,6 +180,7 @@ public class OperatorController implements MessageListener {
 
                 //System.out.println(text.getText());
                 ActiveMQBytesMessage activeMQBytesMessage = (ActiveMQBytesMessage) message;
+                
                 String destination = ((ActiveMQBytesMessage) message).getDestination().getPhysicalName();
                 destination =destination.substring(destination.indexOf('.')+1);
 

@@ -69,11 +69,11 @@ public class ChatController{
     final ObservableList<UserItem> listItems = FXCollections.observableArrayList();
     private Vector<String> messageProducerID;
     private ArrayList<Variable> contextMenuVariables;
-    private final Configuration config;
+    private Configuration config;
     private  OperatorController operatorController ;
     private  HistoryController historyController;
     private NetworkDownHandler networkHandler;
-    private final String defaultOperator;
+    private String defaultOperator;
     private volatile boolean isOnline;
     private Stage stage;
     private SettingsController settingsController;
@@ -91,12 +91,7 @@ public class ChatController{
         controller =this;
         previousID = null;
         config = ConfigurationController.readConfig();
-        try {
-            loadSettings();
-            System.out.println("settings loaded");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
         //operatorController = new OperatorController("operator0", "chat.*",this);
         this.isOnline = false;
 
@@ -179,6 +174,13 @@ public class ChatController{
 
 
         });
+
+        try {
+            loadSettings();
+            System.out.println("settings loaded");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
 
     }
@@ -690,9 +692,9 @@ public class ChatController{
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("Settings.fxml"));
         Parent root = fxmlLoader.load();
         settingsController = fxmlLoader.<SettingsController>getController();
-
+        settingsController.setChatController(this);
         settingsController.setSettingsStage(settingStage);
-
+        settingsController.setListeners();
         root.setCache(true);
         root.setCacheHint(CacheHint.DEFAULT);
 
@@ -779,8 +781,13 @@ public class ChatController{
         Username = username;
     }
 
+    public String getDefaultOperator() {
+        return defaultOperator;
+    }
 
-
+    public void setDefaultOperator(String defaultOperator) {
+        this.defaultOperator = defaultOperator;
+    }
     public Button getAddChatBtn() {
         return AddChatBtn;
     }
@@ -797,7 +804,13 @@ public class ChatController{
         this.chatUsersList = chatUsersList;
     }
 
+    public NetworkDownHandler getNetworkHandler() {
+        return new NetworkDownHandler();
+    }
 
+    public void setNetworkHandler(NetworkDownHandler networkHandler) {
+        this.networkHandler = networkHandler;
+    }
 
     public ScrollPane getMessageDisplay() {
         return messageDisplay;
@@ -823,7 +836,13 @@ public class ChatController{
         this.messageProducerID = messageProducerID;
     }
 
+    public Configuration getConfig() {
+        return config;
+    }
 
+    public void setConfig(Configuration config) {
+        this.config = config;
+    }
 
     public String getPreviousID() {
         return previousID;
@@ -841,6 +860,14 @@ public class ChatController{
         return stage;
     }
 
+    public boolean isOnline() {
+        return isOnline;
+    }
+
+    public void setOnline(boolean online) {
+        isOnline = online;
+    }
+
     public void setScene(Scene scene, Stage stage) {
        // System.out.println("setting scene");
       //  System.out.println(hashMapOperator);
@@ -850,7 +877,7 @@ public class ChatController{
 
 
 
-    private class NetworkDownHandler extends Thread{
+     class NetworkDownHandler extends Thread{
         Image image_offline = new Image(getClass().getResourceAsStream("offline.png")); //===========================
         Image image_online = new Image(getClass().getResourceAsStream("online.png"));   //===========================
 

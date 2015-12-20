@@ -2,19 +2,21 @@ package Controller;
 
 import Model.Configuration;
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
+import javax.jms.JMSException;
+
 /**
  * Created by mmursith on 12/19/2015.
  */
-public class SettingsController  implements EventHandler{
+public class SettingsController  implements ChangeListener{
 
     public Button cancelConfiguration;
     public Button okConfiguration;
@@ -37,12 +39,26 @@ public class SettingsController  implements EventHandler{
 
 
     private SettingsController settingController;
-    private ChatController controller;
+    private ChatController chatController;
     private Stage settingsStage;
 
 
     public SettingsController(){
 
+    }
+    public void setListeners(){
+
+        topic.textProperty().addListener(this);
+        topic.textProperty().addListener(this);
+        destination.textProperty().addListener(this);
+        operator.textProperty().addListener(this);
+        subscription.textProperty().addListener(this);
+        operator.textProperty().addListener(this);
+
+    }
+
+    public void setChatController(ChatController chatController) {
+        this.chatController = chatController;
     }
 
 //    public SettingsController(ChatController controller) throws IOException {
@@ -131,14 +147,34 @@ public class SettingsController  implements EventHandler{
     }
     public void apply(){
         System.out.println("Working");
-        Configuration configuration = new Configuration();
-        configuration.setDestination(destination.getText());
-        configuration.setTopic(topic.getText());
-        configuration.setSubscription(subscription.getText());
-        configuration.setURL(URL.getText());
-        configuration.setOperator(operator.getText());
-        ConfigurationController.writeConfig(configuration);
-        applyConfigurationButton.setDisable(true);
+        Configuration previousConfiguraion = ConfigurationController.readConfig();
+
+        Configuration currentConfiguration = new Configuration();
+        currentConfiguration.setDestination(destination.getText());
+        currentConfiguration.setTopic(topic.getText());
+        currentConfiguration.setSubscription(subscription.getText());
+        currentConfiguration.setURL(URL.getText());
+        currentConfiguration.setOperator(operator.getText());
+        ConfigurationController.writeConfig(currentConfiguration);
+
+        if(!previousConfiguraion.equals(currentConfiguration))
+        {
+            applyConfigurationButton.setDisable(true);
+            try {
+                chatController.getHashMapOperator().get(chatController.getDefaultOperator()).getOperatorController().closeConnection();
+            } catch (JMSException e) {
+                e.printStackTrace();
+            }
+            chatController.getHashMapOperator().remove(chatController.getDefaultOperator());
+            chatController.setDefaultOperator(currentConfiguration.getOperator());
+            chatController.setConfig(currentConfiguration);
+            chatController.setOnline(false);
+
+            chatController.getNetworkHandler().start();
+
+        }
+
+
     }
     public void setOkVariable(ActionEvent actionEvent) {
         apply();
@@ -155,10 +191,7 @@ public class SettingsController  implements EventHandler{
     public void removeVariable(ActionEvent actionEvent) {
     }
 
-    @Override
-    public void handle(Event event) {
-        settingController.applyConfigurationButton.setDisable(false);
-    }
+
 
     public Stage getSettingsStage() {
         return settingsStage;
@@ -170,5 +203,12 @@ public class SettingsController  implements EventHandler{
 
     public void cancel(ActionEvent actionEvent) {
         settingsStage.close();
+    }
+
+
+    @Override
+    public void changed(ObservableValue observable, Object oldValue, Object newValue) {
+
+        applyConfigurationButton.setDisable(false);
     }
 }

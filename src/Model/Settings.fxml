@@ -85,7 +85,7 @@
                   </ImageView>
                </graphic>
             </Label>
-            <Button fx:id="settings_closeButton" layoutX="580.0" layoutY="8.0" maxHeight="10.0" maxWidth="10.0" minHeight="10.0" minWidth="10.0" mnemonicParsing="false" prefHeight="10.0" prefWidth="10.0" style="-fx-background-color: transparent;">
+            <Button fx:id="settings_closeButton" layoutX="580.0"  onAction="#cancel" layoutY="8.0" maxHeight="10.0" maxWidth="10.0" minHeight="10.0" minWidth="10.0" mnemonicParsing="false" prefHeight="10.0" prefWidth="10.0" style="-fx-background-color: transparent;">
                <graphic>
                   <ImageView fitHeight="10.0" fitWidth="10.0">
                      <image>
