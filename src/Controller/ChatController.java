@@ -7,6 +7,9 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.CacheHint;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -17,6 +20,7 @@ import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 import javax.jms.IllegalStateException;
 import javax.jms.JMSException;
@@ -73,6 +77,8 @@ public class ChatController{
     private volatile boolean isOnline;
     private Stage stage;
     private SettingsController settingsController;
+    private Stage settingStage;
+
 
     public ChatController() throws JMSException {
 
@@ -86,7 +92,8 @@ public class ChatController{
         previousID = null;
         config = ConfigurationController.readConfig();
         try {
-            settingsController = new SettingsController(controller);
+            loadSettings();
+            System.out.println("settings loaded");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -668,6 +675,7 @@ public class ChatController{
     }
 
     public void showSettings(Event event) {
+//        settingStage.show();
         try {
             settingsController.showSettingsWindow();
         } catch (Exception e) {
@@ -676,6 +684,27 @@ public class ChatController{
     }
 
 
+    public void loadSettings() throws IOException {
+        settingStage = new Stage();
+
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("Settings.fxml"));
+        Parent root = fxmlLoader.load();
+        settingsController = fxmlLoader.<SettingsController>getController();
+
+        settingsController.setSettingsStage(settingStage);
+
+        root.setCache(true);
+        root.setCacheHint(CacheHint.DEFAULT);
+
+        Scene scene = new Scene(root);//, 550, 605);
+//            SettingsController chatController = fxmlLoader.<SettingsController>getController();
+//            chatController.setStage(primaryStage);
+        settingStage.setScene(scene);
+        System.out.println("show");
+        //FlatterFX.style();
+        settingStage.initStyle(StageStyle.UNDECORATED);
+        settingStage.setResizable(false);
+    }
 
 
 

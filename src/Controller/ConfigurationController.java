@@ -24,7 +24,7 @@ import java.io.IOException;
 //
 //    }
 
-    public void writeConfig(Configuration configuration){
+    public static void writeConfig(Configuration configuration){
         JSONObject obj = new JSONObject();
         obj.put("operator", configuration.getOperator());
         obj.put("topic", configuration.getTopic());

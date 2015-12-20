@@ -45,9 +45,9 @@
                               <TextField fx:id="URL" promptText="Please add the destination URL here" style="-fx-background-color: #E7F0F5;" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                            </children>
                         </GridPane>
-                        <Button fx:id="cancelConfiguration" layoutX="500.0" layoutY="230.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="63.0" style="-fx-background-color: #00AFF0; -fx-font-weight: bold;" text="Cancel" />
-                        <Button fx:id="okConfiguration" layoutX="430.0" layoutY="230.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="63.0" style="-fx-background-color: #00AFF0; -fx-font-weight: bold;" text="OK" />
-                        <Button fx:id="applyConfiguration" layoutX="359.0" layoutY="230.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="63.0" style="-fx-background-color: #00AFF0; -fx-font-weight: bold;" text="Apply" />
+                        <Button fx:id="cancelConfiguration" layoutX="500.0" layoutY="230.0" mnemonicParsing="false" onAction="#cancel" prefHeight="17.0" prefWidth="63.0" style="-fx-background-color: #00AFF0; -fx-font-weight: bold;" text="Cancel" />
+                        <Button fx:id="okConfiguration" layoutX="430.0" layoutY="230.0" mnemonicParsing="false" onAction="#setOkConfiguration" prefHeight="17.0" prefWidth="63.0" style="-fx-background-color: #00AFF0; -fx-font-weight: bold;" text="OK" />
+                        <Button fx:id="applyConfigurationButton" layoutX="359.0" layoutY="230.0" mnemonicParsing="false" onAction="#applyConfiguration" prefHeight="17.0" prefWidth="63.0" style="-fx-background-color: #00AFF0; -fx-font-weight: bold;" text="Apply" />
                      </children>
                   </AnchorPane>
             </content>
@@ -56,11 +56,11 @@
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <Button fx:id="cancelVariable" layoutX="510.0" layoutY="230.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="63.0" style="-fx-background-color: #00AFF0; -fx-font-weight: bold;" text="Cancel" />
-                        <Button fx:id="okVariable" layoutX="440.0" layoutY="230.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="63.0" style="-fx-background-color: #00AFF0; -fx-font-weight: bold;" text="OK" />
-                        <Button fx:id="applyVariable" layoutX="369.0" layoutY="230.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="63.0" style="-fx-background-color: #00AFF0; -fx-font-weight: bold;" text="Apply" />
-                        <Button fx:id="addVariable" layoutX="26.0" layoutY="230.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="63.0" style="-fx-background-color: #00AFF0; -fx-font-weight: bold;" text="Add" />
-                        <Button fx:id="deleteVariable" layoutX="96.0" layoutY="230.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="63.0" style="-fx-background-color: #00AFF0; -fx-font-weight: bold;" text="Delete" />
+                        <Button fx:id="cancelVariable" layoutX="510.0" layoutY="230.0" mnemonicParsing="false" onAction="#cancel" prefHeight="17.0" prefWidth="63.0" style="-fx-background-color: #00AFF0; -fx-font-weight: bold;" text="Cancel" />
+                        <Button fx:id="okVariable" layoutX="440.0" layoutY="230.0" mnemonicParsing="false" onAction="#setOkVariable" prefHeight="17.0" prefWidth="63.0" style="-fx-background-color: #00AFF0; -fx-font-weight: bold;" text="OK" />
+                        <Button fx:id="applyVariableButton" layoutX="369.0" layoutY="230.0" mnemonicParsing="false" onAction="#applyVariable" prefHeight="17.0" prefWidth="63.0" style="-fx-background-color: #00AFF0; -fx-font-weight: bold;" text="Apply" />
+                        <Button fx:id="adddVariableButton" layoutX="26.0" layoutY="230.0" mnemonicParsing="false" onAction="#addVariable" prefHeight="17.0" prefWidth="63.0" style="-fx-background-color: #00AFF0; -fx-font-weight: bold;" text="Add" />
+                        <Button fx:id="removeVariableButton" layoutX="96.0" layoutY="230.0" mnemonicParsing="false" onAction="#removeVariable" prefHeight="17.0" prefWidth="63.0" style="-fx-background-color: #00AFF0; -fx-font-weight: bold;" text="Remove" />
                         <TableView fx:id="tableVariables" editable="true" layoutX="26.0" layoutY="14.0" prefHeight="200.0" prefWidth="546.0">
                           <columns>
                             <TableColumn prefWidth="270.0" text="Variable ID" />
