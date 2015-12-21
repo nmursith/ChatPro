@@ -1,17 +1,20 @@
 package Controller;
 
 import Model.Configuration;
+import Model.Variable;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
 import javax.jms.JMSException;
+import java.util.ArrayList;
 
 /**
  * Created by mmursith on 12/19/2015.
@@ -27,6 +30,7 @@ public class SettingsController  implements ChangeListener{
     public Button addVariable;
     public Button deleteVariable;
     public Button settings_closeButton;
+    @FXML public ScrollPane tableViewContainer;
     @FXML private Button applyConfigurationButton;
     @FXML private  Button applyVariableButton;
     @FXML private TextField destination;
@@ -34,20 +38,20 @@ public class SettingsController  implements ChangeListener{
     @FXML private TextField subscription;
     @FXML private TextField operator;
     @FXML private TextField URL;
-
-    @FXML private TableView tableVariables;
+    ObservableList<Variable> data;
+     private TableView<Variable> tableVariables;
 
 
     private SettingsController settingController;
     private ChatController chatController;
     private Stage settingsStage;
-
-
+    private TableColumn variableName;
+    private TableColumn variableID;
     public SettingsController(){
 
     }
     public void setListeners(){
-
+        tableVariables = new TableView<>();
         topic.textProperty().addListener(this);
         topic.textProperty().addListener(this);
         destination.textProperty().addListener(this);
@@ -114,7 +118,38 @@ public class SettingsController  implements ChangeListener{
     }
 
     private void fillVariable() {
+        ArrayList<Variable> contextMenuVariables = (ArrayList<Variable>) VariablesController.readVariables();
+         data =FXCollections.observableArrayList(contextMenuVariables);
+//
+//        for (Variable variable :contextMenuVariables) {
+//           data.add(variable);
+//        }
+
+        tableVariables.setEditable(true);
+
+        variableName = new TableColumn("Variable name");
+        variableName.setPrefWidth(270);
+        variableName.setEditable(true);
+        variableName.cellFactoryProperty().addListener((observable, oldValue, newValue) -> applyVariable.setDisable(false));
+        variableName.setCellValueFactory(new PropertyValueFactory<Variable,String>("Name"));
+
+         variableID = new TableColumn("Variable ID");
+        variableID.setEditable(true);
+        variableID.setPrefWidth(270);
+        variableID.cellFactoryProperty().addListener((observable, oldValue, newValue) -> applyVariable.setDisable(false));
+        variableID.setCellValueFactory(new PropertyValueFactory<Variable,String>("Name"));
+
+
+        tableVariables.setItems(data);
+        tableVariables.getColumns().addAll(variableName, variableID);
+
+        tableViewContainer.setContent(tableVariables);
+        tableViewContainer.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        System.out.println(tableVariables.getColumns().get(0));
+
     }
+
+
 
     private void fillConfiguration() {
         Configuration oldConfiguration = ConfigurationController.readConfig();
@@ -136,6 +171,7 @@ public class SettingsController  implements ChangeListener{
 
     public void setOkConfiguration(ActionEvent actionEvent) {
         //applyConfiguration();
+        apply();
         settingsStage.hide();
         settingsStage.close();
     }
@@ -177,18 +213,46 @@ public class SettingsController  implements ChangeListener{
 
     }
     public void setOkVariable(ActionEvent actionEvent) {
-        apply();
+        changeVariable();
         settingsStage.close();
+
 
     }
 
+    public void changeVariable(){
+
+        ArrayList<Variable> previousList = VariablesController.readVariables();
+        ObservableList<Variable> currentList = tableVariables.getItems();
+
+        ArrayList<Variable> List = new ArrayList<>();
+        for (Variable variable: currentList) {
+            if(!variable.getID().trim().equals("") && !variable.getName().trim().equals("")){
+                List.add(variable);
+            }
+
+        }
+
+        if(!List.equals(previousList)){
+            VariablesController.writeVariables(List);
+        }
+        applyVariable.setDisable(true);
+        chatController.addMenuItems();
+
+    }
     public void applyVariable(ActionEvent actionEvent) {
+
+        changeVariable();
+
+
     }
 
     public void addVariable(ActionEvent actionEvent) {
+        data.add(new Variable("new", "new"));
     }
 
     public void removeVariable(ActionEvent actionEvent) {
+        Variable variable = tableVariables.getSelectionModel().getSelectedItem();
+        data.remove(variable);
     }
 
 

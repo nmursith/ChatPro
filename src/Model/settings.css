@@ -7,34 +7,16 @@
 }
 
 
-/* Default row background is black */
 .table-row-cell {
-    -fx-background-color: black;
+    -fx-background-color: white;
+    -fx-text-fill: black;
 }
-
-/* Text in the rows will be white */
-.table-row-cell .text {
-       -fx-fill: white ;
+.table-row-cell:selected {
+    -fx-background-color: linear-gradient(#95caff 0%, #77acff 90%, #e0e0e0 90%);
 }
-
-/*
-Pseudo class 'up' will change the row background
- color to green when activated
- */
-.table-row-cell:up
-{
-    -fx-background-color: #007054;
+.table-row-cell:high-value .table-cell {
+    -fx-text-fill: chartreuse;
 }
-
-/*
-Pseudo class 'down' will change the row background
-color to red when activated
-*/
-.table-row-cell:down {
-    -fx-background-color: #A30029;
-}
-
-
 
 
 
@@ -224,3 +206,42 @@ color to red when activated
 -fx-background-radius: 5 5 0 0, 4 4 0 0, 3 3 0 0;
 -fx-background-insets: 0, 1 1 0 1, 2 2 0 2;
 }*/
+
+
+
+.scroll-pane{
+    -fx-line-height: 12px;
+    -fx-background-color:transparent;
+    -fx-box-shadow: none;
+    -fx-padding:0px 0px 0px 0px;
+    -fx-focus-color: transparent;
+    -fx-border-color:white;
+}
+
+
+ .scroll-bar:vertical {
+    -fx-background-color:transparent;
+
+}
+
+
+ .increment-button , .decrement-button {
+    -fx-background-color:transparent;
+	-fx-border-color:derive(gray,80%);
+}
+
+
+
+ .scroll-bar:vertical .track{
+     -fx-background-color: transparent;
+	 -fx-border-color:derive(gray,80%);
+	 -fx-background-radius: 0em;
+}
+
+.scroll-bar:vertical .thumb {
+    -fx-background-color: derive(black,100%);/*-flatter-blue;/**/
+    -fx-background-color: derive(black,100%);/*-flatter-blue;/**/
+	-fx-background-insets: 0, 0, 0;
+	-fx-background-radius: 0em;
+
+}

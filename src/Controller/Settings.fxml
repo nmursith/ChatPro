@@ -61,12 +61,11 @@
                                 <Button fx:id="applyVariableButton" layoutX="369.0" layoutY="230.0" mnemonicParsing="false" onAction="#applyVariable" prefHeight="17.0" prefWidth="63.0" style="-fx-background-color: #00AFF0; -fx-font-weight: bold;" text="Apply" />
                                 <Button fx:id="adddVariableButton" layoutX="26.0" layoutY="230.0" mnemonicParsing="false" onAction="#addVariable" prefHeight="17.0" prefWidth="63.0" style="-fx-background-color: #00AFF0; -fx-font-weight: bold;" text="Add" />
                                 <Button fx:id="removeVariableButton" layoutX="96.0" layoutY="230.0" mnemonicParsing="false" onAction="#removeVariable" prefHeight="17.0" prefWidth="63.0" style="-fx-background-color: #00AFF0; -fx-font-weight: bold;" text="Remove" />
-                                <TableView fx:id="tableVariables" editable="true" layoutX="26.0" layoutY="14.0" prefHeight="200.0" prefWidth="546.0">
-                                    <columns>
-                                        <TableColumn prefWidth="270.0" text="Variable ID" />
-                                        <TableColumn prefWidth="275.0" text="Variable Name" />
-                                    </columns>
-                                </TableView>
+                        <ScrollPane fx:id="tableViewContainer" layoutX="28.0" layoutY="14.0" prefHeight="200.0" prefWidth="546.0">
+                          <content>
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="200.0" />
+                          </content>
+                        </ScrollPane>
                             </children>
                         </AnchorPane>
                     </content>
@@ -85,7 +84,7 @@
                         </ImageView>
                     </graphic>
                 </Label>
-                <Button fx:id="settings_closeButton" layoutX="580.0" layoutY="8.0" maxHeight="10.0" maxWidth="10.0" minHeight="10.0" minWidth="10.0" mnemonicParsing="false" prefHeight="10.0" prefWidth="10.0" style="-fx-background-color: transparent;">
+                <Button fx:id="settings_closeButton" layoutX="580.0" layoutY="8.0" maxHeight="10.0" maxWidth="10.0" minHeight="10.0" minWidth="10.0" mnemonicParsing="false" onAction="#cancel" prefHeight="10.0" prefWidth="10.0" style="-fx-background-color: transparent;">
                     <graphic>
                         <ImageView fitHeight="10.0" fitWidth="10.0">
                             <image>

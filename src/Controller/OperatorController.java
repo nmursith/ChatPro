@@ -115,10 +115,10 @@ public class OperatorController implements MessageListener {
                 try{
 
                     TextMessage response = operator.getSesssion().createTextMessage();
-              //      System.out.println("Re - Sending: "+ response);
+                    //System.out.println("Re - Sending: "+ chatMessage.getTextMessage());
                     String myMessage = chatMessage.getTextMessage();
                     response.setText(myMessage.trim().equalsIgnoreCase("exit") ? "DIRROUTETOBOT":myMessage);
-          //          System.out.println("offline:   "+myMessage);
+                    System.out.println("offline:   "+myMessage);
                     String random = Constant.correalationID;
                     response.setJMSCorrelationID(random);
                     operator.getMessageProducer().send(response);
@@ -180,7 +180,7 @@ public class OperatorController implements MessageListener {
 
                 //System.out.println(text.getText());
                 ActiveMQBytesMessage activeMQBytesMessage = (ActiveMQBytesMessage) message;
-                
+
                 String destination = ((ActiveMQBytesMessage) message).getDestination().getPhysicalName();
                 destination =destination.substring(destination.indexOf('.')+1);
 
