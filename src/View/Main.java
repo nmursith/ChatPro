@@ -14,7 +14,7 @@ import javafx.stage.WindowEvent;
 import javax.jms.JMSException;
 
 public class Main extends Application {
-
+    /*one default variable needs to be added*/
     @Override
     public void start(Stage primaryStage) throws Exception{
       //  AquaFx.style();

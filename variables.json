@@ -1,1 +1,8 @@
-{"variables":[{"name":"Username","ID":"VARUSERNAME"},{"name":"Introduced Violations","ID":"VARINTRODUCEDVIOLATIONS"},{"name":"Open Violations","ID":"VAROPENVIOLATIONS"}]}
+{"variables":[
+          {"name":"Username","ID":"VARUSERNAME"},
+          {"name":"Introduced Violations","ID":"VARINTRODUCEDVIOLATIONS"},
+          {"name":"Open Violations","ID":"VAROPENVIOLATIONS"}
+
+          ]
+}
+
