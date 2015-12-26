@@ -96,7 +96,7 @@ public class ChatController{
         this.isOnline = false;
 
 
-        String ID = Constant.getRandomString();
+        String ID = Constant.operatorID;//Constant.getRandomString();
 
         try{
             Operator operator = new Operator(ID, ID);
@@ -108,6 +108,7 @@ public class ChatController{
                 isOnline = true;
                 networkHandler = null;
                 System.out.println("connected");
+                operator.closeConnection();
             }
             else {
                 isOnline = false;
@@ -146,25 +147,28 @@ public class ChatController{
     //    System.out.println(hashMapOperator);
 
 
-//        chatUsersList.setItems(listItems);
+
         Platform.runLater(() -> {
 
             if(isOnline){
                 statusImageView.setImage(image_online);
+
             }else{
                 statusImageView.setImage(image_offline);
+
             }
             this.closeButton.setContentDisplay(ContentDisplay.CENTER);
             this.closeButton.getStyleClass().add("closeButton");
             this.minimizeButton.getStyleClass().add("minimizeButton");
             this.sendButton.getStyleClass().add("sendButton");
 
-
+            chatUsersList.setItems(listItems);
             messageTextField.setDisable(true);
             sendButton.setDisable(true);
             this.Username.getStyleClass().add("username");
             messageDisplay.setContent(chatHolder);
             messageDisplay.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+
 
             addMenuItems();
             if(isOnline) {
@@ -199,6 +203,10 @@ public class ChatController{
     }
 
     public void sendMessage() throws IOException {
+
+
+
+
         String myMessage = messageTextField.getText();
 
         ChatMessage myMessageMod = getObjectMessage(myMessage, operatorController.getSubscriptionName());
@@ -212,7 +220,7 @@ public class ChatController{
                 //       GridPane.setHalignment(bubble.getFromBubble(), HPos.RIGHT);
 
                // Parent root = bubble.getRoot(defaultOperator, myMessageMod.getTextMessage(), myMessageMod.getTime());
-                historyController.writehistory(counter, defaultOperator,myMessageMod);
+                historyController.writehistory(counter, Constant.operatorID, myMessageMod);
 
                 chatHolder.addRow(counter, bubble.getRoot());
 
@@ -221,7 +229,12 @@ public class ChatController{
                 myMessage = getReplacedVariables(myMessage);
 
                 myMessageMod = getObjectMessage(myMessage, operatorController.getSubscriptionName());
+
+
+
+                System.out.println("Sending:     "+hashMapOperator.size() +"       "+operatorController.getSesssion());
                 operatorController.sendMessage(myMessageMod, operatorController);
+
 
             //    System.out.println("Message sent");
                 Thread.sleep(50);
@@ -383,6 +396,7 @@ public class ChatController{
                     messageTextField.setText(hashMapOperator.get(userID).getTypedMessage());
                     chatHolder = hashMapOperator.get(userID).getChatHolder();
                     operatorController = hashMapOperator.get(userID).getOperatorController();
+
                     historyController = hashMapOperator.get(userID).getHistoryController();
                     messageDisplay.setContent(chatHolder);
                     messageDisplay.setVvalue(messageDisplay.getVmax());
@@ -442,7 +456,7 @@ public class ChatController{
 //    }
 
     // Remove users from the chat and ArrayList
-    public void closeChat() throws JMSException, IOException {
+    public void closeChat() throws JMSException, IOException, InterruptedException {
 
         int index = chatUsersList.getSelectionModel().getSelectedIndex();
         System.out.println("Closing index: "+ index);
@@ -458,7 +472,7 @@ public class ChatController{
 
             OperatorBubble bubble = new OperatorBubble(defaultOperator, myMessageMod.getTextMessage(),myMessageMod.getTime() );
 
-            historyController.writehistory(counter, defaultOperator,myMessageMod);
+            historyController.writehistory(counter, Constant.operatorID,myMessageMod);
             chatHolder.addRow(counter, bubble.getRoot());
             messageDisplay.setContent(chatHolder);
             operatorController.sendMessage(myMessageMod, operatorController);
@@ -484,6 +498,8 @@ public class ChatController{
 //                messageDisplay.setContent(chatHolder);
 //
 //            }
+            Thread.sleep(50);
+            Platform.runLater(() -> messageDisplay.setVvalue(messageDisplay.getVmax()));
 
         }
 
@@ -491,7 +507,7 @@ public class ChatController{
     }
 
 
-    public void closeChat(UserItem useritem) throws JMSException, IOException {
+    public void closeChat(UserItem useritem) throws JMSException, IOException, InterruptedException {
         int index = chatUsersList.getSelectionModel().getSelectedIndex();
         System.out.println("Closing index: "+ index);
         //  operatorController.closeConnection();
@@ -505,7 +521,7 @@ public class ChatController{
           //  System.out.println("exit");
             int counter = (int) operatorController.getMessageCounter();
             OperatorBubble bubble = new OperatorBubble(defaultOperator, myMessageMod.getTextMessage(), myMessageMod.getTime() );
-            historyController.writehistory(counter, defaultOperator,myMessageMod);
+            historyController.writehistory(counter, Constant.operatorID,myMessageMod);
             chatHolder.addRow(counter, bubble.getRoot());
             messageDisplay.setContent(chatHolder);
 
@@ -519,7 +535,8 @@ public class ChatController{
             sendButton.setDisable(true);
             messageTextField.setDisable(true);
             useritem.setDisable(true);
-
+            Thread.sleep(50);
+            Platform.runLater(() -> messageDisplay.setVvalue(messageDisplay.getVmax()));
 
         }
 
@@ -887,7 +904,7 @@ public class ChatController{
         public void run() {
             thread = Thread.currentThread();
             System.out.println(isOnline);
-            String ID = Constant.getRandomString();
+            String ID = Constant.operatorID;//Constant.getRandomString();
                 while (!isOnline) {
                     try {
                         System.out.println("Trying to resolve");
@@ -899,6 +916,7 @@ public class ChatController{
                             statusImageView.setImage(image_online); //==========================
                             isOnline = true;
                             System.out.println("Re-connected");
+                            operator.closeConnection();
                         }
                         else {
                             statusImageView.setImage(image_offline);//===========================
@@ -930,12 +948,39 @@ public class ChatController{
             if(isOnline){
                 System.out.println("Re-connected and put the operator");
                 try {
-                    OperatorController operatorController = new OperatorController(config.getOperator(), config.getTopic(),controller);
-                    hashMapOperator.put(defaultOperator, new BindOperator(operatorController, getGridPane()));
+                   OperatorController operatorController = new OperatorController(config.getOperator(), config.getTopic(),controller);
+                    System.out.println("from network      "+operatorController.getSesssion());
+                    hashMapOperator.put(config.getOperator(), new BindOperator(operatorController, getGridPane()));
+                    setUsername(chatUsersList.getSelectionModel().getSelectedItem());
+
+
                  //   historyController = hashMapOperator.get(config.getSubscription()).getHistoryController();
                 } catch (JMSException e) {
                     e.printStackTrace();
                 }
+
+                if(controller.isOnline()){
+                    for (int index = 0; index < messageProducerID.size(); index++) {
+
+                 //       UserItem useritem = controller.getListItems().get(index);
+                        String producerID =messageProducerID.get(index);
+                        System.out.println("producerID:     "+producerID);
+//                        OperatorController operatorController = null;
+//                        try {
+//                            operatorController = new OperatorController(producerID, "chat." + producerID, controller);
+//                        } catch (JMSException e) {
+//                            e.printStackTrace();
+//                        }
+//                        int count =   controller.getHashMapOperator().get(producerID).getOperatorController().getMessageCounter() -1;
+//
+//                        operatorController.setMessageCounter(count);
+//                        ChatMessage chat = new ChatMessage();
+//                        chat.setTextMessage("sdfsdfssdgs");
+                        //  operatorController.sendMessage(chat, operatorController);
+                        System.out.println("Printting hash:  "+  controller.getHashMapOperator().get(producerID).getOperatorController().getSesssion());
+                    }
+                }
+
 
             }
 

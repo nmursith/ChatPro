@@ -8,13 +8,13 @@ import javax.jms.*;
  * Created by mmursith on 11/24/2015.
  */
 public class Operator{
-    private String subscriptionName;
-    private Connection connection;
-    private Session session;
-    private MessageProducer messageProducer;
-    private String topicName;
-    private Topic topic;
-    private Destination destination;
+    private volatile String subscriptionName;
+    private volatile Connection connection;
+    private volatile Session session;
+    private volatile MessageProducer messageProducer;
+    private volatile String topicName;
+    private volatile Topic topic;
+    private volatile  Destination destination;
 
     private static int ackMode;
     private static String messageBrokerUrl;
@@ -45,13 +45,14 @@ public class Operator{
             connection.setClientID(subscriptionName);
             boolean transacted = false;
             session =connection.createSession(transacted, ackMode);
+
             destination = this.session.createTopic(topicName);
             topic = session.createTopic(topicName);
             messageProducer = session.createProducer(topic);
             messageProducer.setDeliveryMode(DeliveryMode.NON_PERSISTENT);
             connection.start();
             isConnected =true;
-    }
+        }
         catch (JMSException e){
             isConnected = false;
         }

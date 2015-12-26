@@ -1,6 +1,8 @@
 package Controller;
 
+import Model.BindOperator;
 import Model.Configuration;
+import Model.UserItem;
 import Model.Variable;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
@@ -131,13 +133,14 @@ public class SettingsController  implements ChangeListener{
         variableName.setPrefWidth(270);
         variableName.setEditable(true);
         variableName.cellFactoryProperty().addListener((observable, oldValue, newValue) -> applyVariable.setDisable(false));
+
         variableName.setCellValueFactory(new PropertyValueFactory<Variable,String>("Name"));
 
          variableID = new TableColumn("Variable ID");
         variableID.setEditable(true);
         variableID.setPrefWidth(270);
         variableID.cellFactoryProperty().addListener((observable, oldValue, newValue) -> applyVariable.setDisable(false));
-        variableID.setCellValueFactory(new PropertyValueFactory<Variable,String>("Name"));
+        variableID.setCellValueFactory(new PropertyValueFactory<Variable,String>("ID"));
 
 
         tableVariables.setItems(data);
@@ -171,7 +174,8 @@ public class SettingsController  implements ChangeListener{
 
     public void setOkConfiguration(ActionEvent actionEvent) {
         //applyConfiguration();
-        apply();
+        if(!okConfiguration.isDisabled())
+            apply();
         settingsStage.hide();
         settingsStage.close();
     }
@@ -181,7 +185,7 @@ public class SettingsController  implements ChangeListener{
 
 
     }
-    public void apply(){
+    public void apply()  {
         System.out.println("Working");
         Configuration previousConfiguraion = ConfigurationController.readConfig();
 
@@ -193,7 +197,7 @@ public class SettingsController  implements ChangeListener{
         currentConfiguration.setOperator(operator.getText());
         ConfigurationController.writeConfig(currentConfiguration);
 
-        if(!previousConfiguraion.equals(currentConfiguration))
+        if(!previousConfiguraion.equals(currentConfiguration) )
         {
             applyConfigurationButton.setDisable(true);
             try {
@@ -201,19 +205,60 @@ public class SettingsController  implements ChangeListener{
             } catch (JMSException e) {
                 e.printStackTrace();
             }
-            chatController.getHashMapOperator().remove(chatController.getDefaultOperator());
-            chatController.setDefaultOperator(currentConfiguration.getOperator());
-            chatController.setConfig(currentConfiguration);
-            chatController.setOnline(false);
+            BindOperator bindOperator = chatController.getHashMapOperator().get(chatController.getDefaultOperator());
+            OperatorController previous = bindOperator.getOperatorController();
 
-            chatController.getNetworkHandler().start();
+
+          //  System.out.println("previius:   " + chatController.getHashMapOperator().get(chatController.getDefaultOperator()).getOperatorController());
+
+            chatController.getHashMapOperator().remove(chatController.getDefaultOperator());
+            chatController.setConfig(currentConfiguration);
+            OperatorController operatorController = null;
+            try {
+                operatorController = new OperatorController(currentConfiguration.getOperator(), currentConfiguration.getTopic(),chatController);
+                operatorController.setMessageCounter(previous.getMessageCounter());
+
+                operatorController.setMessageProduceID(previous.getMessageProduceID());
+                operatorController.getMessageProduceID().remove(0);
+
+                operatorController.getMessageProduceID().add(0,currentConfiguration.getOperator());
+                operatorController.setChatMessagess(previous.getChatMessagess());
+
+
+
+            } catch (JMSException e) {
+                e.printStackTrace();
+            }
+            chatController.getHashMapOperator().put(currentConfiguration.getOperator(), new BindOperator(operatorController, chatController.getGridPane()) );
+
+
+            chatController.setDefaultOperator(currentConfiguration.getOperator());
+//            if(chatController.isOnline()){
+//                try {
+//                    OperatorController operatorController = new OperatorController(currentConfiguration.getOperator(), currentConfiguration.getTopic(),chatController);
+//                    chatController.getHashMapOperator().put(chatController.getDefaultOperator(), new BindOperator(operatorController, chatController.getGridPane()));
+//                    //   historyController = hashMapOperator.get(config.getSubscription()).getHistoryController();
+//                } catch (JMSException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//           else {
+
+
+       //         chatController.setOnline(false);
+       //         chatController.getNetworkHandler().start();
+
+            //}
+//                System.out.println("new" + chatController.getHashMapOperator().get(chatController.getDefaultOperator()).getOperatorController());
 
         }
 
-
+     //   chatController.setUsername();
     }
     public void setOkVariable(ActionEvent actionEvent) {
-        changeVariable();
+        if(!okVariable.isDisabled())
+            changeVariable();
+        settingsStage.hide();
         settingsStage.close();
 
 

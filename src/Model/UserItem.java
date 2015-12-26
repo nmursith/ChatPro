@@ -222,6 +222,8 @@ public class UserItem extends GridPane implements   Runnable, EventHandler<Mouse
                 chatController.closeChat(this);
             } catch (IOException e) {
                 e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
             //chatController.closeChat((UserItem)event.getTarget());
         } catch (JMSException e) {
