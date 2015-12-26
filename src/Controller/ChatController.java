@@ -554,7 +554,7 @@ public class ChatController{
 
     public  void addMenuItems(){
         contextMenuVariables = (ArrayList<Variable>) VariablesController.readVariables();
-        variablesMenu.getItems().remove(0, variablesMenu.getItems().size()-1);
+        variablesMenu.getItems().remove(0, variablesMenu.getItems().size());
 
         for (Variable variable :contextMenuVariables) {
             {
@@ -610,7 +610,7 @@ public class ChatController{
 
        //         hashMapOperator.remove(name);
        //         hashMapOperator.get(defaultOperator).getOperatorController().getMessageProduceID().remove(name);
-           if(isOnline) {
+           if(isOnline && !listItems.get(index).isDisabled()) {
                ChatMessage myMessageMod = getObjectMessage(myMessage, hashMapOperator.get(defaultOperator).getOperatorController().getSubscriptionName());
                hashMapOperator.get(defaultOperator).getOperatorController().sendMessage(myMessageMod, operatorController);
            }
