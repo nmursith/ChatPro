@@ -1,9 +1,1 @@
-{"variables":[
-          {"name":"Username","ID":"VARUSERNAME"},
-          {"name":"Introduced Violations","ID":"VARINTRODUCEDVIOLATIONS"},
-          {"name":"Open Violations","ID":"VAROPENVIOLATIONS"},
-          {"name":"Runtime Violations","ID":"VARRUNTIMEVIOLATIONS"}
-
-          ]
-}
-
+{"variables":[{"name":"Username","ID":"VARUSERNAME"},{"name":"Introduced Violations","ID":"VARINTRODUCEDVIOLATIONS"},{"name":"Open Violations","ID":"VAROPENVIOLATIONS"},{"name":"Runtime Violations","ID":"VARRUNTIMEVIOLATIONS"}]}

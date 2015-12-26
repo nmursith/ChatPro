@@ -10,9 +10,11 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.stage.Stage;
 
 import javax.jms.JMSException;
@@ -23,16 +25,17 @@ import java.util.ArrayList;
  */
 public class SettingsController  implements ChangeListener{
 
-    public Button cancelConfiguration;
-    public Button okConfiguration;
-    public Button applyConfiguration;
-    public Button cancelVariable;
-    public Button okVariable;
-    public Button applyVariable;
-    public Button addVariable;
-    public Button deleteVariable;
-    public Button settings_closeButton;
+    @FXML public Button cancelConfiguration;
+    @FXML public Button okConfiguration;
+    @FXML public Button applyConfiguration;
+    @FXML public Button cancelVariable;
+    @FXML public Button okVariable;
+
+    @FXML public Button addVariable;
+    @FXML public Button deleteVariable;
+    @FXML public Button settings_closeButton;
     @FXML public ScrollPane tableViewContainer;
+    @FXML  public Button removeVariableButton;
     @FXML private Button applyConfigurationButton;
     @FXML private  Button applyVariableButton;
     @FXML private TextField destination;
@@ -127,27 +130,53 @@ public class SettingsController  implements ChangeListener{
 //           data.add(variable);
 //        }
 
-        tableVariables.setEditable(true);
+
 
         variableName = new TableColumn("Variable name");
         variableName.setPrefWidth(270);
         variableName.setEditable(true);
-        variableName.cellFactoryProperty().addListener((observable, oldValue, newValue) -> applyVariable.setDisable(false));
 
         variableName.setCellValueFactory(new PropertyValueFactory<Variable,String>("Name"));
+        variableName.setCellFactory(TextFieldTableCell.forTableColumn());
 
-         variableID = new TableColumn("Variable ID");
+        variableName.cellFactoryProperty().addListener((observable, oldValue, newValue) -> applyVariableButton.setDisable(false));
+        variableName.setOnEditCommit(
+                new EventHandler<TableColumn.CellEditEvent<Variable, String>> () {
+                    @Override
+                    public void handle(TableColumn.CellEditEvent<Variable, String> t) {
+                        (t.getTableView().getItems().get(
+                                t.getTablePosition().getRow())
+                        ).setName(t.getNewValue());
+                        applyVariableButton.setDisable(false);
+                    }
+                }
+        );
+
+        variableID = new TableColumn("Variable ID");
         variableID.setEditable(true);
         variableID.setPrefWidth(270);
-        variableID.cellFactoryProperty().addListener((observable, oldValue, newValue) -> applyVariable.setDisable(false));
+
         variableID.setCellValueFactory(new PropertyValueFactory<Variable,String>("ID"));
+        variableID.setCellFactory(TextFieldTableCell.forTableColumn());
+        variableID.cellFactoryProperty().addListener((observable, oldValue, newValue) -> applyVariableButton.setDisable(false));
 
-
+        variableID.setOnEditCommit(
+                new EventHandler<TableColumn.CellEditEvent<Variable, String>> () {
+                    @Override
+                    public void handle(TableColumn.CellEditEvent<Variable, String> t) {
+                        (t.getTableView().getItems().get(
+                                t.getTablePosition().getRow())
+                        ).setID(t.getNewValue());
+                        applyVariableButton.setDisable(false);
+                    }
+                }
+        );
         tableVariables.setItems(data);
         tableVariables.getColumns().addAll(variableName, variableID);
 
         tableViewContainer.setContent(tableVariables);
         tableViewContainer.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        tableVariables.setEditable(true);
         System.out.println(tableVariables.getColumns().get(0));
 
     }
@@ -273,14 +302,17 @@ public class SettingsController  implements ChangeListener{
         for (Variable variable: currentList) {
             if(!variable.getID().trim().equals("") && !variable.getName().trim().equals("")){
                 List.add(variable);
+
             }
 
         }
 
+        System.out.println(!List.equals(previousList));
         if(!List.equals(previousList)){
             VariablesController.writeVariables(List);
         }
-        applyVariable.setDisable(true);
+
+        applyVariableButton.setDisable(true);
         chatController.addMenuItems();
 
     }
@@ -298,6 +330,8 @@ public class SettingsController  implements ChangeListener{
     public void removeVariable(ActionEvent actionEvent) {
         Variable variable = tableVariables.getSelectionModel().getSelectedItem();
         data.remove(variable);
+        //if(removeVariableButton.isDisabled())
+            applyVariableButton.setDisable(false);
     }
 
 
