@@ -612,7 +612,7 @@ public class ChatController{
        //         hashMapOperator.get(defaultOperator).getOperatorController().getMessageProduceID().remove(name);
            if(isOnline && !listItems.get(index).isDisabled()) {
                ChatMessage myMessageMod = getObjectMessage(myMessage, hashMapOperator.get(defaultOperator).getOperatorController().getSubscriptionName());
-               hashMapOperator.get(defaultOperator).getOperatorController().sendMessage(myMessageMod, operatorController);
+               hashMapOperator.get(defaultOperator).getOperatorController().sendMessage(myMessageMod, hashMapOperator.get(messageProducerID.get(index)).getOperatorController());
            }
         ///        hashMapOperator.get(defaultOperator).getOperatorController().closeConnection();
              //   hashMapOperator.get(defaultOperator).getOperatorController().getExecutor().shutdown();
