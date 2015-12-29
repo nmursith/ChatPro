@@ -2,7 +2,6 @@ package Controller;
 
 import Model.BindOperator;
 import Model.Configuration;
-import Model.UserItem;
 import Model.Variable;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
@@ -70,42 +69,7 @@ public class SettingsController  implements ChangeListener{
         this.chatController = chatController;
     }
 
-//    public SettingsController(ChatController controller) throws IOException {
-//        this.controller = controller;
-//        this.settingsStage = new Stage();
-//
-//        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("Settings.fxml"));
-//        Parent root = fxmlLoader.load();
-//        SettingsController settingsC= fxmlLoader.<SettingsController>getController();
-//        settingController = settingsC;
-//
-//        root.setCache(true);
-//        root.setCacheHint(CacheHint.DEFAULT);
-//
-//        Scene scene = new Scene(root);//, 550, 605);
-////            SettingsController chatController = fxmlLoader.<SettingsController>getController();
-////            chatController.setStage(primaryStage);
-//        settingsStage.setScene(scene);
-//        System.out.println("show");
-//        //FlatterFX.style();
-//        settingsStage.initStyle(StageStyle.UNDECORATED);
-//        settingsStage.setResizable(false);
-//
-//        settingController.topic.setOnInputMethodTextChanged(this);
-//        settingController.destination.setOnInputMethodTextChanged(this);
-//        settingController.operator.setOnInputMethodTextChanged(this);
-//        settingController.subscription.setOnInputMethodTextChanged(this);
-//        settingController.operator.setOnInputMethodTextChanged(this);
-//
-//        settingController.applyConfigurationButton.setOnAction(new EventHandler<ActionEvent>() {
-//            @Override
-//            public void handle(ActionEvent event) {
-//                settingController.applyConfiguration();
-//            }
-//        });
-//
-//
-//    }
+
 
 
     public void showSettingsWindow() throws Exception {
