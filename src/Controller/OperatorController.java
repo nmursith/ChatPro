@@ -681,9 +681,6 @@ public class OperatorController implements MessageListener {
 
     private class OfflineNetworkDownHandler extends Thread{
 
-//        Image image_offline = new Image(getClass().getResourceAsStream("offline.png")); //==========================
-//        Image image_online = new Image(getClass().getResourceAsStream("online.png"));   //===========================
-
 
         Thread thread = this;
 //        String ID = Constant.getRandomString();

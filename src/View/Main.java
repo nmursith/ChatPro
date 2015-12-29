@@ -7,6 +7,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.CacheHint;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.stage.WindowEvent;
@@ -46,6 +47,10 @@ public class Main extends Application {
                 }
             }
         });
+        Image ico = new Image(getClass().getResourceAsStream("appIcon.png"));
+        primaryStage.getIcons().add(ico);
+
+
         primaryStage.setTitle("vAssistant");
         primaryStage.setScene(scene);
         System.out.println("show");

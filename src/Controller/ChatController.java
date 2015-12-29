@@ -204,9 +204,6 @@ public class ChatController{
 
     public void sendMessage() throws IOException {
 
-
-
-
         String myMessage = messageTextField.getText();
 
         ChatMessage myMessageMod = getObjectMessage(myMessage, operatorController.getSubscriptionName());
@@ -737,6 +734,9 @@ public class ChatController{
 //            SettingsController chatController = fxmlLoader.<SettingsController>getController();
 //            chatController.setStage(primaryStage);
         settingStage.setScene(scene);
+        Image ico = new Image(getClass().getResourceAsStream("settingIcon.png"));
+        settingStage.getIcons().add(ico);
+
         System.out.println("show");
         //FlatterFX.style();
         settingStage.initStyle(StageStyle.UNDECORATED);
