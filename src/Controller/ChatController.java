@@ -465,12 +465,14 @@ public class ChatController{
         if(!listItems.isEmpty() ) {
 
             String myMessage = "exit";
-            ChatMessage myMessageMod = getObjectMessage(myMessage, operatorController.getSubscriptionName());
 
+            String bubbleMessage = "Chat closed by Operator";
+            ChatMessage myMessageMod = getObjectMessage(myMessage, operatorController.getSubscriptionName());
+            ChatMessage bubbleMessageMod = getObjectMessage(bubbleMessage, operatorController.getSubscriptionName());
 
             int counter = (int) operatorController.getMessageCounter();
 
-            OperatorBubble bubble = new OperatorBubble(defaultOperator, myMessageMod.getTextMessage(),myMessageMod.getTime() );
+            OperatorBubble bubble = new OperatorBubble(defaultOperator, bubbleMessageMod.getTextMessage(),bubbleMessageMod.getTime() );
 
             historyController.writehistory(counter, Constant.operatorID,myMessageMod);
             chatHolder.addRow(counter, bubble.getRoot());
@@ -515,12 +517,13 @@ public class ChatController{
         if(!listItems.isEmpty() ) {
 
             String myMessage = "exit";
+            String bubbleMessage = "Chat closed by Operator";
             ChatMessage myMessageMod = getObjectMessage(myMessage, operatorController.getSubscriptionName());
-
+            ChatMessage bubbleMessageMod = getObjectMessage(bubbleMessage, operatorController.getSubscriptionName());
             operatorController.sendMessage(myMessageMod, operatorController);
           //  System.out.println("exit");
             int counter = (int) operatorController.getMessageCounter();
-            OperatorBubble bubble = new OperatorBubble(defaultOperator, myMessageMod.getTextMessage(), myMessageMod.getTime() );
+            OperatorBubble bubble = new OperatorBubble(defaultOperator, bubbleMessageMod.getTextMessage(), bubbleMessageMod.getTime() );
             historyController.writehistory(counter, Constant.operatorID,myMessageMod);
             chatHolder.addRow(counter, bubble.getRoot());
             messageDisplay.setContent(chatHolder);
@@ -603,7 +606,10 @@ public class ChatController{
     public void closeAllConnections() throws JMSException {
         if(!listItems.isEmpty()) {
             String myMessage = "exit";
-       for(int index=0; index< listItems.size(); index++) {
+            String bubbleMessage = "Chat closed by Operator";
+
+
+            for(int index=0; index< listItems.size(); index++) {
   //              UserItem useritem = controller.getListItems().get(index);
 //                String name = useritem.getUser().getSubscriptionName();
 
@@ -611,8 +617,20 @@ public class ChatController{
        //         hashMapOperator.remove(name);
        //         hashMapOperator.get(defaultOperator).getOperatorController().getMessageProduceID().remove(name);
            if(isOnline && !listItems.get(index).isDisabled()) {
-               ChatMessage myMessageMod = getObjectMessage(myMessage, hashMapOperator.get(messageProducerID.get(index)).getOperatorController().getSubscriptionName());
-               hashMapOperator.get(defaultOperator).getOperatorController().sendMessage(myMessageMod, hashMapOperator.get(messageProducerID.get(index)).getOperatorController());
+
+               String producerID = messageProducerID.get(index);
+               BindOperator bindOperator = hashMapOperator.get(producerID);
+
+
+               ChatMessage myMessageMod = getObjectMessage(myMessage, bindOperator.getOperatorController().getSubscriptionName());
+      //         ChatMessage bubbleMessageMod = getObjectMessage(bubbleMessage, operatorController.getSubscriptionName());
+
+               hashMapOperator.get(producerID).getOperatorController().sendMessage(myMessageMod, bindOperator.getOperatorController());
+               int counter = (int) bindOperator.getOperatorController().getMessageCounter();
+            //   OperatorBubble bubble = new OperatorBubble(defaultOperator, bubbleMessageMod.getTextMessage(), bubbleMessageMod.getTime() );
+               bindOperator.getHistoryController().writehistory(counter, Constant.operatorID,myMessageMod);
+               //bindOperator.getChatHolder().addRow(counter, bubble.getRoot());
+
            }
         ///        hashMapOperator.get(defaultOperator).getOperatorController().closeConnection();
              //   hashMapOperator.get(defaultOperator).getOperatorController().getExecutor().shutdown();

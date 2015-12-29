@@ -26,9 +26,9 @@
    <children>
       <SplitPane prefHeight="634.0" prefWidth="650.0" style="-fx-background-color: transparent;" GridPane.rowIndex="1">
          <items>
-            <AnchorPane prefHeight="611.0" prefWidth="650.0" style="-fx-background-color: transparent; -fx-border-color: transparent;">
+            <AnchorPane prefHeight="601.0" prefWidth="648.0" style="-fx-background-color: transparent; -fx-border-color: transparent;">
                <children>
-                  <ScrollPane fx:id="messageDisplay" layoutX="214.0" layoutY="58.0" maxHeight="413.0" maxWidth="431.0" minHeight="413.0" minWidth="431.0" prefHeight="413.0" prefWidth="431.0" style="-fx-background-color: white;" />
+                  <ScrollPane fx:id="messageDisplay" layoutX="214.0" layoutY="58.0" maxHeight="413.0" maxWidth="431.0" minHeight="413.0" minWidth="431.0" prefHeight="413.0" prefWidth="431.0" style="-fx-background: white;" />
                   <Label fx:id="Username" layoutX="217.0" layoutY="7.0" prefHeight="44.0" prefWidth="327.0" style="-fx-text-fill: #2c3e50;" textOverrun="CLIP">
                      <font>
                         <Font name="System Bold" size="24.0" />
@@ -37,20 +37,21 @@
                      <contextMenu>
                         <ContextMenu fx:id="variablesMenu" onAction="#setSelectedItem" style="-fx-background-color: rgb(255.0, 255.0, 255.0, 0.95); fx-background-radius: 2.0;" />
                      </contextMenu></TextArea>
-                  <Line endX="330.0" layoutX="315.0" layoutY="56.0" startX="-100.0" stroke="#3498db">
+                  <Line endX="330.0" layoutX="315.0" layoutY="56.0" startX="-100.0" stroke="#9b9d9e">
                      <rotationAxis>
                         <Point3D />
                      </rotationAxis></Line>
-                  <Line endX="508.0" layoutX="11.0" layoutY="302.0" rotate="90.0" startX="-106.0" stroke="#3498db" />
-                  <ListView fx:id="chatUsersList" maxHeight="609.0" maxWidth="210" minHeight="609.0" minWidth="210.0" onMouseClicked="#setUsername" prefHeight="609.0" prefWidth="210" />
-                  <Button fx:id="sendButton" layoutX="574.0" layoutY="567.0" mnemonicParsing="false" onAction="#getMyMessage" prefHeight="32.0" prefWidth="63.0" style="-fx-background-color: #00AFF0; -fx-font-weight: bold;" text="Send">
+                  <Line endX="508.0" layoutX="11.0" layoutY="301.0" rotate="90.0" startX="-106.0" stroke="#3498db" />
+                  <ListView fx:id="chatUsersList" maxHeight="609.0" maxWidth="210" minHeight="538.0" minWidth="210.0" onMouseClicked="#setUsername" prefHeight="581.0" prefWidth="210" />
+                  <Button fx:id="sendButton" layoutX="575.0" layoutY="567.0" mnemonicParsing="false" onAction="#getMyMessage" prefHeight="32.0" prefWidth="63.0" style="-fx-background-color: #00AFF0; -fx-font-weight: bold;" text="Send">
 
                   </Button>
-                  <ImageView fx:id="settings" fitHeight="38.0" fitWidth="39.0" layoutX="170.0" layoutY="568.0" onMouseClicked="#showSettings" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="settings" fitHeight="20.0" fitWidth="20.0" layoutX="186.0" layoutY="586.0" onMouseClicked="#showSettings" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../Model/gearmain.png" />
                      </image>
                   </ImageView>
+                  <Line endX="109.0" layoutX="101.0" layoutY="580.0" startX="-100.0" stroke="#3498db" />
                </children>
             </AnchorPane>
          </items>

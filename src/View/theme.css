@@ -229,9 +229,11 @@ scrollbar
 
 
 .list-cell:filled:selected {
-    -fx-background-color: #D6D6D6 ;
+    -fx-background-color: #EEE9E9 ;//========#D6D6D6
     -fx-text-fill: white;
-    -fx-text-fill:#696969; -fx-font-size:12px; -fx-font-weight:bold;
+
+    -fx-font-size:12px;
+    -fx-font-weight:bold;
 
 }
 /*
@@ -243,12 +245,12 @@ scrollbar
 }
 */
 .list-cell:filled:hover {
-    -fx-background-color: #A1A1A1;
+    -fx-background-color: #BFE9F9; //=======#A1A1A1=============================
     -fx-text-fill: white;
 }
 
  .list-cell:filled:selected:hover{
-     -fx-background-color: #A1A1A1;
+     -fx-background-color: #BFE9F9; // ===========================================
      -fx-text-fill: white;
  }
 

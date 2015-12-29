@@ -1,6 +1,7 @@
 package Model;
 
 import Controller.ChatController;
+import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.scene.control.Button;
@@ -216,19 +217,23 @@ public class UserItem extends GridPane implements   Runnable, EventHandler<Mouse
 
     @Override
     public void handle(MouseEvent event) {
-        try {
+        final UserItem userItem = this;
 
+
+        chatController.setUsername(userItem);
+        Platform.runLater(() -> {
             try {
-                chatController.closeChat(this);
+                chatController.closeChat(userItem);
+            } catch (JMSException e) {
+                e.printStackTrace();
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            //chatController.closeChat((UserItem)event.getTarget());
-        } catch (JMSException e) {
-            System.out.println("problem");
-            //e.printStackTrace();
-        }
+        });
+
+
+        //chatController.closeChat((UserItem)event.getTarget());
     }
 }

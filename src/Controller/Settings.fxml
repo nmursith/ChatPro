@@ -5,7 +5,7 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<GridPane maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="329.0" prefWidth="600.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.SettingsController">
+<GridPane maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="329.0" prefWidth="600.0" style="-fx-background-color: white; -fx-border-color: black; -fx-border-width: 0.25px;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.SettingsController">
     <columnConstraints>
         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
     </columnConstraints>
@@ -14,7 +14,7 @@
         <RowConstraints maxHeight="386.0" minHeight="0.0" prefHeight="301.0" vgrow="SOMETIMES" />
     </rowConstraints>
     <children>
-        <TabPane prefHeight="337.0" prefWidth="600.0" style="-fx-background-color: white;" stylesheets="@settings.css" tabClosingPolicy="UNAVAILABLE" GridPane.rowIndex="1">
+        <TabPane prefHeight="337.0" prefWidth="600.0" style="-fx-background-color: white; -fx-border-color: black; -fx-border-width: 0.25px;" stylesheets="@settings.css" tabClosingPolicy="UNAVAILABLE" GridPane.rowIndex="1">
             <tabs>
                 <Tab text="Configuration">
                     <content>
@@ -45,9 +45,9 @@
                                         <TextField fx:id="URL" promptText="Please add the destination URL here" style="-fx-background-color: #E7F0F5;" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                                     </children>
                                 </GridPane>
-                                <Button fx:id="cancelConfiguration" layoutX="500.0" layoutY="230.0" mnemonicParsing="false" onAction="#cancel" prefHeight="17.0" prefWidth="63.0" style="-fx-background-color: #00AFF0; -fx-font-weight: bold;" text="Cancel" />
-                                <Button fx:id="okConfiguration" layoutX="430.0" layoutY="230.0" mnemonicParsing="false" onAction="#setOkConfiguration" prefHeight="17.0" prefWidth="63.0" style="-fx-background-color: #00AFF0; -fx-font-weight: bold;" text="OK" />
-                                <Button fx:id="applyConfigurationButton" layoutX="359.0" layoutY="230.0" mnemonicParsing="false" onAction="#applyConfiguration" prefHeight="17.0" prefWidth="63.0" style="-fx-background-color: #00AFF0; -fx-font-weight: bold;" text="Apply" />
+                                <Button fx:id="cancelConfiguration" layoutX="500.0" layoutY="230.0" mnemonicParsing="false" onAction="#cancel" prefHeight="17.0" prefWidth="63.0" style="-fx-background-color: #00AFF0; -fx-font-weight: bold;" text="Cancel" textFill="WHITE" />
+                                <Button fx:id="okConfiguration" layoutX="430.0" layoutY="230.0" mnemonicParsing="false" onAction="#setOkConfiguration" prefHeight="17.0" prefWidth="63.0" style="-fx-background-color: #00AFF0; -fx-font-weight: bold;" text="OK" textFill="WHITE" />
+                                <Button fx:id="applyConfigurationButton" layoutX="359.0" layoutY="230.0" mnemonicParsing="false" onAction="#applyConfiguration" prefHeight="17.0" prefWidth="63.0" style="-fx-background-color: #00AFF0; -fx-font-weight: bold;" text="Apply" textFill="WHITE" />
                             </children>
                         </AnchorPane>
                     </content>
@@ -56,16 +56,16 @@
                     <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                             <children>
-                                <Button fx:id="cancelVariable" layoutX="510.0" layoutY="230.0" mnemonicParsing="false" onAction="#cancel" prefHeight="17.0" prefWidth="63.0" style="-fx-background-color: #00AFF0; -fx-font-weight: bold;" text="Cancel" />
-                                <Button fx:id="okVariable" layoutX="440.0" layoutY="230.0" mnemonicParsing="false" onAction="#setOkVariable" prefHeight="17.0" prefWidth="63.0" style="-fx-background-color: #00AFF0; -fx-font-weight: bold;" text="OK" />
-                                <Button fx:id="applyVariableButton" layoutX="369.0" layoutY="230.0" mnemonicParsing="false" onAction="#applyVariable" prefHeight="17.0" prefWidth="63.0" style="-fx-background-color: #00AFF0; -fx-font-weight: bold;" text="Apply" />
-                                <Button fx:id="adddVariableButton" layoutX="26.0" layoutY="230.0" mnemonicParsing="false" onAction="#addVariable" prefHeight="17.0" prefWidth="63.0" style="-fx-background-color: #00AFF0; -fx-font-weight: bold;" text="Add" />
-                                <Button fx:id="removeVariableButton" layoutX="96.0" layoutY="230.0" mnemonicParsing="false" onAction="#removeVariable" prefHeight="17.0" prefWidth="63.0" style="-fx-background-color: #00AFF0; -fx-font-weight: bold;" text="Remove" />
-                        <ScrollPane fx:id="tableViewContainer" layoutX="28.0" layoutY="14.0" prefHeight="200.0" prefWidth="546.0">
-                          <content>
-                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="200.0" />
-                          </content>
-                        </ScrollPane>
+                                <Button fx:id="cancelVariable" layoutX="500.0" layoutY="230.0" mnemonicParsing="false" onAction="#cancel" prefHeight="17.0" prefWidth="63.0" style="-fx-background-color: #00AFF0; -fx-font-weight: bold;" text="Cancel" textFill="WHITE" />
+                                <Button fx:id="okVariable" layoutX="430.0" layoutY="230.0" mnemonicParsing="false" onAction="#setOkVariable" prefHeight="17.0" prefWidth="63.0" style="-fx-background-color: #00AFF0; -fx-font-weight: bold;" text="OK" textFill="WHITE" />
+                                <Button fx:id="applyVariableButton" layoutX="359.0" layoutY="230.0" mnemonicParsing="false" onAction="#applyVariable" prefHeight="17.0" prefWidth="63.0" style="-fx-background-color: #00AFF0; -fx-font-weight: bold;" text="Apply" textFill="WHITE" />
+                                <Button fx:id="adddVariableButton" layoutX="26.0" layoutY="230.0" mnemonicParsing="false" onAction="#addVariable" prefHeight="17.0" prefWidth="63.0" style="-fx-background-color: #00AFF0; -fx-font-weight: bold;" text="Add" textFill="WHITE" />
+                                <Button fx:id="removeVariableButton" layoutX="96.0" layoutY="230.0" mnemonicParsing="false" onAction="#removeVariable" prefHeight="17.0" prefWidth="63.0" style="-fx-background-color: #00AFF0; -fx-font-weight: bold;" text="Remove" textFill="WHITE" />
+                                <ScrollPane fx:id="tableViewContainer" layoutX="28.0" layoutY="14.0" prefHeight="200.0" prefWidth="546.0">
+                                    <content>
+                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="200.0" />
+                                    </content>
+                                </ScrollPane>
                             </children>
                         </AnchorPane>
                     </content>
@@ -84,7 +84,7 @@
                         </ImageView>
                     </graphic>
                 </Label>
-                <Button fx:id="settings_closeButton" layoutX="580.0" layoutY="8.0" maxHeight="10.0" maxWidth="10.0" minHeight="10.0" minWidth="10.0" mnemonicParsing="false" onAction="#cancel" prefHeight="10.0" prefWidth="10.0" style="-fx-background-color: transparent;">
+                <Button fx:id="settings_closeButton" layoutX="580.0" layoutY="8.0" maxHeight="10.0" maxWidth="10.0" minHeight="10.0" minWidth="10.0" mnemonicParsing="false" onAction="#cancel" prefHeight="10.0" prefWidth="10.0" style="-fx-background-color: transparent;" styleClass="closeButton">
                     <graphic>
                         <ImageView fitHeight="10.0" fitWidth="10.0">
                             <image>

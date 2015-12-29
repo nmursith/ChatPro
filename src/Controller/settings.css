@@ -9,13 +9,19 @@
 
 /* Default row background is black */
 .table-row-cell {
-    -fx-background-color: black;
+    -fx-background-color: transparent;
 }
 
 /* Text in the rows will be white */
 .table-row-cell .text {
-       -fx-fill: white ;
+       -fx-fill: black ;
 }
+
+// ==================================================
+.table-row-cell:selected {
+    -fx-background-color: #CEECF5;
+}
+// ==================================================
 
 /*
 Pseudo class 'up' will change the row background
@@ -39,7 +45,7 @@ color to red when activated
 
 
 .tab-pane:top > .tab-header-area > .tab-header-background {
-  -fx-background-insets: 0, 0 0 0 0, 0;
+  -fx-background-color: #ACAFB0;
 }
 
 .tab-pane
@@ -56,6 +62,8 @@ color to red when activated
 -fx-skin: "com.sun.javafx.scene.control.skin.LabelSkin";
 -fx-background-color: transparent;
 -fx-alignment: CENTER;
+-fx-font-weight:bold;
+
 -fx-text-fill: -fx-text-base-color;
 }
 /*
@@ -107,9 +115,10 @@ color to red when activated
 /*    -fx-background-color: -fx-tab-border-color, -fx-inner-border, -fx-body-color;
 -fx-background-radius: 5 5 0 0, 4 4 0 0, 3 3 0 0;
 -fx-background-insets: 0, 1 1 0 1, 2 2 0 2;*/
--fx-background-color: -fx-tab-border-color, -fx-control-inner-background;
+-fx-background-color: white;
 -fx-background-insets: 0, 1 1 0 1;
 -fx-background-radius: 5 5 0 0, 4 4 0 0;
+
 }
 .tab:disabled
 {
@@ -224,3 +233,7 @@ color to red when activated
 -fx-background-radius: 5 5 0 0, 4 4 0 0, 3 3 0 0;
 -fx-background-insets: 0, 1 1 0 1, 2 2 0 2;
 }*/
+
+
+
+
