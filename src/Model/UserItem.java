@@ -2,6 +2,8 @@ package Model;
 
 import Controller.ChatController;
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.scene.control.Button;
@@ -25,15 +27,19 @@ public class UserItem extends GridPane implements   Runnable, EventHandler<Mouse
 
 
     private ImageView userImage;
+    //private ImageView statusImage; // ==========
     private volatile Label thumbUserName;
     private Rectangle statusBar;
     private Button closeButton;
     private Image thumbImage;
+    private Image statusOnline; // =========
+    private Image statusOffline; // =========
     private User user;
     private ChatController chatController;
     private static UserItem userItem;  //addded latest
     private volatile Boolean running;
     private Thread blink;
+
     public UserItem(User user, ChatController controller){
 
         this.user = user;
@@ -45,12 +51,26 @@ public class UserItem extends GridPane implements   Runnable, EventHandler<Mouse
         this.setStyle("-fx-background-color:transparent; -fx-border-color:transparent;");
         userItem = this;                //
 
+        // ========================================
+        /*statusOnline = new Image(getClass().getResourceAsStream("statusOnline.png"));
+        statusOffline = new Image(getClass().getResourceAsStream("statusOffline.png"));
+        statusImage = new ImageView();
+        statusImage.setFitHeight(10);
+        statusImage.setFitWidth(10);
+        statusImage.setImage(statusOnline);
+        statusImage.setX(0);
+        statusImage.setY(70);*/
+        // ========================================
 
         thumbImage = new Image(getClass().getResourceAsStream("dummyImage.png"));
+        statusOnline = new Image(getClass().getResourceAsStream("userPicOnline.png"));
+        statusOffline = new Image(getClass().getResourceAsStream("userPicOffline.png"));
+
         userImage = new ImageView();
         userImage.setFitHeight(30);
         userImage.setFitWidth(30);
-        userImage.setImage(thumbImage);
+        //userImage.setImage(thumbImage);
+        userImage.setImage(statusOnline);
         userImage.setStyle("-fx-padding:2px;-fx-border-radius:30px; -fx-background-radius:30px;");
         GridPane.setHalignment(userImage, HPos.RIGHT );
 
@@ -76,7 +96,7 @@ public class UserItem extends GridPane implements   Runnable, EventHandler<Mouse
 //        closeButton.setStyle("-fx-background-radius: 100; -fx-border-radius: 100; -fx-background-color: transparent;-fx-focus-color: transparent; -fx-faint-focus-color: transparent; -fx-background-insets: 0 0 0 0, 0, 0, 0;");
 //        GridPane.setHalignment(closeButton, HPos.LEFT );
 //        closeButton.setOnAction(this);
-      // = new Image(new Label(getClass().getResourceAsStream("closeButton.png"))); //();
+        // = new Image(new Label(getClass().getResourceAsStream("closeButton.png"))); //();
 
         ImageView close = new ImageView(new Image(getClass().getResourceAsStream("close.png")));
         close.setFitHeight(9);
@@ -86,25 +106,33 @@ public class UserItem extends GridPane implements   Runnable, EventHandler<Mouse
 
         this.addRow(0,userImage);
         this.addRow(0,thumbUserName);
+
         this.addRow(0,closeLabel);
 
-
-
-
+        this.disableProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                if(isDisabled()){
+                    userImage.setImage(statusOffline);
+                }else{
+                    userImage.setImage(statusOnline);
+                }
+            }
+        });
 
         this.setOnMouseClicked(event -> {
-        //    System.out.println("clicked");
-               // blink.interrupt();
-     //           stop();
-               // blink = null;
-       //         System.out.println("stopping");
+            //    System.out.println("clicked");
+            // blink.interrupt();
+            //           stop();
+            // blink = null;
+            //         System.out.println("stopping");
             this.thumbUserName.setStyle("-fx-text-fill:#696969; -fx-font-size:12px; -fx-font-weight:bold; ");
 
             //blink = new Blink();
 
         });
 
-   //   System.out.println("focueed:  "+this.isFocused());
+        //   System.out.println("focueed:  "+this.isFocused());
 
     }
 
@@ -137,7 +165,7 @@ public class UserItem extends GridPane implements   Runnable, EventHandler<Mouse
                 ///  e.printStackTrace();
 
             }
-        //    System.out.println("Loop: " + running);
+            //    System.out.println("Loop: " + running);
         }
 
         if(chatController.getChatUsersList().getSelectionModel().getSelectedItem().equals(userItem) && userItem!=null) {
@@ -189,6 +217,14 @@ public class UserItem extends GridPane implements   Runnable, EventHandler<Mouse
     public void setCloseButton(Button closeButton) {
         this.closeButton = closeButton;
     }
+
+    public Image getStatusOnline(){return statusOnline;}
+
+    public void setStatusOnline(Image statusOnline){this.statusOnline = statusOnline;}
+
+    public Image getStatusOffline(){return statusOffline;}
+
+    public void setStatusOffline(Image statusOffline){this.statusOffline = statusOffline;}
 
     public Image getThumbImage() {
         return thumbImage;

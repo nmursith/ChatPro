@@ -57,8 +57,7 @@ public class OperatorController implements MessageListener {
         this.operatorController = this;
         this.offlineNetworkDownHandler = new OfflineNetworkDownHandler();
         this.pendingNotification = new LinkedList<>();
-
-        defaultOperator = ConfigurationController.readConfig().getOperator();//"operator1";
+        this.defaultOperator = ConfigurationController.readConfig().getOperator();//"operator1";
         System.out.println("Default operat:  "+ defaultOperator);
 
      //   this.notificationController = new NotificationController();
@@ -81,7 +80,6 @@ public class OperatorController implements MessageListener {
                             networkHandler = new NetworkDownHandler();
                             networkHandler.start();
 
-
                     }
                 };
 
@@ -101,11 +99,6 @@ public class OperatorController implements MessageListener {
             //BindOperator bindOperator = new BindOperator(this, new TextArea());
             //this.controller.getHashMapOperator().put(defaultOperator, bindOperator);
         }
-        //
-
-   //     notificationHandler.start();
-
-   //     System.out.println("Listening..");
     }
 
 

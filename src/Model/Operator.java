@@ -1,5 +1,6 @@
 package Model;
 
+import Controller.ConfigurationController;
 import org.apache.activemq.ActiveMQConnectionFactory;
 
 import javax.jms.*;
@@ -15,6 +16,7 @@ public class Operator{
     private volatile String topicName;
     private volatile Topic topic;
     private volatile  Destination destination;
+    private String operatorID;
 
     private static int ackMode;
     private static String messageBrokerUrl;
@@ -22,8 +24,8 @@ public class Operator{
 
 
     static {
-     //   messageBrokerUrl = ConfigurationController.readConfig().getURL();////ActiveMQConnection.DEFAULT_BROKER_URL;//"tcp://localhost:61616";
-        messageBrokerUrl ="tcp://localhost:61616";
+        messageBrokerUrl = ConfigurationController.readConfig().getURL();////ActiveMQConnection.DEFAULT_BROKER_URL;//"tcp://localhost:61616";
+     //   messageBrokerUrl ="tcp://localhost:61616";
         ackMode = Session.AUTO_ACKNOWLEDGE;
 
     }
@@ -36,6 +38,13 @@ public class Operator{
 
     }
 
+//    public Operator(String operatorID, String subscriptionName, String topicName) throws JMSException {
+//        this.subscriptionName = subscriptionName;
+//        this.topicName = topicName;
+//        this.operatorID = operatorID;
+//        this.create();
+//
+//    }
 
     private void create() {
 
@@ -59,6 +68,7 @@ public class Operator{
 
 
     }
+
 
     public void setSubscriptionName(String subscriptionName) {
         this.subscriptionName = subscriptionName;
@@ -111,5 +121,13 @@ public class Operator{
 
     public boolean isConnected() {
         return isConnected;
+    }
+
+    public String getOperatorID() {
+        return operatorID;
+    }
+
+    public void setOperatorID(String operatorID) {
+        this.operatorID = operatorID;
     }
 }

@@ -51,7 +51,6 @@
                         <Image url="@../Model/gearmain.png" />
                      </image>
                   </ImageView>
-                  <Line endX="109.0" layoutX="101.0" layoutY="580.0" startX="-100.0" stroke="#3498db" />
                </children>
             </AnchorPane>
          </items>

@@ -752,7 +752,7 @@ public class ChatController{
         gridPane.setPrefWidth(width);
         gridPane.setMinWidth(width);
         gridPane.setMaxWidth(width);
-        gridPane.setPrefHeight(300);
+        gridPane.setPrefHeight(413);
         gridPane.setVgap(7);
         ColumnConstraints c1 = new ColumnConstraints();
         c1.setPercentWidth(100);

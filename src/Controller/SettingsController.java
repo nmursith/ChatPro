@@ -1,8 +1,6 @@
 package Controller;
 
-import Model.BindOperator;
-import Model.Configuration;
-import Model.Variable;
+import Model.*;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -14,8 +12,10 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
+import javax.jms.IllegalStateException;
 import javax.jms.JMSException;
 import java.util.ArrayList;
 
@@ -179,74 +179,9 @@ public class SettingsController  implements ChangeListener{
 
     }
     public void apply()  {
-        System.out.println("Working");
-        Configuration previousConfiguraion = ConfigurationController.readConfig();
+        NetworkDownHandler networkDownHandler = new NetworkDownHandler();
+        networkDownHandler.start();
 
-        Configuration currentConfiguration = new Configuration();
-        currentConfiguration.setDestination(destination.getText());
-        currentConfiguration.setTopic(topic.getText());
-        currentConfiguration.setSubscription(subscription.getText());
-        currentConfiguration.setURL(URL.getText());
-        currentConfiguration.setOperator(operator.getText());
-        ConfigurationController.writeConfig(currentConfiguration);
-
-        if(!previousConfiguraion.equals(currentConfiguration) )
-        {
-            applyConfigurationButton.setDisable(true);
-            try {
-                chatController.getHashMapOperator().get(chatController.getDefaultOperator()).getOperatorController().closeConnection();
-            } catch (JMSException e) {
-                e.printStackTrace();
-            }
-            BindOperator bindOperator = chatController.getHashMapOperator().get(chatController.getDefaultOperator());
-            OperatorController previous = bindOperator.getOperatorController();
-
-
-          //  System.out.println("previius:   " + chatController.getHashMapOperator().get(chatController.getDefaultOperator()).getOperatorController());
-
-            chatController.getHashMapOperator().remove(chatController.getDefaultOperator());
-            chatController.setConfig(currentConfiguration);
-            OperatorController operatorController = null;
-            try {
-                operatorController = new OperatorController(currentConfiguration.getOperator(), currentConfiguration.getTopic(),chatController);
-                operatorController.setMessageCounter(previous.getMessageCounter());
-
-                operatorController.setMessageProduceID(previous.getMessageProduceID());
-                operatorController.getMessageProduceID().remove(0);
-
-                operatorController.getMessageProduceID().add(0,currentConfiguration.getOperator());
-                operatorController.setChatMessagess(previous.getChatMessagess());
-
-
-
-            } catch (JMSException e) {
-                e.printStackTrace();
-            }
-            chatController.getHashMapOperator().put(currentConfiguration.getOperator(), new BindOperator(operatorController, chatController.getGridPane()) );
-
-
-            chatController.setDefaultOperator(currentConfiguration.getOperator());
-//            if(chatController.isOnline()){
-//                try {
-//                    OperatorController operatorController = new OperatorController(currentConfiguration.getOperator(), currentConfiguration.getTopic(),chatController);
-//                    chatController.getHashMapOperator().put(chatController.getDefaultOperator(), new BindOperator(operatorController, chatController.getGridPane()));
-//                    //   historyController = hashMapOperator.get(config.getSubscription()).getHistoryController();
-//                } catch (JMSException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//           else {
-
-
-       //         chatController.setOnline(false);
-       //         chatController.getNetworkHandler().start();
-
-            //}
-//                System.out.println("new" + chatController.getHashMapOperator().get(chatController.getDefaultOperator()).getOperatorController());
-
-        }
-
-     //   chatController.setUsername();
     }
     public void setOkVariable(ActionEvent actionEvent) {
         if(!okVariable.isDisabled())
@@ -318,4 +253,141 @@ public class SettingsController  implements ChangeListener{
 
         applyConfigurationButton.setDisable(false);
     }
+
+
+    class NetworkDownHandler extends Thread{
+        Image image_offline = new Image(getClass().getResourceAsStream("offline.png")); //===========================
+        Image image_online = new Image(getClass().getResourceAsStream("online.png"));   //===========================
+
+        Thread thread = this;
+
+        public void run() {
+
+            thread = Thread.currentThread();
+            System.out.println(chatController.isOnline());
+            String ID = Constant.operatorID;//Constant.getRandomString();
+            while (!chatController.isOnline()) {
+                try {
+                    System.out.println("Trying to resolve");
+                    Operator operator = new Operator(ID, ID);
+                    boolean isConnected = operator.isConnected();
+
+                    //         System.out.println("inside:  " + isOnline);
+                    if (isConnected) {
+                        chatController.statusImageView.setImage(image_online); //==========================
+                        chatController.setOnline(true);
+                        System.out.println("Re-connected");
+                        operator.closeConnection();
+                    }
+                    else {
+                        chatController.statusImageView.setImage(image_offline);//===========================
+                        chatController.setOnline(false);
+                    }
+
+                } catch (IllegalStateException e) {
+                    chatController.setOnline(false);
+                    try {
+                        sleep(100);
+                    } catch (InterruptedException e1) {
+                        e1.printStackTrace();
+                    }
+                    System.out.println("Offline: Session");
+                    System.out.println("Re-connected");
+                } catch (JMSException e) {
+                    chatController.setOnline(false);
+                    try {
+
+                        sleep(100);
+                    } catch (InterruptedException e1) {
+                        e1.printStackTrace();
+                    }
+                    System.out.println("Offline: JMS");
+                    System.out.println("Re-connected");
+                }
+            }
+
+            if(chatController.isOnline()){
+
+                System.out.println("Working");
+                Configuration previousConfiguraion = ConfigurationController.readConfig();
+
+                Configuration currentConfiguration = new Configuration();
+                currentConfiguration.setDestination(destination.getText());
+                currentConfiguration.setTopic(topic.getText());
+                currentConfiguration.setSubscription(subscription.getText());
+                currentConfiguration.setURL(URL.getText());
+                currentConfiguration.setOperator(operator.getText());
+                ConfigurationController.writeConfig(currentConfiguration);
+
+                if(!previousConfiguraion.equals(currentConfiguration) )
+                {
+                    applyConfigurationButton.setDisable(true);
+                    try {
+                        chatController.getHashMapOperator().get(chatController.getDefaultOperator()).getOperatorController().closeConnection();
+                    } catch (JMSException e) {
+                        e.printStackTrace();
+                    }
+                    BindOperator bindOperator = chatController.getHashMapOperator().get(chatController.getDefaultOperator());
+                    OperatorController previous = bindOperator.getOperatorController();
+
+                    System.out.println("Message in que:         "+ previous.getChatMessagess().size());
+
+
+                    //  System.out.println("previius:   " + chatController.getHashMapOperator().get(chatController.getDefaultOperator()).getOperatorController());
+
+                    chatController.getHashMapOperator().remove(chatController.getDefaultOperator());
+                    chatController.setConfig(currentConfiguration);
+                    OperatorController operatorController = null;
+                    try {
+                        operatorController = new OperatorController(currentConfiguration.getOperator(), currentConfiguration.getTopic(),chatController);
+                        operatorController.setMessageCounter(previous.getMessageCounter());
+
+                        operatorController.setMessageProduceID(previous.getMessageProduceID());
+                        operatorController.getMessageProduceID().remove(0);
+
+                        operatorController.getMessageProduceID().add(0,currentConfiguration.getOperator());
+                        operatorController.setChatMessagess(previous.getChatMessagess());
+
+
+
+                    } catch (JMSException e) {
+                        e.printStackTrace();
+                    }
+                    chatController.getHashMapOperator().put(currentConfiguration.getOperator(), new BindOperator(operatorController, chatController.getGridPane()) );
+
+
+                    chatController.setDefaultOperator(currentConfiguration.getOperator());
+//            if(chatController.isOnline()){
+//                try {
+//                    OperatorController operatorController = new OperatorController(currentConfiguration.getOperator(), currentConfiguration.getTopic(),chatController);
+//                    chatController.getHashMapOperator().put(chatController.getDefaultOperator(), new BindOperator(operatorController, chatController.getGridPane()));
+//                    //   historyController = hashMapOperator.get(config.getSubscription()).getHistoryController();
+//                } catch (JMSException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//           else {
+
+
+                    //         chatController.setOnline(false);
+                    //         chatController.getNetworkHandler().start();
+
+                    //}
+//                System.out.println("new" + chatController.getHashMapOperator().get(chatController.getDefaultOperator()).getOperatorController());
+
+                }
+
+            }
+
+            stopThread();
+        }
+
+        public  void stopThread(){
+            Thread t = thread;
+            thread = null;
+            t.interrupt();
+        }
+    }
+
+
 }
