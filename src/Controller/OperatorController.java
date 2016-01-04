@@ -32,6 +32,7 @@ public class OperatorController implements MessageListener {
     private ChatController controller;
     private MessageConsumer messageConsumer;
     private int messageCounter;
+    private int IDtracker;
 
 
     private NetworkDownHandler networkHandler;
@@ -216,12 +217,17 @@ public class OperatorController implements MessageListener {
                 messageProduceID.add(producerID);
 
 
-                GridPane chatHolder = getGridPane();
+                GridPane chatHolder = controller.getGridPane();
                 OperatorController operatorController = new OperatorController(producerID, "chat."+producerID, controller);
+//                bindOperator.getChatHolder().addRow(0, SeperatorLine.getSeperator());//oldhistory);
 
 //                if(!producerID.equals(defaultOperator))
 //                    operatorController.getMessageConsumer().setMessageListener(null);
+
                 BindOperator bindOperator = new BindOperator(operatorController, chatHolder);
+                SeperatorLine seperatorLine = new SeperatorLine(bindOperator);
+                chatHolder.addRow(0,seperatorLine.getSeperator());
+
                 controller.getHashMapOperator().put(producerID, bindOperator);
 
                 //Thread.sleep(20);
@@ -229,6 +235,7 @@ public class OperatorController implements MessageListener {
                 if(controller!=null){
                     int count  = loadHistory(controller.getHashMapOperator().get(producerID));
                     operatorController.setMessageCounter(count);        //starting
+                    operatorController.setIDtracker(1);
                 }
 
 
@@ -403,6 +410,7 @@ public class OperatorController implements MessageListener {
     /*******/               //UserBubble bubble = new UserBubble(username, chatMessage.getTextMessage(), chatMessage.getTime());
                             BindOperator bindOperator =  controller.getHashMapOperator().get(chatMessage.getProducerID());
                             int counter = (int)bindOperator.getOperatorController().getMessageCounter();
+                            int ID = bindOperator.getOperatorController().getIDtracker();
 //                            bindOperator.getTextArea().appendText("User:  " + reply+"\n\n");
 
 
@@ -413,18 +421,18 @@ public class OperatorController implements MessageListener {
                                 if (JMSreplyTo.equalsIgnoreCase(Constant.JMSmessageID)) {
                                     OperatorBubble bubble = new OperatorBubble(defaultOperator, chatMessage.getTextMessage(), chatMessage.getTime());
                                     //    GridPane.setHalignment(bubble.getFromBubble(), HPos.RIGHT);
-                                    bindOperator.getChatHolder().addRow(counter, bubble.getRoot());
+                                    bindOperator.getChatHolder().addRow(ID, bubble.getRoot());
 
 
                                 } else {
                                     UserBubble bubble = new UserBubble(username, chatMessage.getTextMessage(), chatMessage.getTime());
                                     //         GridPane.setHalignment(bubble.getToBubble(), HPos.LEFT);
-                                    bindOperator.getChatHolder().addRow(counter, bubble.getRoot());
+                                    bindOperator.getChatHolder().addRow(ID, bubble.getRoot());
                                 }
                             }
                             else {
                                 UserBubble bubble = new UserBubble(username, chatMessage.getTextMessage(), chatMessage.getTime());
-                                bindOperator.getChatHolder().addRow(counter, bubble.getRoot());
+                                bindOperator.getChatHolder().addRow(ID, bubble.getRoot());
                             }
 /******************/
 
@@ -552,6 +560,7 @@ public class OperatorController implements MessageListener {
             try {
                 messages.readHeaders();
 
+                GridPane oldhistory = controller.getGridPane();
 
                 while (messages.readRecord()) {
                     String ID = messages.get("id");
@@ -565,19 +574,47 @@ public class OperatorController implements MessageListener {
                     if(from.equalsIgnoreCase(Constant.operatorID)) {
                         OperatorBubble bubble = new OperatorBubble(defaultOperator, message, time);
                         //    GridPane.setHalignment(bubble.getFromBubble(), HPos.RIGHT);
-                        bindOperator.getChatHolder().addRow(id, bubble.getRoot());
+                        oldhistory.addRow(id, bubble.getRoot());
+                       // bindOperator.getChatHolder().addRow(id, bubble.getRoot());
 
 
                     }
                     else {
                         UserBubble bubble = new UserBubble(from, message, time);
                         //         GridPane.setHalignment(bubble.getToBubble(), HPos.LEFT);
-                        bindOperator.getChatHolder().addRow(id, bubble.getRoot());
+                        oldhistory.addRow(id, bubble.getRoot());
+                    //    bindOperator.getChatHolder().addRow(id, bubble.getRoot());
                     }
+//                    for (Node node : bindOperator.getChatHolder().getChildren()) {
+//                        System.out.print("index:    "+GridPane.getRowIndex(node)+"     ");
+//                        GridPane.setRowIndex(node, GridPane.getRowIndex(node)+1);
+//                        System.out.println(GridPane.getRowIndex(node));
+//
+//                    }
+           //         bindOperator.getChatHolder().addRow(0, oldhistory);
+       //             Node node = bindOperator.getChatHolder().getChildren().get(0);
+
+                    bindOperator.getChatHolder().getChildren().clear();
+                    bindOperator.setOldchatHolder(oldhistory);
 
 
+/*                    int numRows = 1;
+                    int rowIndex = 0;
+                    for (Node node :  bindOperator.getChatHolder().getChildren()) {
+                        int currentRow = GridPane.getRowIndex(node);
+                        if (currentRow >= rowIndex) {
+                            GridPane.setRowIndex(node, currentRow+1);
+                            if (currentRow+1 > numRows) {
+                                numRows = currentRow + 1;
+                            }
+                        }
+                    }*/
+
+                    //bindOperator.getChatHolder().addRow(0, oldhistory);
                     count++;
+
                 }
+
                 messages.close();
 
             }
@@ -677,6 +714,16 @@ public class OperatorController implements MessageListener {
     }
     protected void setMessageCounter(int messageCounter) {
         this.messageCounter = messageCounter;
+    }
+
+    public int getIDtracker() {
+        operatorController.IDtracker = operatorController.IDtracker+1;
+        return operatorController.IDtracker;
+
+    }
+
+    public void setIDtracker(int IDtracker) {
+        this.IDtracker = IDtracker;
     }
 
     private class OfflineNetworkDownHandler extends Thread{

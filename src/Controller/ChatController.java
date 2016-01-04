@@ -211,6 +211,7 @@ public class ChatController{
             if(!myMessage.trim().equals("") && !myMessage.trim().equalsIgnoreCase("exit")){
 
                 int counter =  operatorController.getMessageCounter();
+                int ID = operatorController.getIDtracker();
           //      System.out.println("value chat:  "+counter+"     ****"+operatorController);
 
                 OperatorBubble bubble = new OperatorBubble(defaultOperator, myMessageMod.getTextMessage(), myMessageMod.getTime() );
@@ -219,7 +220,7 @@ public class ChatController{
                // Parent root = bubble.getRoot(defaultOperator, myMessageMod.getTextMessage(), myMessageMod.getTime());
                 historyController.writehistory(counter, Constant.operatorID, myMessageMod);
 
-                chatHolder.addRow(counter, bubble.getRoot());
+                chatHolder.addRow(ID, bubble.getRoot());
 
                 messageDisplay.setContent(chatHolder);
 
@@ -468,11 +469,11 @@ public class ChatController{
             ChatMessage bubbleMessageMod = getObjectMessage(bubbleMessage, operatorController.getSubscriptionName());
 
             int counter = (int) operatorController.getMessageCounter();
-
+            int ID = operatorController.getIDtracker();
             OperatorBubble bubble = new OperatorBubble(defaultOperator, bubbleMessageMod.getTextMessage(),bubbleMessageMod.getTime() );
 
-            historyController.writehistory(counter, Constant.operatorID,myMessageMod);
-            chatHolder.addRow(counter, bubble.getRoot());
+            historyController.writehistory(counter, Constant.operatorID, bubbleMessageMod);
+            chatHolder.addRow(ID, bubble.getRoot());
             messageDisplay.setContent(chatHolder);
             operatorController.sendMessage(myMessageMod, operatorController);
 
@@ -520,9 +521,10 @@ public class ChatController{
             operatorController.sendMessage(myMessageMod, operatorController);
           //  System.out.println("exit");
             int counter = (int) operatorController.getMessageCounter();
+            int ID = operatorController.getIDtracker();
             OperatorBubble bubble = new OperatorBubble(defaultOperator, bubbleMessageMod.getTextMessage(), bubbleMessageMod.getTime() );
             historyController.writehistory(counter, Constant.operatorID,myMessageMod);
-            chatHolder.addRow(counter, bubble.getRoot());
+            chatHolder.addRow(ID, bubble.getRoot());
             messageDisplay.setContent(chatHolder);
 
 
@@ -620,12 +622,12 @@ public class ChatController{
 
 
                ChatMessage myMessageMod = getObjectMessage(myMessage, bindOperator.getOperatorController().getSubscriptionName());
-      //         ChatMessage bubbleMessageMod = getObjectMessage(bubbleMessage, operatorController.getSubscriptionName());
+               ChatMessage bubbleMessageMod = getObjectMessage(bubbleMessage, operatorController.getSubscriptionName());
 
                hashMapOperator.get(producerID).getOperatorController().sendMessage(myMessageMod, bindOperator.getOperatorController());
                int counter = (int) bindOperator.getOperatorController().getMessageCounter();
             //   OperatorBubble bubble = new OperatorBubble(defaultOperator, bubbleMessageMod.getTextMessage(), bubbleMessageMod.getTime() );
-               bindOperator.getHistoryController().writehistory(counter, Constant.operatorID,myMessageMod);
+               bindOperator.getHistoryController().writehistory(counter, Constant.operatorID,bubbleMessageMod);
                //bindOperator.getChatHolder().addRow(counter, bubble.getRoot());
 
            }
@@ -755,6 +757,7 @@ public class ChatController{
         gridPane.setPrefHeight(413);
         gridPane.setVgap(7);
         ColumnConstraints c1 = new ColumnConstraints();
+
         c1.setPercentWidth(100);
         gridPane.getColumnConstraints().add(c1);
         return gridPane;
