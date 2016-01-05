@@ -225,8 +225,7 @@ public class OperatorController implements MessageListener {
 //                    operatorController.getMessageConsumer().setMessageListener(null);
 
                 BindOperator bindOperator = new BindOperator(operatorController, chatHolder);
-                SeperatorLine seperatorLine = new SeperatorLine(bindOperator);
-                chatHolder.addRow(0,seperatorLine.getSeperator());
+
 
                 controller.getHashMapOperator().put(producerID, bindOperator);
 
@@ -550,12 +549,15 @@ public class OperatorController implements MessageListener {
 
     }
 
-    private int loadHistory(BindOperator bindOperator) {
+    private int loadHistory(BindOperator bindOperator) throws IOException {
 
         int count = 0;
-
+        SeperatorLine seperatorLine = new SeperatorLine(bindOperator);
+        bindOperator.getChatHolder().getChildren().clear();
+        bindOperator.getChatHolder().addRow(0,seperatorLine.getSeperator());
         CsvReader messages = bindOperator.getHistoryController().readHistory();
         if(messages != null){
+
 
             try {
                 messages.readHeaders();
@@ -594,7 +596,7 @@ public class OperatorController implements MessageListener {
            //         bindOperator.getChatHolder().addRow(0, oldhistory);
        //             Node node = bindOperator.getChatHolder().getChildren().get(0);
 
-                    bindOperator.getChatHolder().getChildren().clear();
+
                     bindOperator.setOldchatHolder(oldhistory);
 
 

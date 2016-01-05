@@ -77,6 +77,7 @@ public class  VariablesController {
         try {
  //           Scanner scanner = new Scanner(new File("variables.json"));
 //
+
             JSONObject jsonObject = (JSONObject) (new JSONParser().parse(new FileReader("variables.json")));
 
             JSONArray msg = (JSONArray) jsonObject.get("variables");
@@ -85,7 +86,7 @@ public class  VariablesController {
            for (int i=0; i<msg.size(); i++){
                JSONObject obj = (JSONObject) msg.get(i);
                variableList.add(new Variable((String) obj.get("ID"), (String) obj.get("name")));
-  //              System.out.println(obj.get("ID")+"      "+obj.get("name"));
+ //              System.out.println(obj.get("ID")+"      "+obj.get("name"));
 
             }
 

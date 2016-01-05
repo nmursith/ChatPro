@@ -2,8 +2,6 @@ package Controller;
 
 import Model.BindOperator;
 import javafx.event.ActionEvent;
-import javafx.scene.Node;
-import javafx.scene.layout.GridPane;
 
 import java.io.IOException;
 
@@ -23,12 +21,15 @@ public class SeparatorController {
     }
 
     public void showHistory(ActionEvent actionEvent) {
-        for (Node node : bindOperator.getChatHolder().getChildren()) {
-                System.out.print("index:    "+GridPane.getRowIndex(node)+"     ");
-                GridPane.setRowIndex(node, GridPane.getRowIndex(node)+1);
-                System.out.println(GridPane.getRowIndex(node));
-    }
-        bindOperator.getChatHolder().addRow(0, bindOperator.getOldchatHolder());
+        bindOperator.getChatHolder().getChildren().remove(0);
+        if(bindOperator.getOldchatHolder()!=null){
+//            for (Node node : bindOperator.getChatHolder().getChildren()) {
+//                //System.out.print("index:    "+ GridPane.getRowIndex(node)+"     ");
+//                GridPane.setRowIndex(node, GridPane.getRowIndex(node)+1);
+//                //System.out.println(GridPane.getRowIndex(node));
+//            }
+            bindOperator.getChatHolder().addRow(0, bindOperator.getOldchatHolder());
+        }
         System.out.println("show history");
 
     }

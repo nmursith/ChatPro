@@ -8,7 +8,7 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.SeparatorController">
    <children>
-      <Line endX="265.0" layoutX="107.0" layoutY="15.5" startX="-100.0" stroke="#807b7b" />
+      <Line endX="265.0" layoutX="107.0" layoutY="15.5" startX="-100.0" stroke="#7c7979" />
       <Button fx:id="historyButton" layoutX="363.5" layoutY="-2.0" mnemonicParsing="false" onAction="#showHistory" prefHeight="15.0" prefWidth="15.0" style="-fx-background-color: transparent;">
          <graphic>
             <ImageView fitHeight="20.0" fitWidth="20.0">
@@ -18,5 +18,6 @@
             </ImageView>
          </graphic>
       </Button>
+      <Label layoutX="152.0" layoutY="4.0" prefHeight="17.0" prefWidth="96.0" style="-fx-background-color: white; -fx-text-alignment: center;" text="Show Old History" textAlignment="CENTER" textFill="#a49f9f" />
    </children>
 </AnchorPane>
