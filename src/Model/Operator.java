@@ -20,10 +20,12 @@ public class Operator{
     private static int ackMode;
     private static String messageBrokerUrl;
     private boolean isConnected;
+    private boolean isAnswered;
+
 
 
     static {
-       // messageBrokerUrl = ConfigurationController.readConfig().getURL();////ActiveMQConnection.DEFAULT_BROKER_URL;//"tcp://localhost:61616";
+     //   messageBrokerUrl = ConfigurationController.readConfig().getURL();////ActiveMQConnection.DEFAULT_BROKER_URL;//"tcp://localhost:61616";
         messageBrokerUrl ="tcp://localhost:61616";
         ackMode = Session.AUTO_ACKNOWLEDGE;
 
@@ -62,6 +64,9 @@ public class Operator{
             isConnected =true;
         }
         catch (JMSException e){
+         //   e.printStackTrace();
+            if(e instanceof InvalidClientIDException)
+                isAnswered = true;
             isConnected = false;
         }
 
@@ -128,5 +133,13 @@ public class Operator{
 
     public void setOperatorID(String operatorID) {
         this.operatorID = operatorID;
+    }
+
+    public boolean isAnswered() {
+        return isAnswered;
+    }
+
+    public void setAnswered(boolean answered) {
+        isAnswered = answered;
     }
 }

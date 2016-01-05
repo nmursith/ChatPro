@@ -110,8 +110,9 @@ public class OperatorController implements MessageListener {
                 try{
 
                     System.out.println("opreato session :  "+controller.getHashMapOperator().get(defaultOperator).getOperatorController().getSesssion());
-                    TextMessage response =   operator.getSesssion().createTextMessage(); //controller.getHashMapOperator().get(controller.getDefaultOperator()).getOperatorController().getSesssion().createTextMessage();
-                    //System.out.println("Response: "+ response);
+                    System.out.println("Response session: "+ operator.getSesssion());
+                     TextMessage response =   operator.getSesssion().createTextMessage(); //controller.getHashMapOperator().get(controller.getDefaultOperator()).getOperatorController().getSesssion().createTextMessage();
+
 
                     String myMessage = chatMessage.getTextMessage();
                     //System.out.println("message: "+ myMessage);
@@ -124,7 +125,6 @@ public class OperatorController implements MessageListener {
                     //System.out.println("Getting producer");
                     operator.getMessageProducer().send(response);
                     //System.out.println("fine: "+ operator.getMessageProducer());
-
 
                 }
 
@@ -233,6 +233,7 @@ public class OperatorController implements MessageListener {
 
                 if(controller!=null){
                     int count  = loadHistory(controller.getHashMapOperator().get(producerID));
+
                     operatorController.setMessageCounter(count);        //starting
                     operatorController.setIDtracker(1);
                 }
@@ -379,7 +380,6 @@ public class OperatorController implements MessageListener {
                 while (!durablechatMessage.isEmpty()) {
                     //                  System.out.println("internal");
                     try {
-
 
                         chatMessage =durablechatMessage.remove();
                         reply = chatMessage.getTextMessage();
