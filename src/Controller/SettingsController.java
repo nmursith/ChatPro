@@ -340,6 +340,9 @@ public class SettingsController  implements ChangeListener{
                     OperatorController operatorController = null;
                     try {
                         operatorController = new OperatorController(currentConfiguration.getOperator(), currentConfiguration.getTopic(),chatController);
+                        operatorController.createSession();
+                        operatorController.startDefaultOperatorAction();
+
                         operatorController.setMessageCounter(previous.getMessageCounter());
 
                         operatorController.setMessageProduceID(previous.getMessageProduceID());

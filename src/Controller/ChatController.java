@@ -91,7 +91,8 @@ public class ChatController{
         controller =this;
         previousID = null;
         config = ConfigurationController.readConfig();
-
+        Constant.correalationID = Constant.getRandomString();
+        System.out.println(Constant.correalationID);
         //operatorController = new OperatorController("operator0", "chat.*",this);
         this.isOnline = false;
 
@@ -100,10 +101,10 @@ public class ChatController{
 
         try{
             Operator operator = new Operator(ID, ID);
+            operator.create();
             boolean isConnected = operator.isConnected();
 
-
-                     System.out.println("startup:  " + isConnected);
+            System.out.println("startup:  " + isConnected);
             if (isConnected) {
                 isOnline = true;
                 networkHandler = null;
@@ -123,8 +124,11 @@ public class ChatController{
 //                latch.await();
 
             }
-            if(isOnline)
-                operatorController = new OperatorController(config.getOperator(), config.getTopic(),this);
+            if(isOnline) {
+                operatorController = new OperatorController(config.getOperator(), config.getTopic(), this);
+                operatorController.createSession();
+                operatorController.startDefaultOperatorAction();
+            }
 
         }
         catch (Exception e){
@@ -218,7 +222,7 @@ public class ChatController{
                 //       GridPane.setHalignment(bubble.getFromBubble(), HPos.RIGHT);
 
                // Parent root = bubble.getRoot(defaultOperator, myMessageMod.getTextMessage(), myMessageMod.getTime());
-                historyController.writehistory(counter, Constant.operatorID, myMessageMod);
+                historyController.writehistory(counter, Constant.operatorhistoryID, myMessageMod);
 
                 chatHolder.addRow(ID, bubble.getRoot());
 
@@ -472,7 +476,7 @@ public class ChatController{
             int ID = operatorController.getIDtracker();
             OperatorBubble bubble = new OperatorBubble(defaultOperator, bubbleMessageMod.getTextMessage(),bubbleMessageMod.getTime() );
 
-            historyController.writehistory(counter, Constant.operatorID, bubbleMessageMod);
+            historyController.writehistory(counter, Constant.operatorhistoryID, bubbleMessageMod);
             chatHolder.addRow(ID, bubble.getRoot());
             messageDisplay.setContent(chatHolder);
             operatorController.sendMessage(myMessageMod, operatorController);
@@ -482,6 +486,7 @@ public class ChatController{
 //            hashMapOperator.remove(name);
  //           hashMapOperator.get(defaultOperator).getOperatorController().getMessageProduceID().remove(name);
             //listItems.remove(index);
+            operatorController.closeConnection();
             hashMapOperator.get(userID).getChatHolder().setDisable(true);
             sendButton.setDisable(true);
             messageTextField.setDisable(true);
@@ -519,11 +524,12 @@ public class ChatController{
             ChatMessage myMessageMod = getObjectMessage(myMessage, operatorController.getSubscriptionName());
             ChatMessage bubbleMessageMod = getObjectMessage(bubbleMessage, operatorController.getSubscriptionName());
             operatorController.sendMessage(myMessageMod, operatorController);
+            operatorController.closeConnection();
           //  System.out.println("exit");
             int counter = (int) operatorController.getMessageCounter();
             int ID = operatorController.getIDtracker();
             OperatorBubble bubble = new OperatorBubble(defaultOperator, bubbleMessageMod.getTextMessage(), bubbleMessageMod.getTime() );
-            historyController.writehistory(counter, Constant.operatorID,myMessageMod);
+            historyController.writehistory(counter, Constant.operatorhistoryID,myMessageMod);
             chatHolder.addRow(ID, bubble.getRoot());
             messageDisplay.setContent(chatHolder);
 
@@ -627,7 +633,7 @@ public class ChatController{
                hashMapOperator.get(producerID).getOperatorController().sendMessage(myMessageMod, bindOperator.getOperatorController());
                int counter = (int) bindOperator.getOperatorController().getMessageCounter();
             //   OperatorBubble bubble = new OperatorBubble(defaultOperator, bubbleMessageMod.getTextMessage(), bubbleMessageMod.getTime() );
-               bindOperator.getHistoryController().writehistory(counter, Constant.operatorID,bubbleMessageMod);
+               bindOperator.getHistoryController().writehistory(counter, Constant.operatorhistoryID,bubbleMessageMod);
                //bindOperator.getChatHolder().addRow(counter, bubble.getRoot());
 
            }
@@ -930,6 +936,7 @@ public class ChatController{
                     try {
                         System.out.println("Trying to resolve");
                         Operator operator = new Operator(ID, ID);
+                        operator.create();
                         boolean isConnected = operator.isConnected();
 
                         //         System.out.println("inside:  " + isOnline);
@@ -969,7 +976,9 @@ public class ChatController{
             if(isOnline){
                 System.out.println("Re-connected and put the operator");
                 try {
-                   OperatorController operatorController = new OperatorController(config.getOperator(), config.getTopic(),controller);
+                    OperatorController operatorController = new OperatorController(config.getOperator(), config.getTopic(),controller);
+                    operatorController.createSession();
+                    operatorController.startDefaultOperatorAction();
                     System.out.println("from network      "+operatorController.getSesssion());
                     hashMapOperator.put(config.getOperator(), new BindOperator(operatorController, getGridPane()));
                     setUsername(chatUsersList.getSelectionModel().getSelectedItem());

@@ -38,18 +38,21 @@ public class OperatorController implements MessageListener {
     private NetworkDownHandler networkHandler;
     private OperatorController operatorController;      //static or volatile or something
     private static String defaultOperator;
-    private volatile boolean isOnline;
+
     private OfflineNetworkDownHandler offlineNetworkDownHandler;
     private volatile boolean isFirstime =true;
     private final Queue<ChatMessage> cachedMessages =  new LinkedList<>();
     private volatile Queue<Notification> pendingNotification;
     private final ExecutorService executor = Executors.newFixedThreadPool(100);  // 100 blink at a time
 
-
+    private volatile boolean isOnline;
+    private boolean isSessionCreated;
+    private String subscriptionName;
 
 
     public OperatorController(String subscriptionName, String topicName, ChatController controller) throws JMSException {
         this.operator = new Operator(subscriptionName, topicName);
+        this.subscriptionName = subscriptionName;
 
         this.messageProduceID = new Vector<>();
         this.chatMessagess= new LinkedList<>();
@@ -60,8 +63,20 @@ public class OperatorController implements MessageListener {
         this.pendingNotification = new LinkedList<>();
         this.defaultOperator = ConfigurationController.readConfig().getOperator();//"operator1";
         System.out.println("Default operat:  "+ defaultOperator);
-
+        this.isSessionCreated = false;
      //   this.notificationController = new NotificationController();
+        this.messageCounter = -1;
+
+        if(!messageProduceID.contains(defaultOperator)) {
+            messageProduceID.add(defaultOperator);
+
+            //BindOperator bindOperator = new BindOperator(this, new TextArea());
+            //this.controller.getHashMapOperator().put(defaultOperator, bindOperator);
+        }
+
+    }
+
+    protected void startDefaultOperatorAction(){
         try {
             //if
             if(subscriptionName.equalsIgnoreCase(defaultOperator)) {
@@ -75,42 +90,41 @@ public class OperatorController implements MessageListener {
                     public void run() {
 //                        System.out.println("Timer Working online :  "+ isOnline);
 
-                            if(networkHandler.isAlive())
-                                networkHandler.stopThread();
+                        if(networkHandler.isAlive())
+                            networkHandler.stopThread();
 
-                            networkHandler = new NetworkDownHandler();
-                            networkHandler.start();
+                        networkHandler = new NetworkDownHandler();
+                        networkHandler.start();
 
                     }
                 };
 
-                    Platform.runLater(() -> timer.schedule(myTask, 500, 3000));
+                Platform.runLater(() -> timer.schedule(myTask, 500, 3000));
 
             }
 
         }
         catch (NullPointerException e){
             System.out.println("Already Answering");
+        } catch (JMSException e) {
+            e.printStackTrace();
         }
-        messageCounter = -1;
 
-        if(!messageProduceID.contains(defaultOperator)) {
-            messageProduceID.add(defaultOperator);
-
-            //BindOperator bindOperator = new BindOperator(this, new TextArea());
-            //this.controller.getHashMapOperator().put(defaultOperator, bindOperator);
-        }
     }
-
 
     public void sendMessage(ChatMessage chatMessage,OperatorController operator) throws JMSException {
 
         // check if a message was received
         if (chatMessage != null ) {
+            if(!operator.isSessionCreated()){
+                operator.createSession();
+                System.out.println("operator session:  " + operator.getSesssion());
+            }
+
                 try{
 
-                    System.out.println("opreato session :  "+controller.getHashMapOperator().get(defaultOperator).getOperatorController().getSesssion());
-                    System.out.println("Response session: "+ operator.getSesssion());
+                   // System.out.println("opreato session :  "+controller.getHashMapOperator().get(defaultOperator).getOperatorController().getSesssion());
+                    System.out.println("Message: "+ chatMessage.getTextMessage());
                      TextMessage response =   operator.getSesssion().createTextMessage(); //controller.getHashMapOperator().get(controller.getDefaultOperator()).getOperatorController().getSesssion().createTextMessage();
 
 
@@ -121,6 +135,8 @@ public class OperatorController implements MessageListener {
                     String random = Constant.correalationID;
                     String JMSmessageID = Constant.JMSmessageID;
                     response.setJMSCorrelationID(random);
+                    //response.acknowledge();
+
                     response.setJMSMessageID(JMSmessageID);
                     //System.out.println("Getting producer");
                     operator.getMessageProducer().send(response);
@@ -384,11 +400,12 @@ public class OperatorController implements MessageListener {
                         chatMessage =durablechatMessage.remove();
                         reply = chatMessage.getTextMessage();
                         String correID = chatMessage.getMessage().getJMSCorrelationID();
+
                         pID = chatMessage.getProducerID();
 //                        if (correID==null)
 //                            correID = "";
 //                       System.out.println(correID);
-                        if( correID==null || !correID.equals(Constant.correalationID)  ) {  //!correID.equals(Constant.correalationID)
+                        if( correID==null ) {  //!correID.equals(Constant.correalationID)  //|| !correID.equals(Constant.correalationID)
 
               //              Bubble bubble = new Bubble(reply, controller);
                             int index = controller.getMessageProducerID().indexOf(chatMessage.getProducerID());
@@ -533,6 +550,9 @@ public class OperatorController implements MessageListener {
 
 
                         }
+                        else if(correID!=null && !correID.equals(Constant.correalationID) ){
+                            System.out.println("from other operator:  "+ correID);
+                        }
 
                     }
                     catch (NullPointerException e){
@@ -573,7 +593,7 @@ public class OperatorController implements MessageListener {
 ////working here
 
 
-                    if(from.equalsIgnoreCase(Constant.operatorID)) {
+                    if(from.equals(Constant.operatorhistoryID)) {
                         OperatorBubble bubble = new OperatorBubble(defaultOperator, message, time);
                         //    GridPane.setHalignment(bubble.getFromBubble(), HPos.RIGHT);
                         oldhistory.addRow(id, bubble.getRoot());
@@ -655,6 +675,11 @@ public class OperatorController implements MessageListener {
         return controller.getGridPane();
     }
 
+    protected void createSession(){
+        operator.create();
+        setSessionCreated(true);
+    }
+
     protected Queue<ChatMessage> getChatMessagess() {
         return operatorController.chatMessagess;
     }
@@ -672,6 +697,7 @@ public class OperatorController implements MessageListener {
     }
 
     public void closeConnection() throws JMSException {
+        setSessionCreated(false);
         operatorController.operator.closeConnection();
     }
 
@@ -722,6 +748,14 @@ public class OperatorController implements MessageListener {
         operatorController.IDtracker = operatorController.IDtracker+1;
         return operatorController.IDtracker;
 
+    }
+
+    public boolean isSessionCreated() {
+        return isSessionCreated;
+    }
+
+    public void setSessionCreated(boolean sessionCreated) {
+        isSessionCreated = sessionCreated;
     }
 
     public void setIDtracker(int IDtracker) {
@@ -782,6 +816,8 @@ public class OperatorController implements MessageListener {
                     }
 
                     OperatorController operatorController = new OperatorController(OperatorController.defaultOperator, "chat.*", controller);
+                    operatorController.createSession();
+                    operatorController.startDefaultOperatorAction();
                     int count =   controller.getHashMapOperator().get(defaultOperator).getOperatorController().getMessageCounter();
                     operatorController.setMessageCounter(count);
                     controller.getHashMapOperator().get(OperatorController.defaultOperator).setOperatorController(operatorController);
@@ -797,7 +833,7 @@ public class OperatorController implements MessageListener {
 
                     while (!cachedMessages.isEmpty()) {
 
-                        ChatMessage chatMessage = cachedMessages.remove();
+                       ChatMessage chatMessage = cachedMessages.remove();
 
                         BindOperator bindOperator = controller.getHashMapOperator().get(chatMessage.getProducerID());
                         controller.sendMessage(chatMessage, bindOperator.getOperatorController());
@@ -831,8 +867,8 @@ public class OperatorController implements MessageListener {
     private class NetworkDownHandler extends Thread{
         Image image_offline = new Image(getClass().getResourceAsStream("offline.png")); //===========================
         Image image_online = new Image(getClass().getResourceAsStream("online.png"));   //===========================
-
         Thread thread = this;
+
         public void run() {
             thread = Thread.currentThread();
 
@@ -841,6 +877,7 @@ public class OperatorController implements MessageListener {
                 try {
 
                     Operator operator = new Operator(ID, ID);
+                    operator.create();
                     boolean isConnected = operator.isConnected();
 
                     //         System.out.println("inside:  " + isOnline);

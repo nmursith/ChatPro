@@ -25,7 +25,7 @@ public class Operator{
 
 
     static {
-     //   messageBrokerUrl = ConfigurationController.readConfig().getURL();////ActiveMQConnection.DEFAULT_BROKER_URL;//"tcp://localhost:61616";
+      //  messageBrokerUrl = ConfigurationController.readConfig().getURL();////ActiveMQConnection.DEFAULT_BROKER_URL;//"tcp://localhost:61616";
         messageBrokerUrl ="tcp://localhost:61616";
         ackMode = Session.AUTO_ACKNOWLEDGE;
 
@@ -35,7 +35,7 @@ public class Operator{
     public Operator(String subscriptionName, String topicName) throws JMSException {
         this.subscriptionName = subscriptionName;
         this.topicName = topicName;
-        this.create();
+    //    this.create();
 
     }
 
@@ -47,7 +47,7 @@ public class Operator{
 //
 //    }
 
-    private void create() {
+    public void create() {
 
         try {
             ConnectionFactory connectionFactory = new ActiveMQConnectionFactory(messageBrokerUrl);
