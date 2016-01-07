@@ -25,7 +25,7 @@ public class NotificationController {
 
     private volatile static ChatController chatController;
     private volatile static  int index;
-    private static final Stage stage = new Stage(StageStyle.UNDECORATED);
+    public static final Stage stage = new Stage(StageStyle.UNDECORATED);
     private static Popup createPopup(final String message, final String userName) {
 
         final Popup popup = new Popup();

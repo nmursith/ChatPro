@@ -4,6 +4,8 @@ import Controller.HistoryController;
 import Controller.OperatorController;
 import javafx.scene.layout.GridPane;
 
+import java.util.ArrayList;
+
 
 /**
  * Created by mmursith on 12/2/2015.
@@ -15,7 +17,7 @@ public class BindOperator {
     private GridPane chatHolder;
     private GridPane oldchatHolder;
     private String typedMessage;
-
+    private ArrayList<HistoryMessage> historyMessages;
 
     public BindOperator(OperatorController operatorController, GridPane gridPane){
         this.operatorController = operatorController;
@@ -47,6 +49,14 @@ public class BindOperator {
 
     public GridPane getOldchatHolder() {
         return oldchatHolder;
+    }
+
+    public ArrayList<HistoryMessage> getHistoryMessages() {
+        return historyMessages;
+    }
+
+    public void setHistoryMessages(ArrayList<HistoryMessage> historyMessages) {
+        this.historyMessages = historyMessages;
     }
 
     public void setOldchatHolder(GridPane oldchatHolder) {

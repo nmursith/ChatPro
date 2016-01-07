@@ -32,15 +32,11 @@ import java.util.Vector;
 
 public class ChatController{
 
-
     @FXML public Button closeButton; //=========================
     @FXML public Button minimizeButton; // ============================
 
     @FXML public Label statusIcon; // =========================== new
     @FXML public ImageView statusImageView; // ===================== new
-
-
-
 
 
     @FXML public Pane titleBar;
@@ -86,6 +82,9 @@ public class ChatController{
         Image image_offline = new Image(getClass().getResourceAsStream("offline.png")); // =========================== NEW
         Image image_online = new Image(getClass().getResourceAsStream("online.png"));   // =========================== NEW
 
+
+        defaultOperator = ConfigurationController.readConfig().getOperator();// "operator1";
+        messageProducerID = new Vector<>();
 
         hashMapOperator = new HashMap<>();
         controller =this;
@@ -141,9 +140,6 @@ public class ChatController{
 
         //chatBubble = new TextArea();
         chatHolder = new GridPane();
-
-        defaultOperator = ConfigurationController.readConfig().getOperator();// "operator1";
-        messageProducerID = new Vector<>();
         contextMenuVariables = (ArrayList<Variable>) VariablesController.readVariables();
 
 

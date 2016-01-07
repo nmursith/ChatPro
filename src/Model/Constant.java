@@ -13,6 +13,8 @@ public class Constant {
     public static final String prefix = ConfigurationController.readConfig().getOperator();
     public static final String operatorID =  prefix+"60e232e2a20tafwe";
     public static final String operatorhistoryID =  "60e232e2a20tafwe";
+    public static final String exitMessage ="DIRROUTETOBOT";
+    public static final String  exitBubbleMessage = "Chat closed by Operator";
 
     public static String [] usernames = {"Operator","Pubudu", "Shannon", "Nimashi","Damith","Mursith","Januka","Prabudhika","Thuan","Sameera"};
 

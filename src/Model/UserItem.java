@@ -137,9 +137,12 @@ public class UserItem extends GridPane implements   Runnable, EventHandler<Mouse
     }
 
     public void startBlink(){
-        blink = null;
         blink = new Thread(this, user.getUserName());
         blink.start ();
+
+
+
+
 
     }
 
@@ -167,6 +170,7 @@ public class UserItem extends GridPane implements   Runnable, EventHandler<Mouse
             }
             //    System.out.println("Loop: " + running);
         }
+        blink = null;
 
         if(chatController.getChatUsersList().getSelectionModel().getSelectedItem().equals(userItem) && userItem!=null) {
 

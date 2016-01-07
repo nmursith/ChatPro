@@ -1,6 +1,7 @@
 package View;
 
 import Controller.ChatController;
+import Controller.NotificationController;
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
@@ -45,6 +46,14 @@ public class Main extends Application {
                 } catch (JMSException e) {
                     e.printStackTrace();
                 }
+            }
+        });
+
+        primaryStage.setOnShowing(new EventHandler<WindowEvent>() {
+            @Override
+            public void handle(WindowEvent event) {
+                if(NotificationController.stage.isShowing())
+                    NotificationController.stage.close();
             }
         });
         Image ico = new Image(getClass().getResourceAsStream("appIcon.png"));
