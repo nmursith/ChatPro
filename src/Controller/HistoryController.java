@@ -90,7 +90,7 @@ public class HistoryController {
 
             String history="{"+botHistory+"}";
             JSONObject jsonObject = (JSONObject) (new JSONParser().parse(history));
-        //    System.out.println(jsonObject);
+            System.out.println(jsonObject);
             JSONArray msg = (JSONArray) jsonObject.get("VARHISTORY");
 
             boolean alreadyExists = new File(fileName).exists();
@@ -127,7 +127,7 @@ public class HistoryController {
                     String messg = (String)obj.get("msg");
 
                 //    System.out.println(from+"      "+messg);
-                    String time = "";
+                    String time = (String)obj.get("time");
 
                     if(!from.equals(Constant.BOT_TAG)) {
                   //      System.out.println("FROM:   "+from);
