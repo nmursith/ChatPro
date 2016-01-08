@@ -2,6 +2,7 @@ package Controller;
 
 import Model.*;
 import javafx.event.ActionEvent;
+import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
 
 import java.io.IOException;
@@ -24,6 +25,7 @@ public class SeparatorController {
 
     public void showHistory(ActionEvent actionEvent) {
         String defaultOperator = ConfigurationController.readConfig().getOperator();
+        Image botImage =new Image(getClass().getResourceAsStream("robotic.png"));
         bindOperator.getChatHolder().getChildren().remove(0);
         ArrayList<HistoryMessage> historyMessages = bindOperator.getHistoryMessages();
 
@@ -49,6 +51,7 @@ public class SeparatorController {
 
                     } else if (history.getFrom().equalsIgnoreCase(Constant.BOT_TAG)) {
                         OperatorBubble bubble = new OperatorBubble(Constant.BOT_TAG, history.getMessage(), history.getTime());
+                        bubble.setImage(botImage);
                         //    GridPane.setHalignment(bubble.getFromBubble(), HPos.RIGHT);
                         oldhistory.addRow(id, bubble.getRoot());
                     } else {

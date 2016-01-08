@@ -5,6 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.HPos;
 import javafx.scene.CacheHint;
 import javafx.scene.Parent;
+import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
 
 import java.io.IOException;
@@ -31,6 +32,10 @@ public class OperatorBubble {
 
     }
 
+    public void setImage(Image image){
+        operatorBubbleController.setOperator_pic_image_view(image);
+
+    }
     public static Parent getRoot() {
         root.setCache(true);
         root.setCacheHint(CacheHint.DEFAULT);

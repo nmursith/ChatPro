@@ -46,7 +46,7 @@
       <graphic>
          <ImageView fx:id="operator_pic_image_view" fitHeight="30.0" fitWidth="30.0" y="5.0">
             <image>
-               <Image url="@Background.png"/>
+               <Image url="@operator.png"/>
             </image>
          </ImageView>
       </graphic>
