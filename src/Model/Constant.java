@@ -15,6 +15,8 @@ public class Constant {
     public static final String operatorhistoryID =  "60e232e2a20tafwe";
     public static final String exitMessage ="DIRROUTETOBOT";
     public static final String  exitBubbleMessage = "Chat closed by Operator";
+    public static final String  HISTORY_TAG = "VARHISTORY";
+    public static final String  BOT_TAG = "BOT";
 
     public static String [] usernames = {"Operator","Pubudu", "Shannon", "Nimashi","Damith","Mursith","Januka","Prabudhika","Thuan","Sameera"};
 

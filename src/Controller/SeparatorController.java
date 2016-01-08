@@ -29,41 +29,44 @@ public class SeparatorController {
 
         GridPane oldhistory = bindOperator.getOldchatHolder();
 
-        if(bindOperator.getOldchatHolder()!=null && historyMessages!=null){
+        if(bindOperator.getOldchatHolder()!=null && historyMessages!=null) {
 //            for (Node node : bindOperator.getChatHolder().getChildren()) {
 //                //System.out.print("index:    "+ GridPane.getRowIndex(node)+"     ");
 //                GridPane.setRowIndex(node, GridPane.getRowIndex(node)+1);
 //                //System.out.println(GridPane.getRowIndex(node));
 //            }
-            for (HistoryMessage history: historyMessages) {
-                try{
+            for (HistoryMessage history : historyMessages) {
+                try {
                     int id = Integer.parseInt(history.getID());
+                    //         System.out.println("ID:  "+ id);
 
-                    if(history.getFrom().equals(Constant.operatorhistoryID)) {
+                    if (history.getFrom().equals(Constant.operatorhistoryID)) {
                         OperatorBubble bubble = new OperatorBubble(defaultOperator, history.getMessage(), history.getTime());
                         //    GridPane.setHalignment(bubble.getFromBubble(), HPos.RIGHT);
                         oldhistory.addRow(id, bubble.getRoot());
                         // bindOperator.getChatHolder().addRow(id, bubble.getRoot());
 
 
-                    }
-                    else {
+                    } else if (history.getFrom().equalsIgnoreCase(Constant.BOT_TAG)) {
+                        OperatorBubble bubble = new OperatorBubble(Constant.BOT_TAG, history.getMessage(), history.getTime());
+                        //    GridPane.setHalignment(bubble.getFromBubble(), HPos.RIGHT);
+                        oldhistory.addRow(id, bubble.getRoot());
+                    } else {
                         UserBubble bubble = new UserBubble(history.getFrom(), history.getMessage(), history.getTime());
                         //         GridPane.setHalignment(bubble.getToBubble(), HPos.LEFT);
                         oldhistory.addRow(id, bubble.getRoot());
                         //    bindOperator.getChatHolder().addRow(id, bubble.getRoot());
                     }
-                }
-                catch (IOException e){
-                        System.out.println("Problem in loading history");
+                } catch (IOException e) {
+                    System.out.println("Problem in loading history");
                 }
 
             }
 
-
+        }
 
             bindOperator.getChatHolder().addRow(0, oldhistory);
-        }
+
         System.out.println("show history");
 
     }

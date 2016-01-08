@@ -4,7 +4,10 @@ package Controller;
  * Created by mmursith on 12/9/2015.
  */
 
+import Model.BindOperator;
 import Model.ChatMessage;
+import Model.Constant;
+import Model.HistoryMessage;
 import com.csvreader.CsvReader;
 import com.csvreader.CsvWriter;
 import org.json.simple.JSONArray;
@@ -15,6 +18,7 @@ import org.json.simple.parser.ParseException;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class HistoryController {
     private String fileName;
@@ -24,7 +28,7 @@ public class HistoryController {
         historyController.readHistory();
         String history = "\"VARHISTORY\":[{\"from\":\"BOT\",\"msg\":\"Hi Pubudu, Can I help you improve your code quality today?\"},{\"from\":\"Pubudu\",\"msg\":\"no\"},{\"from\":\"BOT\",\"msg\":\"Do send me a message if you need any more help. Bye for now.\"},{\"from\":\"Pubudu\",\"msg\":\"what is insightlive?\"},{\"from\":\"BOT\",\"msg\":\"ERA Insight helps you manage code quality by creating the visibility to your ongoing development as you scale up.\"},{\"from\":\"Pubudu\",\"msg\":\"what is your name?\"},{\"from\":\"BOT\",\"msg\":\"Operator Connected\"}]";
         try {
-            historyController.writeHistory(history);
+            historyController.writeHistory(history,null);
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -78,12 +82,15 @@ public class HistoryController {
         }
     }
 
-    public void writeHistory(String botHistory) throws ParseException {
+    public String writeHistory(String botHistory, BindOperator bindOperator ) throws ParseException {
+        String userName="";
+        OperatorController operatorController = bindOperator.getOperatorController();
+        ArrayList<HistoryMessage> historyMessages = bindOperator.getHistoryMessages();
         try {
 
             String history="{"+botHistory+"}";
             JSONObject jsonObject = (JSONObject) (new JSONParser().parse(history));
-            System.out.println(jsonObject);
+        //    System.out.println(jsonObject);
             JSONArray msg = (JSONArray) jsonObject.get("VARHISTORY");
 
             boolean alreadyExists = new File(fileName).exists();
@@ -114,26 +121,38 @@ public class HistoryController {
                 for (int i=0; i<msg.size(); i++){
                     JSONObject obj = (JSONObject) msg.get(i);
                     //variableList.add(new Variable((String) obj.get("ID"), (String) obj.get("name")));
-                    System.out.println(obj.get("from")+"      "+obj.get("msg"));
+              //      System.out.println(obj);
+
                     String from = (String)obj.get("from");
                     String messg = (String)obj.get("msg");
 
+                //    System.out.println(from+"      "+messg);
+                    String time = "";
 
+                    if(!from.equals(Constant.BOT_TAG)) {
+                  //      System.out.println("FROM:   "+from);
+                        userName = from;
+                    }
 
-                    csvOutput.write("");
-                    csvOutput.write(from);
-                    //csvOutput.write(message);
-                    csvOutput.write(messg);
-                    csvOutput.write("");
+                        if(i<(msg.size()-2)){
+                            int ID = operatorController.getMessageCounter();
+                            csvOutput.write(ID + "");
+                            csvOutput.write(from);
+                            //csvOutput.write(message);
+                            csvOutput.write(messg);
+                            csvOutput.write(time);
 
-                    csvOutput.endRecord();
+                            csvOutput.endRecord();
+                            //if(historyMessages!=null)
+                            historyMessages.add(new HistoryMessage(ID + "", from, messg, time));
+                        }
 
 
 
                 }
 
                 csvOutput.close();
-
+                return userName;
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -143,8 +162,9 @@ public class HistoryController {
 
         }
         catch (Exception e){
-
+            e.printStackTrace();
         }
+        return null;
     }
 
     public CsvReader readHistory(){

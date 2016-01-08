@@ -18,11 +18,14 @@ public class BindOperator {
     private GridPane oldchatHolder;
     private String typedMessage;
     private ArrayList<HistoryMessage> historyMessages;
+    private String clientName;
 
     public BindOperator(OperatorController operatorController, GridPane gridPane){
         this.operatorController = operatorController;
         this.chatHolder = gridPane;
         this.historyController = new HistoryController(operatorController.getSubscriptionName());
+        this.historyMessages = new ArrayList<>();
+        this.oldchatHolder = operatorController.getGridPane();
 
     }
 
@@ -69,5 +72,13 @@ public class BindOperator {
 
     public void setTypedMessage(String typedMessage) {
         this.typedMessage = typedMessage;
+    }
+
+    public String getClientName() {
+        return clientName;
+    }
+
+    public void setClientName(String clientName) {
+        this.clientName = clientName;
     }
 }

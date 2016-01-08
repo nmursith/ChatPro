@@ -18,11 +18,11 @@ public class OperatorBubble {
     private static FXMLLoader fxmlLoader;
 
     public OperatorBubble(String name, String  chatMessage, String time) throws IOException {
-        long time1 = System.currentTimeMillis();
+        //long time1 = System.currentTimeMillis();
         fxmlLoader = new FXMLLoader(getClass().getResource("operatorbubble.fxml"));
         root = fxmlLoader.load();
-        long time2 = System.currentTimeMillis();
-        System.out.println("Time:  "+ (time2-time1));
+        //long time2 = System.currentTimeMillis();
+       // System.out.println("Time:  "+ (time2-time1));
 
         operatorBubbleController= fxmlLoader.<OperatorBubbleController>getController();
         operatorBubbleController.setOperatorname(name);

@@ -513,14 +513,17 @@ public class ChatController{
         System.out.println("Closing index: "+ index);
         //  operatorController.closeConnection();
 
-        if(!listItems.isEmpty() ) {
+        if(!listItems.isEmpty()) {
 
             String myMessage = "exit";
             String bubbleMessage = "Chat closed by Operator";
             ChatMessage myMessageMod = getObjectMessage(myMessage, operatorController.getSubscriptionName());
             ChatMessage bubbleMessageMod = getObjectMessage(bubbleMessage, operatorController.getSubscriptionName());
-            operatorController.sendMessage(myMessageMod, operatorController);
-            operatorController.closeConnection();
+
+            if(!operatorController.isClosedAlready()) {
+                operatorController.sendMessage(myMessageMod, operatorController);
+                operatorController.closeConnection();
+            }
           //  System.out.println("exit");
             int counter = (int) operatorController.getMessageCounter();
             int ID = operatorController.getIDtracker();
@@ -625,8 +628,9 @@ public class ChatController{
 
                ChatMessage myMessageMod = getObjectMessage(myMessage, bindOperator.getOperatorController().getSubscriptionName());
                ChatMessage bubbleMessageMod = getObjectMessage(bubbleMessage, operatorController.getSubscriptionName());
+               if(!bindOperator.getOperatorController().isClosedAlready())
+                   bindOperator.getOperatorController().sendMessage(myMessageMod, bindOperator.getOperatorController());
 
-               hashMapOperator.get(producerID).getOperatorController().sendMessage(myMessageMod, bindOperator.getOperatorController());
                int counter = (int) bindOperator.getOperatorController().getMessageCounter();
             //   OperatorBubble bubble = new OperatorBubble(defaultOperator, bubbleMessageMod.getTextMessage(), bubbleMessageMod.getTime() );
                bindOperator.getHistoryController().writehistory(counter, Constant.operatorhistoryID,bubbleMessageMod);

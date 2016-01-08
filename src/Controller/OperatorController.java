@@ -47,7 +47,7 @@ public class OperatorController implements MessageListener {
     private volatile boolean isOnline;
     private boolean isSessionCreated;
     private String subscriptionName;
-
+    private boolean isClosedAlready;
 
     public OperatorController(String subscriptionName, String topicName, ChatController controller) throws JMSException {
         this.operator = new Operator(subscriptionName, topicName);
@@ -63,6 +63,7 @@ public class OperatorController implements MessageListener {
         this.defaultOperator = ConfigurationController.readConfig().getOperator();//"operator1";
 
         this.isSessionCreated = false;
+        this.isClosedAlready = false;
 //      this.notificationController = new NotificationController();
         this.messageCounter = -1;
 
@@ -188,6 +189,7 @@ public class OperatorController implements MessageListener {
      @Override
     public void onMessage(Message message) {
     String producerID = null;
+         ChatMessage chatMessage;
    //     System.out.println("Recieving......:      ");
         try {
 
@@ -206,7 +208,7 @@ public class OperatorController implements MessageListener {
 
                 //                System.out.println("destination: "+ destination);
                 producerID = destination;
-                ChatMessage chatMessage =  new ChatMessage();
+                chatMessage =  new ChatMessage();
 
                 chatMessage.setProducerID(producerID);
                 chatMessage.setMessage(message);
@@ -236,24 +238,26 @@ public class OperatorController implements MessageListener {
                     ByteSequence byteSequence = activeMQBytesMessage.getContent();
                     byte[] bytes = byteSequence.getData();
                     String messageText = new String(bytes, StandardCharsets.UTF_8);
-                System.out.println();
-                System.out.println();
-                System.out.println();
-                System.out.println();
+//                System.out.println();
+//                System.out.println();
+//                System.out.println();
+//                System.out.println();
+//
+//
+//                                    System.out.println(messageText);
+//                System.out.println();
+//                System.out.println();
+//                System.out.println();
 
 
-                                    System.out.println(messageText);
-                System.out.println();
-                System.out.println();
-                System.out.println();
-
-
-                    ChatMessage chatMessage = new ChatMessage();
+                    chatMessage = new ChatMessage();
                     chatMessage.setProducerID(producerID);
 
                     chatMessage.setMessage(message);
                     chatMessage.setTextMessage(messageText);
                     //                System.out.println("From Byte Client: "+ chatMessage.getTextMessage());
+
+                    if(!messageText.contains(Constant.BOT_TAG) && !messageText.contains(Constant.HISTORY_TAG))
                     this.chatMessagess.add(chatMessage);
 
 //                System.out.println(chatMessagess.isEmpty());
@@ -280,9 +284,18 @@ public class OperatorController implements MessageListener {
                 //Thread.sleep(20);
 
                 if(controller!=null){
-                    int count  = loadHistory(controller.getHashMapOperator().get(producerID));
 
+                    int count  = loadHistory(controller.getHashMapOperator().get(producerID));
                     operatorController.setMessageCounter(count);        //starting
+
+                    if(!chatMessagess.contains(chatMessage)) {
+                        String  username = bindOperator.getHistoryController().writeHistory(chatMessage.getTextMessage(), bindOperator);
+                        bindOperator.setClientName(username);
+                        System.out.println("client Name set:  "+ username);
+                        //count = count +count2;
+                        //operatorController.setMessageCounter(count);
+                  }
+
                     operatorController.setIDtracker(1);
                 }
 
@@ -402,9 +415,16 @@ public class OperatorController implements MessageListener {
 //                }
 
                     if (!controller.getMessageProducerID().contains(tempName) && !tempName.equals(null) && !tempName.trim().equalsIgnoreCase(defaultOperator) ) {
+
                         System.out.println("updating:  "+tempName);
                         controller.getMessageProducerID().add(tempName);
-                        String username=Constant.usernames[messageProduceID.size()-1];
+
+                        BindOperator bindOperator = controller.getHashMapOperator().get(tempName);
+                        String username =bindOperator.getClientName();
+
+                        if(username == null)
+                            username=Constant.usernames[messageProduceID.size()-1];
+
                         User user = new User();
                         user.setuserId(tempName);
                         user.setUserName(username);
@@ -487,7 +507,10 @@ public class OperatorController implements MessageListener {
 
                                             OperatorBubble bubble = new OperatorBubble(defaultOperator, chatMessage.getTextMessage(), chatMessage.getTime());
                                             //    GridPane.setHalignment(bubble.getFromBubble(), HPos.RIGHT);
+                                            bindOperator.getOperatorController().setClosedAlready(true);
                                             bindOperator.getChatHolder().addRow(ID, bubble.getRoot());
+
+
                                            // Platform.runLater(() -> controller.messageDisplay.setVvalue(controller.messageDisplay.getVmax()));
                                         }
 
@@ -643,8 +666,8 @@ public class OperatorController implements MessageListener {
             try {
                 messages.readHeaders();
 
-                GridPane oldhistory = controller.getGridPane();
-                ArrayList<HistoryMessage> historyMessages = new ArrayList<>();
+                GridPane oldhistory = bindOperator.getOldchatHolder();//controller.getGridPane();
+                ArrayList<HistoryMessage> historyMessages = bindOperator.getHistoryMessages();
                 while (messages.readRecord()) {
                     String ID = messages.get("id");
                     String from = messages.get("from");
@@ -695,8 +718,9 @@ public class OperatorController implements MessageListener {
                     count++;
 
                 }
-                bindOperator.setHistoryMessages(historyMessages);
-                bindOperator.setOldchatHolder(oldhistory);
+              //  System.out.println(historyMessages);
+               // bindOperator.setHistoryMessages(historyMessages);
+              //  bindOperator.setOldchatHolder(oldhistory);
                 messages.close();
 
             }
@@ -721,7 +745,7 @@ public class OperatorController implements MessageListener {
 
 
 
-    private GridPane getGridPane() {
+    public GridPane getGridPane() {
 //        GridPane gridPane = new GridPane();
 //        //gridPane.setMaxSize(431, 413);
 //        gridPane.setPrefWidth(431);
@@ -824,6 +848,14 @@ public class OperatorController implements MessageListener {
 
     public void setIDtracker(int IDtracker) {
         this.IDtracker = IDtracker;
+    }
+
+    public boolean isClosedAlready() {
+        return isClosedAlready;
+    }
+
+    public void setClosedAlready(boolean closedAlready) {
+        isClosedAlready = closedAlready;
     }
 
     private class OfflineNetworkDownHandler extends Thread{
