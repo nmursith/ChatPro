@@ -26,6 +26,7 @@ public class SeparatorController {
     public void showHistory(ActionEvent actionEvent) {
         String defaultOperator = ConfigurationController.readConfig().getOperator();
         Image botImage =new Image(getClass().getResourceAsStream("robotic.png"));
+
         bindOperator.getChatHolder().getChildren().remove(0);
         ArrayList<HistoryMessage> historyMessages = bindOperator.getHistoryMessages();
 

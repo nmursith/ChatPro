@@ -26,6 +26,7 @@ public class BindOperator {
         this.historyController = new HistoryController(operatorController.getSubscriptionName());
         this.historyMessages = new ArrayList<>();
         this.oldchatHolder = operatorController.getGridPane();
+        this.oldchatHolder.setPrefHeight(50);
 
     }
 
