@@ -645,6 +645,7 @@ public class ChatController{
             }
 
         }
+        System.exit(0);
 
     }
     public void setSelectedItem(ActionEvent actionEvent) {

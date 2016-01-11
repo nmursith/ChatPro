@@ -510,6 +510,12 @@ public class OperatorController implements MessageListener {
                                             bindOperator.getOperatorController().setClosedAlready(true);
                                             bindOperator.getChatHolder().addRow(ID, bubble.getRoot());
 
+                                            controller.getHashMapOperator().get(chatMessage.getProducerID()).getChatHolder().setDisable(true);
+                                            controller.sendButton.setDisable(true);
+                                            controller.messageTextField.setDisable(true);
+                                            controller.getChatUsersList().getItems().get(controller.getMessageProducerID().indexOf(chatMessage.getProducerID())).setDisable(true);
+
+
 
                                            // Platform.runLater(() -> controller.messageDisplay.setVvalue(controller.messageDisplay.getVmax()));
                                         }
@@ -655,9 +661,9 @@ public class OperatorController implements MessageListener {
     private int loadHistory(BindOperator bindOperator) throws IOException {
 
         int count = 0;
-        SeperatorLine seperatorLine = new SeperatorLine(bindOperator);
-        bindOperator.getChatHolder().getChildren().clear();
-        bindOperator.getChatHolder().addRow(0,seperatorLine.getSeperator());
+        SeperatorLine seperatorLine = new SeperatorLine(bindOperator);            // uncomment
+        bindOperator.getChatHolder().getChildren().clear();  // uncomment
+        bindOperator.getChatHolder().addRow(0,seperatorLine.getSeperator()); // uncomment
 
         CsvReader messages = bindOperator.getHistoryController().readHistory();
         if(messages != null){
