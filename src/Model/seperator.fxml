@@ -8,10 +8,10 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.SeparatorController">
    <children>
-      <Line endX="265.0" layoutX="107.0" layoutY="15.5" startX="-100.0" stroke="#7c7979" />
+      <Line endX="265.0" layoutX="107.0" layoutY="15.5" startX="-100.0" stroke="#9e9696" strokeWidth="1.5" />
       <Button fx:id="historyButton" layoutX="363.5" layoutY="-2.0" mnemonicParsing="false" onAction="#showHistory" prefHeight="15.0" prefWidth="15.0" style="-fx-background-color: transparent;">
          <graphic>
-            <ImageView fitHeight="20.0" fitWidth="20.0">
+            <ImageView fx:id="historyButton_view" fitHeight="20.0" fitWidth="20.0">
                <image>
                   <Image url="@add139.png" />
                </image>

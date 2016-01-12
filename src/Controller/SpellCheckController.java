@@ -1,22 +1,27 @@
 package Controller;
 
-import org.xeustechnologies.googleapi.spelling.SpellChecker;
-import org.xeustechnologies.googleapi.spelling.SpellCorrection;
-import org.xeustechnologies.googleapi.spelling.SpellResponse;
-
 /**
  * Created by mmursith on 1/11/2016.
  */
 
 public class SpellCheckController  {
+
+
+
+
     public static void main(String[] args) {
     //    Application.launch(args);
-        SpellChecker checker = new SpellChecker();
 
-        SpellResponse spellResponse = checker.check( "helloo worlrd" );
 
-        for( SpellCorrection sc : spellResponse.getCorrections() )
-            System.out.println( sc.getValue() );
+
+//
+//
+//        SpellChecker checker = new SpellChecker();
+//        checker.setOverHttps(true);
+//        SpellResponse spellResponse = checker.check( "helloo worlrd" );
+//
+//        for( SpellCorrection sc : spellResponse.getCorrections() )
+//            System.out.println( sc.getValue() );
     }
 //    @Override
 //    public void start(Stage stage) {

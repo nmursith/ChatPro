@@ -221,9 +221,9 @@ public class ChatController{
                 chatHolder.addRow(ID, bubble.getRoot());
                 messageDisplay.setContent(chatHolder);
 
-                if(doTrain.isSelected()){
-                    myMessage = Constant.DO_NOT_TRAIN_TAG+" "+myMessage;
-                    doTrain.setSelected(false);
+                if(!doTrain.isSelected()){
+                    myMessage = Constant.DO_NOT_TRAIN_TAG+myMessage;
+                    doTrain.setSelected(true);
                 }
                 myMessage = getReplacedVariables(myMessage);
                 myMessageMod = getObjectMessage(myMessage, operatorController.getSubscriptionName());

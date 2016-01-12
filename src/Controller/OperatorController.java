@@ -200,6 +200,11 @@ public class OperatorController implements MessageListener {
                 String messageText = txtMsg.getText();
 
 
+                if(messageText.contains(Constant.DO_NOT_TRAIN_TAG)){
+                   messageText= messageText.replace(Constant.DO_NOT_TRAIN_TAG,"");
+
+                }
+
 
 
                 String destination = message.getJMSDestination().toString();
@@ -238,6 +243,10 @@ public class OperatorController implements MessageListener {
                     ByteSequence byteSequence = activeMQBytesMessage.getContent();
                     byte[] bytes = byteSequence.getData();
                     String messageText = new String(bytes, StandardCharsets.UTF_8);
+
+                if(messageText.contains(Constant.DO_NOT_TRAIN_TAG)){
+                    messageText= messageText.replace(Constant.DO_NOT_TRAIN_TAG,"");
+                }
 //                System.out.println();
 //                System.out.println();
 //                System.out.println();

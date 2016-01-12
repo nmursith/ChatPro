@@ -51,7 +51,7 @@
                         <Image url="@../Model/gearmain.png" />
                      </image>
                   </ImageView>
-                  <CheckBox fx:id="doTrain" layoutX="218.0" layoutY="556.0" mnemonicParsing="false" style="-fx-background-color: transparent;" text="Do not Train" />
+                  <CheckBox fx:id="doTrain" layoutX="218.0" layoutY="556.0" mnemonicParsing="false" selected="true" style="-fx-background-color: transparent;" text="Train the Bot" />
                </children>
             </AnchorPane>
          </items>
