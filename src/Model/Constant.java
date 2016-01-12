@@ -17,6 +17,8 @@ public class Constant {
     public static final String  exitBubbleMessage = "Chat closed by Operator";
     public static final String  HISTORY_TAG = "VARHISTORY";
     public static final String  BOT_TAG = "BOT";
+    public static final String  DO_NOT_TRAIN_TAG = "DONOTTRAIN";
+
 
     public static String [] usernames = {"Operator","Pubudu", "Shannon", "Nimashi","Damith","Mursith","Januka","Prabudhika","Thuan","Sameera"};
 

@@ -663,7 +663,7 @@ public class OperatorController implements MessageListener {
         int count = 0;
         SeperatorLine seperatorLine = new SeperatorLine(bindOperator);            // uncomment
         bindOperator.getChatHolder().getChildren().clear();  // uncomment
-        bindOperator.getChatHolder().addRow(0,seperatorLine.getSeperator()); // uncomment
+        bindOperator.getChatHolder().add(seperatorLine.getSeperator(),0,0); // uncomment
 
         CsvReader messages = bindOperator.getHistoryController().readHistory();
         if(messages != null){

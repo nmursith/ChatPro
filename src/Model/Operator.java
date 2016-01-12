@@ -40,6 +40,7 @@ public class Operator{
 
     }
 
+
 //    public Operator(String operatorID, String subscriptionName, String topicName) throws JMSException {
 //        this.subscriptionName = subscriptionName;
 //        this.topicName = topicName;

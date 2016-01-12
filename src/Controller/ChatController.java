@@ -50,6 +50,7 @@ public class ChatController{
     @FXML public ListView<UserItem> chatUsersList;
 
     @FXML public ScrollPane messageDisplay;
+    @FXML public CheckBox doTrain;
     @FXML private ContextMenu variablesMenu;
 
     private double xOffset;
@@ -213,26 +214,22 @@ public class ChatController{
                 int counter =  operatorController.getMessageCounter();
                 int ID = operatorController.getIDtracker();
           //      System.out.println("value chat:  "+counter+"     ****"+operatorController);
-
                 OperatorBubble bubble = new OperatorBubble(defaultOperator, myMessageMod.getTextMessage(), myMessageMod.getTime() );
                 //       GridPane.setHalignment(bubble.getFromBubble(), HPos.RIGHT);
-
                // Parent root = bubble.getRoot(defaultOperator, myMessageMod.getTextMessage(), myMessageMod.getTime());
                 historyController.writehistory(counter, Constant.operatorhistoryID, myMessageMod);
-
                 chatHolder.addRow(ID, bubble.getRoot());
-
                 messageDisplay.setContent(chatHolder);
 
+                if(doTrain.isSelected()){
+                    myMessage = Constant.DO_NOT_TRAIN_TAG+" "+myMessage;
+                    doTrain.setSelected(false);
+                }
                 myMessage = getReplacedVariables(myMessage);
-
                 myMessageMod = getObjectMessage(myMessage, operatorController.getSubscriptionName());
-
-
 
                 System.out.println("Sending:     "+hashMapOperator.size() +"       "+operatorController.getSesssion());
                 operatorController.sendMessage(myMessageMod, operatorController);
-
 
             //    System.out.println("Message sent");
                 Thread.sleep(50);
@@ -628,9 +625,10 @@ public class ChatController{
 
                ChatMessage myMessageMod = getObjectMessage(myMessage, bindOperator.getOperatorController().getSubscriptionName());
                ChatMessage bubbleMessageMod = getObjectMessage(bubbleMessage, operatorController.getSubscriptionName());
-               if(!bindOperator.getOperatorController().isClosedAlready())
-                   bindOperator.getOperatorController().sendMessage(myMessageMod, bindOperator.getOperatorController());
+               if(!bindOperator.getOperatorController().isClosedAlready()) {
+//                   bindOperator.getOperatorController().sendMessage(myMessageMod, bindOperator.getOperatorController());
 
+               }
                int counter = (int) bindOperator.getOperatorController().getMessageCounter();
             //   OperatorBubble bubble = new OperatorBubble(defaultOperator, bubbleMessageMod.getTextMessage(), bubbleMessageMod.getTime() );
                bindOperator.getHistoryController().writehistory(counter, Constant.operatorhistoryID,bubbleMessageMod);
