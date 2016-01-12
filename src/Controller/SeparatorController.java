@@ -146,11 +146,8 @@ public class SeparatorController {
 
             }
             middle_label.setText(" Hide History");
-
             bindOperator.getChatHolder().getChildren().remove(oldhistory);
-
             bindOperator.getChatHolder().add(oldhistory,0,0);
-
             System.out.println("show history");
         }
         else{

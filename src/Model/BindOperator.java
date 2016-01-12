@@ -18,6 +18,7 @@ public class BindOperator {
     private GridPane oldchatHolder;
     private String typedMessage;
     private ArrayList<HistoryMessage> historyMessages;
+    private ArrayList<HistoryMessage> latestHistoryMessages;
     private String clientName;
 
     public BindOperator(OperatorController operatorController, GridPane gridPane){
@@ -25,6 +26,7 @@ public class BindOperator {
         this.chatHolder = gridPane;
         this.historyController = new HistoryController(operatorController.getSubscriptionName());
         this.historyMessages = new ArrayList<>();
+        this.latestHistoryMessages = new ArrayList<>();
         this.oldchatHolder = operatorController.getGridPane();
         this.oldchatHolder.setPrefHeight(50);
 
@@ -81,5 +83,13 @@ public class BindOperator {
 
     public void setClientName(String clientName) {
         this.clientName = clientName;
+    }
+
+    public ArrayList<HistoryMessage> getLatestHistoryMessages() {
+        return latestHistoryMessages;
+    }
+
+    public void setLatestHistoryMessages(ArrayList<HistoryMessage> latestHistoryMessages) {
+        this.latestHistoryMessages = latestHistoryMessages;
     }
 }

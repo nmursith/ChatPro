@@ -9,6 +9,7 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
 import org.apache.activemq.command.ActiveMQBytesMessage;
 import org.apache.activemq.util.ByteSequence;
+import org.json.simple.parser.ParseException;
 
 import javax.jms.IllegalStateException;
 import javax.jms.*;
@@ -48,7 +49,7 @@ public class OperatorController implements MessageListener {
     private boolean isSessionCreated;
     private String subscriptionName;
     private boolean isClosedAlready;
-
+    private static ChatMessage chatMessage;
     public OperatorController(String subscriptionName, String topicName, ChatController controller) throws JMSException {
         this.operator = new Operator(subscriptionName, topicName);
         this.subscriptionName = subscriptionName;
@@ -214,7 +215,7 @@ public class OperatorController implements MessageListener {
      @Override
     public void onMessage(Message message) {
     String producerID = null;
-         ChatMessage chatMessage;
+
    //     System.out.println("Recieving......:      ");
         try {
 
@@ -268,6 +269,7 @@ public class OperatorController implements MessageListener {
                     ByteSequence byteSequence = activeMQBytesMessage.getContent();
                     byte[] bytes = byteSequence.getData();
                     String messageText = new String(bytes, StandardCharsets.UTF_8);
+         //       System.out.println(messageText);
 
                 if(messageText.contains(Constant.DO_NOT_TRAIN_TAG)){
                     messageText= messageText.replace(Constant.DO_NOT_TRAIN_TAG,"");
@@ -323,9 +325,12 @@ public class OperatorController implements MessageListener {
                     operatorController.setMessageCounter(count);        //starting
 
                     if(!chatMessagess.contains(chatMessage)) {
-                        String  username = bindOperator.getHistoryController().writeHistory(chatMessage.getTextMessage(), bindOperator);
+                        String  username = bindOperator.getHistoryController().writeHistory(chatMessage.getTextMessage(), bindOperator, false);
                         bindOperator.setClientName(username);
                         System.out.println("client Name set:  "+ username);
+
+                        chatMessage =null;
+
                         //count = count +count2;
                         //operatorController.setMessageCounter(count);
                   }
@@ -353,6 +358,57 @@ public class OperatorController implements MessageListener {
                         //System.out.println("First startup fails");
                 }
             }
+
+
+                    if(chatMessage!=null && !chatMessagess.contains(chatMessage)) {
+                        Image botImage= new Image(getClass().getResourceAsStream("robotic.png"));
+
+                        BindOperator bindOperator = controller.getHashMapOperator().get(chatMessage.getProducerID());
+                        String  username = null;
+                        try {
+                            username = bindOperator.getHistoryController().writeHistory(chatMessage.getTextMessage(), bindOperator, true);
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                        bindOperator.setClientName(username);
+
+                        ArrayList<HistoryMessage> historyMessages = bindOperator.getLatestHistoryMessages();
+                        //    bindOperator.getLatestHistoryMessages().clear();
+                        //System.out.println(bindOperator.getLatestHistoryMessages().size());
+
+
+//                        for (HistoryMessage history : historyMessages) {
+//
+//                            try {
+//                                int id = Integer.parseInt(history.getID());
+//                                //         System.out.println("ID:  "+ id);
+//
+//                                if (history.getFrom().equalsIgnoreCase(Constant.BOT_TAG)) {
+//                                    OperatorBubble bubble = new OperatorBubble(Constant.BOT_TAG, history.getMessage(), history.getTime());
+//                                    bubble.setImage(botImage);
+//                                    //    GridPane.setHalignment(bubble.getFromBubble(), HPos.RIGHT);
+//                                    bindOperator.getChatHolder().addRow(id, bubble.getRoot());
+//                                } else {
+//                                    UserBubble bubble = new UserBubble(history.getFrom(), history.getMessage(), history.getTime());
+//                                    //         GridPane.setHalignment(bubble.getToBubble(), HPos.LEFT);
+//                                    bindOperator.getChatHolder().addRow(id, bubble.getRoot());
+//                                    //    bindOperator.getChatHolder().addRow(id, bubble.getRoot());
+//                                }
+//
+//                            }
+//                            catch (IOException e) {
+//                                System.out.println("Problem in loading latest history");
+//                            }
+//
+//                        }
+
+                        System.out.println("client Name set:  "+ username);
+                        //count = count +count2;
+                        //operatorController.setMessageCounter(count);
+                    }
+
+
+
 
 
             /********/

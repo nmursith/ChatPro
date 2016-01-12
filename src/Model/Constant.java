@@ -19,10 +19,10 @@ public class Constant {
     public static final String  BOT_TAG = "BOT";
     public static final String  DO_NOT_TRAIN_TAG = "DONOTTRAIN ";
 
-
     public static String [] usernames = {"Operator","Pubudu", "Shannon", "Nimashi","Damith","Mursith","Januka","Prabudhika","Thuan","Sameera"};
 
     public static String getRandomString() {
+
         Random random = new Random(System.currentTimeMillis());
         long randomLong = random.nextLong();
 

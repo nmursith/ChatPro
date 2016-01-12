@@ -23,15 +23,15 @@ import java.util.ArrayList;
 public class HistoryController {
     private String fileName;
     public  static void main(String [] args){
-        HistoryController historyController = new HistoryController("users");
-//  //      historyController.writehistroty();
-        historyController.readHistory();
-        String history = "\"VARHISTORY\":[{\"from\":\"BOT\",\"msg\":\"Hi Pubudu, Can I help you improve your code quality today?\"},{\"from\":\"Pubudu\",\"msg\":\"no\"},{\"from\":\"BOT\",\"msg\":\"Do send me a message if you need any more help. Bye for now.\"},{\"from\":\"Pubudu\",\"msg\":\"what is insightlive?\"},{\"from\":\"BOT\",\"msg\":\"ERA Insight helps you manage code quality by creating the visibility to your ongoing development as you scale up.\"},{\"from\":\"Pubudu\",\"msg\":\"what is your name?\"},{\"from\":\"BOT\",\"msg\":\"Operator Connected\"}]";
-        try {
-            historyController.writeHistory(history,null);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+//        HistoryController historyController = new HistoryController("users");
+////  //      historyController.writehistroty();
+//        historyController.readHistory();
+//        String history = "\"VARHISTORY\":[{\"from\":\"BOT\",\"msg\":\"Hi Pubudu, Can I help you improve your code quality today?\"},{\"from\":\"Pubudu\",\"msg\":\"no\"},{\"from\":\"BOT\",\"msg\":\"Do send me a message if you need any more help. Bye for now.\"},{\"from\":\"Pubudu\",\"msg\":\"what is insightlive?\"},{\"from\":\"BOT\",\"msg\":\"ERA Insight helps you manage code quality by creating the visibility to your ongoing development as you scale up.\"},{\"from\":\"Pubudu\",\"msg\":\"what is your name?\"},{\"from\":\"BOT\",\"msg\":\"Operator Connected\"}]";
+//        try {
+//            //historyController.writeHistory(history,null);
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
     }
     public HistoryController(String fileName){
         this.fileName = "C:\\history\\"+fileName+".csv";
@@ -82,10 +82,11 @@ public class HistoryController {
         }
     }
 
-    public String writeHistory(String botHistory, BindOperator bindOperator ) throws ParseException {
+    public String writeHistory(String botHistory, BindOperator bindOperator, boolean isLatestHistory ) throws ParseException {
         String userName="";
         OperatorController operatorController = bindOperator.getOperatorController();
         ArrayList<HistoryMessage> historyMessages = bindOperator.getHistoryMessages();
+        ArrayList<HistoryMessage> latestHistoryMessages= bindOperator.getLatestHistoryMessages();
         try {
 
             String history="{"+botHistory+"}";
@@ -144,7 +145,14 @@ public class HistoryController {
 
                             csvOutput.endRecord();
                             //if(historyMessages!=null)
-                            historyMessages.add(new HistoryMessage(ID + "", from, messg, time));
+                            if(!isLatestHistory) {
+                                historyMessages.add(new HistoryMessage(ID + "", from, messg, time));
+                            }
+                            else{
+                                int tracker = operatorController.getIDtracker();
+                                latestHistoryMessages.add(new HistoryMessage(tracker + "", from, messg, time));
+                            }
+
                         }
 
 
