@@ -89,23 +89,48 @@ public class OperatorController implements MessageListener {
 
 
 
+
                 Timer timer = new Timer();
                 TimerTask myTask = new TimerTask() {
 
                     @Override
                     public void run() {
-//                        System.out.println("Timer Working online :  "+ isOnline);
-
+            //                        System.out.println("Timer Working online :  "+ isOnline);
+                        try{
                         if(networkHandler.isAlive())
                             networkHandler.stopThread();
 
                         networkHandler = new NetworkDownHandler();
                         networkHandler.start();
+                        }
+                        catch (Exception e){
+                            //System.out.println("Sleepdetected");
+                        }
+
+                        try {
+                            operatorController.getSesssion().createTextMessage();
+                        }
+                        catch (NullPointerException | JMSException e){
+
+                            System.out.println("Sleep Mode handling");
+                            if(offlineNetworkDownHandler.isAlive()) {
+
+                                offlineNetworkDownHandler.stopThread();
+                            }
+
+
+                            //      System.out.println("Message Added:  "+ chatMessage.getTextMessage() +"   "+cachedMessages.size());
+                            offlineNetworkDownHandler = new OfflineNetworkDownHandler();
+                            offlineNetworkDownHandler.start();
+                            //e.printStackTrace();
+                        }
+
 
                     }
                 };
 
                 Platform.runLater(() -> timer.schedule(myTask, 500, 3000));
+
 
             }
 
@@ -305,6 +330,7 @@ public class OperatorController implements MessageListener {
                         //operatorController.setMessageCounter(count);
                   }
 
+
                     operatorController.setIDtracker(1);
                 }
 
@@ -317,6 +343,7 @@ public class OperatorController implements MessageListener {
                         controller.getHashMapOperator().get(producerID).getChatHolder().setDisable(false);
                         controller.getSendButton().setDisable(false);
                         controller.getMessageTextField().setDisable(false);
+                        controller.getDoTrain().setDisable(false);
                         controller.getSendButton().setDisable(false);
                         controller.getListItems().get(controller.getMessageProducerID().indexOf(producerID)).setDisable(false);
                     }
@@ -432,7 +459,7 @@ public class OperatorController implements MessageListener {
                         String username =bindOperator.getClientName();
 
                         if(username == null)
-                            username=Constant.usernames[messageProduceID.size()-1];
+                            username="Anonymus "+tempName.substring(tempName.length()-2);//Constant.usernames[messageProduceID.size()-1];
 
                         User user = new User();
                         user.setuserId(tempName);
@@ -522,6 +549,7 @@ public class OperatorController implements MessageListener {
                                             controller.getHashMapOperator().get(chatMessage.getProducerID()).getChatHolder().setDisable(true);
                                             controller.sendButton.setDisable(true);
                                             controller.messageTextField.setDisable(true);
+                                            controller.getDoTrain().setDisable(true);
                                             controller.getChatUsersList().getItems().get(controller.getMessageProducerID().indexOf(chatMessage.getProducerID())).setDisable(true);
 
 
@@ -565,6 +593,7 @@ public class OperatorController implements MessageListener {
                              //   System.out.println("firsttime:   " + isFirstime + "    " + controller.getListItems().isEmpty());
                                 if (!controller.getListItems().isEmpty() && isFirstime) {
                                     controller.getMessageTextField().setDisable(false);
+                                    controller.getDoTrain().setDisable(false);
                                     System.out.println("first");
                                     isFirstime = false;
 
@@ -929,6 +958,7 @@ public class OperatorController implements MessageListener {
                     OperatorController operatorController = new OperatorController(OperatorController.defaultOperator, "chat.*", controller);
                     operatorController.createSession();
                     operatorController.startDefaultOperatorAction();
+
                     int count =   controller.getHashMapOperator().get(defaultOperator).getOperatorController().getMessageCounter();
                     operatorController.setMessageCounter(count);
                     controller.getHashMapOperator().get(OperatorController.defaultOperator).setOperatorController(operatorController);

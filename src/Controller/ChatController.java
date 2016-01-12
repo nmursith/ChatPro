@@ -165,6 +165,7 @@ public class ChatController{
 
             chatUsersList.setItems(listItems);
             messageTextField.setDisable(true);
+            doTrain.setDisable(true);
             sendButton.setDisable(true);
             this.Username.getStyleClass().add("username");
             messageDisplay.setContent(chatHolder);
@@ -347,10 +348,12 @@ public class ChatController{
             if(hashMapOperator.get(userID).getChatHolder().isDisabled()) {
                 sendButton.setDisable(true);
                 messageTextField.setDisable(true);
+                doTrain.setDisable(true);
             }
             else {
                 sendButton.setDisable(false);
                 messageTextField.setDisable(false);
+                doTrain.setDisable(false);
             }
 
 
@@ -409,10 +412,13 @@ public class ChatController{
             if(hashMapOperator.get(userID).getChatHolder().isDisabled()) {
                 sendButton.setDisable(true);
                 messageTextField.setDisable(true);
+                doTrain.setDisable(true);
+
             }
             else {
                 sendButton.setDisable(false);
                 messageTextField.setDisable(false);
+                doTrain.setDisable(false);
             }
 
 //            try {
@@ -483,6 +489,7 @@ public class ChatController{
             hashMapOperator.get(userID).getChatHolder().setDisable(true);
             sendButton.setDisable(true);
             messageTextField.setDisable(true);
+            doTrain.setDisable(true);
             useritem.setDisable(true);
 
 //            if(index>0) {
@@ -538,6 +545,7 @@ public class ChatController{
             hashMapOperator.get(userID).getChatHolder().setDisable(true);
             sendButton.setDisable(true);
             messageTextField.setDisable(true);
+            doTrain.setDisable(true);
             useritem.setDisable(true);
             Thread.sleep(50);
             Platform.runLater(() -> messageDisplay.setVvalue(messageDisplay.getVmax()));
@@ -853,6 +861,10 @@ public class ChatController{
 
     public void setNetworkHandler(NetworkDownHandler networkHandler) {
         this.networkHandler = networkHandler;
+    }
+
+    public CheckBox getDoTrain() {
+        return doTrain;
     }
 
     public ScrollPane getMessageDisplay() {
