@@ -327,9 +327,7 @@ public class OperatorController implements MessageListener {
                     if(!chatMessagess.contains(chatMessage)) {
                         String  username = bindOperator.getHistoryController().writeHistory(chatMessage.getTextMessage(), bindOperator, false);
                         bindOperator.setClientName(username);
-                        SeperatorLine seperatorLine = new SeperatorLine(bindOperator,0);            // uncomment
-                     //   bindOperator.getChatHolder().getChildren().clear();  // uncomment
-                        bindOperator.getChatHolder().add(seperatorLine.getSeperator(),0,0); // uncomment
+
                         System.out.println("client Name set:  "+ username);
                         chatMessage =null;
 
@@ -366,9 +364,28 @@ public class OperatorController implements MessageListener {
                         //Image botImage= new Image(getClass().getResourceAsStream("robotic.png"));
 
                         BindOperator bindOperator = controller.getHashMapOperator().get(chatMessage.getProducerID());
-                        String  username = null;
+
+
+
                         try {
-                            username = bindOperator.getHistoryController().writeHistory(chatMessage.getTextMessage(), bindOperator, true);
+                           final String username = bindOperator.getHistoryController().writeHistory(chatMessage.getTextMessage(), bindOperator, true);
+
+                            if(username!=null) {
+                                bindOperator.setClientName(username);
+
+                                int index = controller.getMessageProducerID().indexOf(chatMessage.getProducerID());
+                                UserItem userItem = controller.getChatUsersList().getItems().get(index);
+                                userItem.startBlink();
+                                userItem.getUser().setUserName(username);
+                                System.out.println(controller.getChatUsersList().getSelectionModel().isSelected(index));
+                                if( controller.getChatUsersList().getSelectionModel().isSelected(index)) {
+                                    System.out.println("client Name set:  "+ username);
+                                    Platform.runLater(() -> controller.Username.setText(username));
+
+                                }
+
+                                userItem.getThumbUserName().setText(username);
+                            }
                             int trakcer = bindOperator.getHistoryController().getTracker();
 
                             SeperatorLine seperatorLine = new SeperatorLine(bindOperator,trakcer);            // uncomment
@@ -383,7 +400,8 @@ public class OperatorController implements MessageListener {
                         } catch (ParseException e) {
                             e.printStackTrace();
                         }
-                        bindOperator.setClientName(username);
+
+
 
 
                         //    bindOperator.getLatestHistoryMessages().clear();
@@ -415,7 +433,7 @@ public class OperatorController implements MessageListener {
 //
 //                        }
 
-                        System.out.println("client Name set:  "+ username);
+
                         //count = count +count2;
                         //operatorController.setMessageCounter(count);
                     }
@@ -832,6 +850,10 @@ public class OperatorController implements MessageListener {
                // bindOperator.setHistoryMessages(historyMessages);
               //  bindOperator.setOldchatHolder(oldhistory);
                 messages.close();
+
+                SeperatorLine seperatorLine = new SeperatorLine(bindOperator,0);            // uncomment
+                //   bindOperator.getChatHolder().getChildren().clear();  // uncomment
+                bindOperator.getChatHolder().add(seperatorLine.getSeperator(),0,0); // uncomment
 
             }
 

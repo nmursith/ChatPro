@@ -140,10 +140,6 @@ public class UserItem extends GridPane implements   Runnable, EventHandler<Mouse
         blink = new Thread(this, user.getUserName());
         blink.start ();
 
-
-
-
-
     }
 
 

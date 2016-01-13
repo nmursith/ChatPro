@@ -103,7 +103,7 @@ public class SeparatorController {
                 String defaultOperator = ConfigurationController.readConfig().getOperator();
                 Image botImage =new Image(getClass().getResourceAsStream("robotic.png"));
 
-                if(root==null) {
+                if(root==null ) {
                     if(tracker ==0)
                         tracker = 1;
                     root = bindOperator.getChatHolder().getChildren().get(tracker-1);//bindOperator.getChatHolder().getChildren().get(0);
