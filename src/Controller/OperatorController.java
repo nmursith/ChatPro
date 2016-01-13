@@ -327,8 +327,10 @@ public class OperatorController implements MessageListener {
                     if(!chatMessagess.contains(chatMessage)) {
                         String  username = bindOperator.getHistoryController().writeHistory(chatMessage.getTextMessage(), bindOperator, false);
                         bindOperator.setClientName(username);
+                        SeperatorLine seperatorLine = new SeperatorLine(bindOperator,0);            // uncomment
+                     //   bindOperator.getChatHolder().getChildren().clear();  // uncomment
+                        bindOperator.getChatHolder().add(seperatorLine.getSeperator(),0,0); // uncomment
                         System.out.println("client Name set:  "+ username);
-
                         chatMessage =null;
 
                         //count = count +count2;
@@ -361,18 +363,29 @@ public class OperatorController implements MessageListener {
 
 
                     if(chatMessage!=null && !chatMessagess.contains(chatMessage)) {
-                        Image botImage= new Image(getClass().getResourceAsStream("robotic.png"));
+                        //Image botImage= new Image(getClass().getResourceAsStream("robotic.png"));
 
                         BindOperator bindOperator = controller.getHashMapOperator().get(chatMessage.getProducerID());
                         String  username = null;
                         try {
                             username = bindOperator.getHistoryController().writeHistory(chatMessage.getTextMessage(), bindOperator, true);
+                            int trakcer = bindOperator.getHistoryController().getTracker();
+
+                            SeperatorLine seperatorLine = new SeperatorLine(bindOperator,trakcer);            // uncomment
+                            Platform.runLater(() -> {
+                                //bindOperator.getChatHolder().addRow(trakcer, seperatorLine.getSeperator()); // uncomment
+                                bindOperator.getChatHolder().add(seperatorLine.getSeperator(),0,trakcer); // uncomment
+                            });
+
+
+
+
                         } catch (ParseException e) {
                             e.printStackTrace();
                         }
                         bindOperator.setClientName(username);
 
-                        ArrayList<HistoryMessage> historyMessages = bindOperator.getLatestHistoryMessages();
+
                         //    bindOperator.getLatestHistoryMessages().clear();
                         //System.out.println(bindOperator.getLatestHistoryMessages().size());
 
@@ -755,18 +768,15 @@ public class OperatorController implements MessageListener {
     private int loadHistory(BindOperator bindOperator) throws IOException {
 
         int count = 0;
-        SeperatorLine seperatorLine = new SeperatorLine(bindOperator);            // uncomment
-        bindOperator.getChatHolder().getChildren().clear();  // uncomment
-        bindOperator.getChatHolder().add(seperatorLine.getSeperator(),0,0); // uncomment
+
 
         CsvReader messages = bindOperator.getHistoryController().readHistory();
         if(messages != null){
 
-
             try {
                 messages.readHeaders();
 
-                GridPane oldhistory = bindOperator.getOldchatHolder();//controller.getGridPane();
+                //GridPane oldhistory = bindOperator.getOldchatHolder();//controller.getGridPane();
                 ArrayList<HistoryMessage> historyMessages = bindOperator.getHistoryMessages();
                 while (messages.readRecord()) {
                     String ID = messages.get("id");
@@ -1003,8 +1013,9 @@ public class OperatorController implements MessageListener {
                         System.out.println("producerID:     "+producerID);
                         OperatorController operatorController = new OperatorController(producerID, "chat." + producerID, controller);
                         int count =   controller.getHashMapOperator().get(producerID).getOperatorController().getMessageCounter() -1;
-
+                        int idtracker= controller.getHashMapOperator().get(producerID).getOperatorController().getIDtracker() -1;
                         operatorController.setMessageCounter(count);
+                        operatorController.setIDtracker(idtracker);
 //                        ChatMessage chat = new ChatMessage();
 //                        chat.setTextMessage("sdfsdfssdgs");
                       //  operatorController.sendMessage(chat, operatorController);

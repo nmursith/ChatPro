@@ -22,6 +22,7 @@ import java.util.ArrayList;
 
 public class HistoryController {
     private String fileName;
+    private int tracker = 0;
     public  static void main(String [] args){
 //        HistoryController historyController = new HistoryController("users");
 ////  //      historyController.writehistroty();
@@ -74,8 +75,6 @@ public class HistoryController {
 
             csvOutput.endRecord();
 
-
-
             csvOutput.close();
         } catch (IOException e) {
             e.printStackTrace();
@@ -86,7 +85,9 @@ public class HistoryController {
         String userName="";
         OperatorController operatorController = bindOperator.getOperatorController();
         ArrayList<HistoryMessage> historyMessages = bindOperator.getHistoryMessages();
-        ArrayList<HistoryMessage> latestHistoryMessages= bindOperator.getLatestHistoryMessages();
+        int tracker = operatorController.getIDtracker();
+        setTracker(tracker);
+
         try {
 
             String history="{"+botHistory+"}";
@@ -120,6 +121,10 @@ public class HistoryController {
 
 
                 for (int i=0; i<msg.size(); i++){
+
+                    if(i==0 && isLatestHistory)
+                        continue;
+
                     JSONObject obj = (JSONObject) msg.get(i);
                     //variableList.add(new Variable((String) obj.get("ID"), (String) obj.get("name")));
               //      System.out.println(obj);
@@ -131,11 +136,11 @@ public class HistoryController {
                     String time = (String)obj.get("time");
 
                     if(!from.equals(Constant.BOT_TAG)) {
-                  //      System.out.println("FROM:   "+from);
+
                         userName = from;
                     }
 
-                        if(i<(msg.size()-2)){
+                        if(i<(msg.size()-2) ){
                             int ID = operatorController.getMessageCounter();
                             csvOutput.write(ID + "");
                             csvOutput.write(from);
@@ -145,16 +150,12 @@ public class HistoryController {
 
                             csvOutput.endRecord();
                             //if(historyMessages!=null)
-                            if(!isLatestHistory) {
-                                historyMessages.add(new HistoryMessage(ID + "", from, messg, time));
-                            }
-                            else{
-                                int tracker = operatorController.getIDtracker();
-                                latestHistoryMessages.add(new HistoryMessage(tracker + "", from, messg, time));
-                            }
-
+                            historyMessages.add(new HistoryMessage(i + "", from, messg, time));
                         }
-
+                        else {
+                            bindOperator.setHistoryMessages(historyMessages);
+                            break;
+                        }
 
 
                 }
@@ -173,6 +174,14 @@ public class HistoryController {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public int getTracker() {
+        return tracker;
+    }
+
+    public void setTracker(int tracker) {
+        this.tracker = tracker;
     }
 
     public CsvReader readHistory(){

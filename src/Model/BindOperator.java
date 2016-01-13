@@ -12,13 +12,13 @@ import java.util.ArrayList;
  */
 public class BindOperator {
 
-    private  OperatorController operatorController;
-    private HistoryController historyController;
-    private GridPane chatHolder;
-    private GridPane oldchatHolder;
+    private volatile OperatorController operatorController;
+    private volatile HistoryController historyController;
+    private volatile GridPane chatHolder;
+
     private String typedMessage;
-    private ArrayList<HistoryMessage> historyMessages;
-    private ArrayList<HistoryMessage> latestHistoryMessages;
+    private volatile ArrayList<HistoryMessage> historyMessages;
+
     private String clientName;
 
     public BindOperator(OperatorController operatorController, GridPane gridPane){
@@ -26,9 +26,7 @@ public class BindOperator {
         this.chatHolder = gridPane;
         this.historyController = new HistoryController(operatorController.getSubscriptionName());
         this.historyMessages = new ArrayList<>();
-        this.latestHistoryMessages = new ArrayList<>();
-        this.oldchatHolder = operatorController.getGridPane();
-        this.oldchatHolder.setPrefHeight(50);
+
 
     }
 
@@ -53,9 +51,7 @@ public class BindOperator {
         this.chatHolder = chatHolder;
     }
 
-    public GridPane getOldchatHolder() {
-        return oldchatHolder;
-    }
+
 
     public ArrayList<HistoryMessage> getHistoryMessages() {
         return historyMessages;
@@ -65,9 +61,6 @@ public class BindOperator {
         this.historyMessages = historyMessages;
     }
 
-    public void setOldchatHolder(GridPane oldchatHolder) {
-        this.oldchatHolder = oldchatHolder;
-    }
 
     public String getTypedMessage() {
         return typedMessage;
@@ -85,11 +78,5 @@ public class BindOperator {
         this.clientName = clientName;
     }
 
-    public ArrayList<HistoryMessage> getLatestHistoryMessages() {
-        return latestHistoryMessages;
-    }
 
-    public void setLatestHistoryMessages(ArrayList<HistoryMessage> latestHistoryMessages) {
-        this.latestHistoryMessages = latestHistoryMessages;
-    }
 }
