@@ -321,8 +321,7 @@ public class OperatorController implements MessageListener {
 
                 if(controller!=null){
 
-                    int count  = loadHistory(controller.getHashMapOperator().get(producerID));
-                    operatorController.setMessageCounter(count);        //starting
+
 
                     if(!chatMessagess.contains(chatMessage)) {
                         String  username = bindOperator.getHistoryController().writeHistory(chatMessage.getTextMessage(), bindOperator, false);
@@ -330,11 +329,12 @@ public class OperatorController implements MessageListener {
 
                         System.out.println("client Name set:  "+ username);
                         chatMessage =null;
-
                         //count = count +count2;
                         //operatorController.setMessageCounter(count);
                   }
 
+                    int count  = loadHistory(controller.getHashMapOperator().get(producerID));
+                    operatorController.setMessageCounter(count);        //starting
 
                     operatorController.setIDtracker(1);
                 }
@@ -786,9 +786,8 @@ public class OperatorController implements MessageListener {
     private int loadHistory(BindOperator bindOperator) throws IOException {
 
         int count = 0;
-
-
         CsvReader messages = bindOperator.getHistoryController().readHistory();
+        String userName = null;
         if(messages != null){
 
             try {
@@ -802,6 +801,11 @@ public class OperatorController implements MessageListener {
                     String message = messages.get("message");
                     String time = messages.get("time");
 
+                    if(!from.equals(Constant.BOT_TAG) && !from.equals(Constant.operatorID)&& userName==null ) {
+                        System.out.println("setting client from History: "+ from);
+                        userName = from;
+                        bindOperator.setClientName(userName);
+                    }
                     historyMessages.add(new HistoryMessage(ID,from, message,time));
 
 //                    int id = Integer.parseInt(ID);
@@ -851,6 +855,7 @@ public class OperatorController implements MessageListener {
               //  bindOperator.setOldchatHolder(oldhistory);
                 messages.close();
 
+                bindOperator.setHistoryMessages(historyMessages);
                 SeperatorLine seperatorLine = new SeperatorLine(bindOperator,0);            // uncomment
                 //   bindOperator.getChatHolder().getChildren().clear();  // uncomment
                 bindOperator.getChatHolder().add(seperatorLine.getSeperator(),0,0); // uncomment

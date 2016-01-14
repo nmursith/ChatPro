@@ -10,7 +10,9 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Created by mmursith on 12/19/2015.
@@ -19,6 +21,7 @@ public class SeparatorController {
     public Button historyButton;
     public Label middle_label;
     public ImageView historyButton_view;
+    public Label time_label;
     private boolean flag = false;
     private boolean isAlreadyShown =false;
     private BindOperator bindOperator;
@@ -92,108 +95,133 @@ public class SeparatorController {
 
 
 
+
     public void showHistory(ActionEvent actionEvent) {
-        System.out.println(this+"   "+ isAlreadyShown +"  " + historyMessages.size());
-        if(!flag){
-            flag = true;
+        //System.out.println(this+"   "+ isAlreadyShown +"  " + historyMessages.size());
 
-            if(!isAlreadyShown){
-                isAlreadyShown = true;
+        if(historyMessages.isEmpty()){
 
-                String defaultOperator = ConfigurationController.readConfig().getOperator();
-                Image botImage =new Image(getClass().getResourceAsStream("robotic.png"));
+            bindOperator.getChatHolder().getChildren().remove(getRoot());
+        }
+        else {
 
-                if(root==null ) {
-                    if(tracker ==0)
-                        tracker = 1;
-                    root = bindOperator.getChatHolder().getChildren().get(tracker-1);//bindOperator.getChatHolder().getChildren().get(0);
-                }
-                //bindOperator.getChatHolder().addRow(1,bindOperator.getChatHolder().getChildren().get(0));//+++++++++++++++++++++
-                if(oldhistory==null) {
-                    oldhistory =bindOperator.getOperatorController().getGridPane();
-                    oldhistory.setPrefHeight(50);
-                }
-                //oldhistory.getChildren().clear();
+            if (!flag) {
+                flag = true;
 
-                if(historyMessages!=null) {
-//            for (Node node : bindOperator.getChatHolder().getChildren()) {
-//                //System.out.print("index:    "+ GridPane.getRowIndex(node)+"     ");
-//                GridPane.setRowIndex(node, GridPane.getRowIndex(node)+1);
-//                //System.out.println(GridPane.getRowIndex(node));
-//            }
-                    for (HistoryMessage history: historyMessages) {
+                if (!isAlreadyShown) {
+                    isAlreadyShown = true;
 
-                        try {
-                            id = Integer.parseInt(history.getID());
-                            //         System.out.println("ID:  "+ id);
+                    String defaultOperator = ConfigurationController.readConfig().getOperator();
+                    Image botImage = new Image(getClass().getResourceAsStream("robotic.png"));
 
-                            if (history.getFrom().equals(Constant.operatorhistoryID)) {
-                                OperatorBubble bubble = new OperatorBubble(defaultOperator, history.getMessage(), history.getTime());
-                                //    GridPane.setHalignment(bubble.getFromBubble(), HPos.RIGHT);
-                                oldhistory.addRow(id, bubble.getRoot());
-                                // bindOperator.getChatHolder().addRow(id, bubble.getRoot());
+                    if (root == null) {
+                        if (tracker == 0)
+                            tracker = 1;
+                        root = getRoot();//bindOperator.getChatHolder().getChildren().get(tracker - 1);//bindOperator.getChatHolder().getChildren().get(0);
+                    }
+                    //bindOperator.getChatHolder().addRow(1,bindOperator.getChatHolder().getChildren().get(0));//+++++++++++++++++++++
+                    if (oldhistory == null) {
+                        oldhistory = bindOperator.getOperatorController().getGridPane();
+                        oldhistory.setPrefHeight(50);
+                    }
+                    //oldhistory.getChildren().clear();
+
+                    if (historyMessages != null) {
+                        //            for (Node node : bindOperator.getChatHolder().getChildren()) {
+                        //                //System.out.print("index:    "+ GridPane.getRowIndex(node)+"     ");
+                        //                GridPane.setRowIndex(node, GridPane.getRowIndex(node)+1);
+                        //                //System.out.println(GridPane.getRowIndex(node));
+                        //            }
+                        for (HistoryMessage history : historyMessages) {
+
+                            try {
+                                id = Integer.parseInt(history.getID());
+                                //         System.out.println("ID:  "+ id);
+
+                                if (history.getFrom().equals(Constant.operatorhistoryID)) {
+                                    OperatorBubble bubble = new OperatorBubble(defaultOperator, history.getMessage(), history.getTime());
+                                    //    GridPane.setHalignment(bubble.getFromBubble(), HPos.RIGHT);
+                                    oldhistory.add(bubble.getRoot(), 0, id);
+                                    // bindOperator.getChatHolder().addRow(id, bubble.getRoot());
 
 
-                            } else if (history.getFrom().equalsIgnoreCase(Constant.BOT_TAG)) {
-                                OperatorBubble bubble = new OperatorBubble(Constant.BOT_TAG, history.getMessage(), history.getTime());
-                                bubble.setImage(botImage);
-                                //    GridPane.setHalignment(bubble.getFromBubble(), HPos.RIGHT);
-                                oldhistory.addRow(id, bubble.getRoot());
-                            } else {
-                                UserBubble bubble = new UserBubble(history.getFrom(), history.getMessage(), history.getTime());
-                                //         GridPane.setHalignment(bubble.getToBubble(), HPos.LEFT);
-                                oldhistory.addRow(id, bubble.getRoot());
-                                //    bindOperator.getChatHolder().addRow(id, bubble.getRoot());
+                                } else if (history.getFrom().equalsIgnoreCase(Constant.BOT_TAG)) {
+                                    OperatorBubble bubble = new OperatorBubble(Constant.BOT_TAG, history.getMessage(), history.getTime());
+                                    bubble.setImage(botImage);
+                                    //    GridPane.setHalignment(bubble.getFromBubble(), HPos.RIGHT);
+                                    oldhistory.add(bubble.getRoot(), 0, id);
+                                } else {
+                                    UserBubble bubble = new UserBubble(history.getFrom(), history.getMessage(), history.getTime());
+                                    //         GridPane.setHalignment(bubble.getToBubble(), HPos.LEFT);
+                                    oldhistory.add(bubble.getRoot(), 0, id);
+                                    //    bindOperator.getChatHolder().addRow(id, bubble.getRoot());
+                                }
+
+                            } catch (IOException e) {
+                                System.out.println("Problem in loading history");
                             }
 
                         }
-                        catch (IOException e) {
-                            System.out.println("Problem in loading history");
-                        }
 
                     }
-
                 }
-            }
 
-            historyButton_view.setImage(showImage);
-            middle_label.setText(" Hide History");
+                historyButton_view.setImage(showImage);
+                middle_label.setText(" Hide History on ");
 
-            System.out.println(bindOperator.getChatHolder().getChildren().remove(root));
+                System.out.println(bindOperator.getChatHolder().getChildren().remove(root));
 
-            if(bindOperator.getChatHolder().getChildren().contains(oldhistory))
+                if (bindOperator.getChatHolder().getChildren().contains(oldhistory))
+                    bindOperator.getChatHolder().getChildren().remove(oldhistory);
+
+                bindOperator.getChatHolder().add(oldhistory, 0, tracker);
+
+                if (!oldhistory.getChildren().contains(root))
+                    oldhistory.addRow(id + 1, root);
+                System.out.println("show history   " + id);
+            } else {
+
+                historyButton_view.setImage(hideImage);
+                System.out.println("HIDE :PPPPPPPPPPPPPPPPPPPPPPP");
+                // bindOperator.getOldchatHolder().getChildren().clear();
                 bindOperator.getChatHolder().getChildren().remove(oldhistory);
 
-            bindOperator.getChatHolder().add(oldhistory,0,tracker);
+                flag = false;
+                middle_label.setText("Show History on ");
+                // bindOperator.getChatHolder().getChildren().remove(0);
+                oldhistory.getChildren().remove(root);
+                bindOperator.getChatHolder().add(root, 0, tracker);//.addRow(0, root);
 
-            if(!oldhistory.getChildren().contains(root))
-                oldhistory.addRow(id+1,root);
-            System.out.println("show history   "+ id);
-        }
-        else{
-
-            historyButton_view.setImage(hideImage);
-            System.out.println("HIDE :PPPPPPPPPPPPPPPPPPPPPPP");
-           // bindOperator.getOldchatHolder().getChildren().clear();
-            bindOperator.getChatHolder().getChildren().remove(oldhistory);
-
-            flag = false;
-            middle_label.setText(" Show History");
-            // bindOperator.getChatHolder().getChildren().remove(0);
-            oldhistory.getChildren().remove(root);
-            bindOperator.getChatHolder().add(root,0,tracker);//.addRow(0, root);
+            }
 
         }
-
-
     }
 
+    public  void setTime(){
+        Date dNow = new Date( );
+        SimpleDateFormat ft = new SimpleDateFormat ("E yyyy/MM/dd  hh:mm a ");
+        String time = ft.format(dNow);
+        time_label.setText(time);
+
+    }
+    public  void setTime(String time){
+        time_label.setText(time);
+
+    }
     public ArrayList<HistoryMessage> getHistoryMessages() {
         return historyMessages;
     }
 
     public void setHistoryMessages(ArrayList<HistoryMessage> historyMessages) {
         this.historyMessages = historyMessages;
+    }
+
+    public Node getRoot() {
+        return root;
+    }
+
+    public void setRoot(Node root) {
+        this.root = root;
     }
 
     public int getTracker() {

@@ -84,7 +84,7 @@ public class ChatController{
         Image image_online = new Image(getClass().getResourceAsStream("online.png"));   // =========================== NEW
 
 
-        defaultOperator = ConfigurationController.readConfig().getOperator();// "operator1";
+        defaultOperator = Constant.configuration.getOperator();// "operator1";
         messageProducerID = new Vector<>();
 
         hashMapOperator = new HashMap<>();

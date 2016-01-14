@@ -82,7 +82,7 @@ public class HistoryController {
     }
 
     public String writeHistory(String botHistory, BindOperator bindOperator, boolean isLatestHistory ) throws ParseException {
-        String userName="";
+        String userName=null;
         OperatorController operatorController = bindOperator.getOperatorController();
         ArrayList<HistoryMessage> historyMessages = bindOperator.getHistoryMessages();
         int tracker = operatorController.getIDtracker();
@@ -135,7 +135,7 @@ public class HistoryController {
                 //    System.out.println(from+"      "+messg);
                     String time = (String)obj.get("time");
 
-                    if(!from.equals(Constant.BOT_TAG)) {
+                    if(!from.equals(Constant.BOT_TAG) && userName==null) {
 
                         userName = from;
                     }

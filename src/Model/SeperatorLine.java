@@ -23,11 +23,23 @@ public class SeperatorLine {
         separatorController.setBindOperator(bindOperator);
         separatorController.setTracker(tracker);
         separatorController.setHistoryMessages(bindOperator.getHistoryMessages());
+        separatorController.setRoot(root);
+
+        if(tracker ==0 && !bindOperator.getHistoryMessages().isEmpty()) {
+            String time = bindOperator.getHistoryMessages().get(bindOperator.getHistoryMessages().size()-1).getTime();
+            separatorController.setTime(time);
+        }
+        else {
+            separatorController.setTime();
+
+        }
+
         bindOperator.setHistoryMessages(new ArrayList<>());
 
     }
 
     public Parent getSeperator()  {
+
         System.out.println("sending sperto");
         return root;
     }
