@@ -22,6 +22,7 @@ import java.util.ArrayList;
 
 public class HistoryController {
     private String fileName;
+    private String directory;
     private int tracker = 0;
     public  static void main(String [] args){
 //        HistoryController historyController = new HistoryController("users");
@@ -35,6 +36,9 @@ public class HistoryController {
 //        }
     }
     public HistoryController(String fileName){
+        this.directory = "C:\\history\\";
+
+        System.out.println("Directory:   "+new File(directory).mkdir());
         this.fileName = "C:\\history\\"+fileName+".csv";
 
 
