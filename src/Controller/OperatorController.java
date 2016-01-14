@@ -378,19 +378,25 @@ public class OperatorController implements MessageListener {
                                 userItem.startBlink();
                                 userItem.getUser().setUserName(username);
                                 System.out.println(controller.getChatUsersList().getSelectionModel().isSelected(index));
+                                userItem.getThumbUserName().setText(username);
+
                                 if( controller.getChatUsersList().getSelectionModel().isSelected(index)) {
                                     System.out.println("client Name set:  "+ username);
-                                    Platform.runLater(() -> controller.Username.setText(username));
+                                    Platform.runLater(() -> {
+                                        controller.Username.setText(username);
+
+                                    });
 
                                 }
 
-                                userItem.getThumbUserName().setText(username);
+
                             }
                             int trakcer = bindOperator.getHistoryController().getTracker();
 
                             SeperatorLine seperatorLine = new SeperatorLine(bindOperator,trakcer);            // uncomment
                             Platform.runLater(() -> {
                                 //bindOperator.getChatHolder().addRow(trakcer, seperatorLine.getSeperator()); // uncomment
+
                                 bindOperator.getChatHolder().add(seperatorLine.getSeperator(),0,trakcer); // uncomment
                             });
 
@@ -1121,12 +1127,14 @@ public class OperatorController implements MessageListener {
                         isOnline = true;
                         operator.closeConnection();
 
+
                     }
                     else {
                         controller.statusImageView.setImage(image_offline);//===========================
                         isOnline = false;
-                    }
 
+                    }
+                    operator =null;
                 } catch (IllegalStateException e) {
                     isOnline = false;
                     try {

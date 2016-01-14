@@ -14,12 +14,31 @@ import javafx.stage.StageStyle;
 import javafx.stage.WindowEvent;
 
 import javax.jms.JMSException;
+import java.io.RandomAccessFile;
+import java.nio.channels.FileChannel;
 
 public class Main extends Application {
     /*one default variable needs to be added*/
     @Override
     public void start(Stage primaryStage) throws Exception{
       //  AquaFx.style();
+
+
+        try{
+            RandomAccessFile randomFile =
+                    new RandomAccessFile("dummy.json","rw");
+
+            FileChannel channel = randomFile.getChannel();
+
+            if(channel.tryLock() == null) {
+                System.out.println("Already Running...");
+
+                System.exit(1);
+            }
+        }catch( Exception e ) {
+            System.out.println(e.toString());
+        }
+
 
 
         //Parent root = FXMLLoader.load(getClass().getResource("Operator.fxml"));

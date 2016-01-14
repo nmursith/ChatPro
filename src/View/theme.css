@@ -295,3 +295,18 @@ scrollbar
      -fx-text-fill: gray;
  }
 
+/*
+For the "Train the Bot" check box
+*/
+.check-box .box {
+    -fx-background-color: transparent;
+    -fx-border-color: #9b9d9e;
+    -fx-border-width: 1.5px;
+    -fx-background-insets: 0 0 0 0, 0, 1, 2;
+    -fx-background-radius: 2, 2, 1, 1;
+    -fx-padding: 1px; /* 3 -- padding from the outside edge to the mark */
+}
+
+.check-box:selected .mark{
+    -fx-background-color: #00aff0;
+}
