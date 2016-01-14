@@ -1,3 +1,1 @@
-{"destination":"chat.*",
-  "topic":"chat.*",
-  "subscription":"Operator","operator":"Operator","URL":"tcp:\/\/cmterainsight:61616?trace=false&soTimeout=60000"}
+{"destination":"chat.*","topic":"chat.*","subscription":"Operator","operator":"Operator1","URL":"tcp:\/\/cmterainsight:61616?trace=false&soTimeout=60000"}

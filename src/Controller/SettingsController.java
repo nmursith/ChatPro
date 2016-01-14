@@ -283,6 +283,7 @@ public class SettingsController  implements ChangeListener{
                         chatController.statusImageView.setImage(image_offline);//===========================
                         chatController.setOnline(false);
                     }
+                    operator = null;
 
                 } catch (IllegalStateException e) {
                     chatController.setOnline(false);
@@ -322,13 +323,10 @@ public class SettingsController  implements ChangeListener{
                 if(!previousConfiguraion.equals(currentConfiguration) )
                 {
                     applyConfigurationButton.setDisable(true);
-                    try {
-                        chatController.getHashMapOperator().get(chatController.getDefaultOperator()).getOperatorController().closeConnection();
-                    } catch (JMSException e) {
-                        e.printStackTrace();
-                    }
+
                     BindOperator bindOperator = chatController.getHashMapOperator().get(chatController.getDefaultOperator());
                     OperatorController previous = bindOperator.getOperatorController();
+                    bindOperator.setOperatorController(null);
 
                     System.out.println("Message in que:         "+ previous.getChatMessagess().size());
 
@@ -342,7 +340,11 @@ public class SettingsController  implements ChangeListener{
                         operatorController = new OperatorController(currentConfiguration.getOperator(), currentConfiguration.getTopic(),chatController);
                         operatorController.createSession();
                         operatorController.startDefaultOperatorAction();
-
+                        try {
+                            previous.closeConnection();
+                        } catch (JMSException e) {
+                            e.printStackTrace();
+                        }
                         operatorController.setMessageCounter(previous.getMessageCounter());
 
                         operatorController.setMessageProduceID(previous.getMessageProduceID());

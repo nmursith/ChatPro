@@ -86,14 +86,14 @@ import java.io.*;
 
         } catch (IOException | ParseException e) {
             setConfiguration();
-      //      e.printStackTrace();
+            e.printStackTrace();
         }
         return configuration;
     }
 
     private static void setConfiguration(){
         configuration = new Configuration();
-        configuration.setOperator("operator1");
+        configuration.setOperator("Operator");
         configuration.setDestination("chat.*");
         configuration.setSubscription("chat.*");
         configuration.setTopic("chat.*");

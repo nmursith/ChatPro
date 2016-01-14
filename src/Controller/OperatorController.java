@@ -164,7 +164,7 @@ public class OperatorController implements MessageListener {
 
                    // System.out.println("opreato session :  "+controller.getHashMapOperator().get(defaultOperator).getOperatorController().getSesssion());
                     System.out.println("Message: "+ chatMessage.getTextMessage());
-                     TextMessage response =   operator.getSesssion().createTextMessage(); //controller.getHashMapOperator().get(controller.getDefaultOperator()).getOperatorController().getSesssion().createTextMessage();
+                    TextMessage response =   operator.getSesssion().createTextMessage(); //controller.getHashMapOperator().get(controller.getDefaultOperator()).getOperatorController().getSesssion().createTextMessage();
 
 
                     String myMessage = chatMessage.getTextMessage();
@@ -1008,7 +1008,7 @@ public class OperatorController implements MessageListener {
 //        String ID = Constant.getRandomString();
 
         public void run() {
-            super.run();
+            //super.run();
         //thread = Thread.currentThread();
         System.out.println("isOnline:    "+isOnline);
 
@@ -1037,7 +1037,7 @@ public class OperatorController implements MessageListener {
 //            }
 
 
-            if (isOnline) {
+            if (isOnline ) {
                 try {
                     for (int index = 0; index < controller.getListItems().size(); index++) {
 
@@ -1052,8 +1052,10 @@ public class OperatorController implements MessageListener {
 //                        ChatMessage chat = new ChatMessage();
 //                        chat.setTextMessage("sdfsdfssdgs");
                       //  operatorController.sendMessage(chat, operatorController);
+//                        controller.getHashMapOperator().get(producerID).getOperatorController().closeConnection();
                         controller.getHashMapOperator().get(producerID).setOperatorController(operatorController);
                     }
+
 
                     OperatorController operatorController = new OperatorController(OperatorController.defaultOperator, "chat.*", controller);
                     operatorController.createSession();
@@ -1061,7 +1063,9 @@ public class OperatorController implements MessageListener {
 
                     int count =   controller.getHashMapOperator().get(defaultOperator).getOperatorController().getMessageCounter();
                     operatorController.setMessageCounter(count);
+                    controller.getHashMapOperator().get(OperatorController.defaultOperator).setOperatorController(null);
                     controller.getHashMapOperator().get(OperatorController.defaultOperator).setOperatorController(operatorController);
+
                     setOperatorController(controller.getHashMapOperator().get(OperatorController.defaultOperator).getOperatorController());
 
                     //int selected = controller.getChatUsersList().getSelectionModel().getSelectedIndex();
@@ -1091,8 +1095,6 @@ public class OperatorController implements MessageListener {
 
             }
         }
-
-
 
         }
 
