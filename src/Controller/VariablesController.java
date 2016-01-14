@@ -53,8 +53,8 @@ public class  VariablesController {
         object.put("variables", list);
 
         try {
-            File file1 = new File(VariablesController.class.getResource("variables.json").getFile());
-            FileWriter file = new FileWriter(file1);
+            //File file1 = new File(VariablesController.class.getResource("variables.json").getFile());
+            FileWriter file = new FileWriter("variables.json");
             file.write(object.toJSONString());
             file.flush();
             file.close();
@@ -74,8 +74,8 @@ public class  VariablesController {
         try {
  //           Scanner scanner = new Scanner(new File("variables.json"));
 //
-            File file1 = new File(VariablesController.class.getResource("variables.json").getFile());
-            JSONObject jsonObject = (JSONObject) (new JSONParser().parse(new FileReader(file1)));
+            //File file1 = new File(VariablesController.class.getResource("variables.json").getFile());
+            JSONObject jsonObject = (JSONObject) (new JSONParser().parse(new FileReader("variables.json")));
 
             JSONArray msg = (JSONArray) jsonObject.get("variables");
 

@@ -5,10 +5,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 
 /**
  * Created by mmursith on 12/9/2015.
@@ -42,7 +39,7 @@ import java.io.IOException;
 
         try {
 
-            FileWriter file = new FileWriter("Controller/config.json");
+            FileWriter file = new FileWriter("config.json");
             file.write(obj.toJSONString());
             file.flush();
             file.close();
@@ -60,8 +57,8 @@ import java.io.IOException;
         JSONParser parser = new JSONParser();
 
         try {
-            File file = new File(ConfigurationController.class.getResource("config.json").getFile());
-            Object obj = parser.parse(new FileReader(file));
+            //File file = new File(ConfigurationController.class.getResource("config.json").getFile());
+            Object obj = parser.parse(new FileReader("config.json"));
             configuration = new Configuration();
             JSONObject jsonObject = (JSONObject) obj;
             String operator = (String) jsonObject.get("operator");
