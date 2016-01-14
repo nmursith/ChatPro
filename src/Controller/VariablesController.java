@@ -6,10 +6,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 
 /**
@@ -56,8 +53,8 @@ public class  VariablesController {
         object.put("variables", list);
 
         try {
-
-            FileWriter file = new FileWriter("variables.json");
+            File file1 = new File(VariablesController.class.getResource("variables.json").getFile());
+            FileWriter file = new FileWriter(file1);
             file.write(object.toJSONString());
             file.flush();
             file.close();
@@ -77,8 +74,8 @@ public class  VariablesController {
         try {
  //           Scanner scanner = new Scanner(new File("variables.json"));
 //
-
-            JSONObject jsonObject = (JSONObject) (new JSONParser().parse(new FileReader("variables.json")));
+            File file1 = new File(VariablesController.class.getResource("variables.json").getFile());
+            JSONObject jsonObject = (JSONObject) (new JSONParser().parse(new FileReader(file1)));
 
             JSONArray msg = (JSONArray) jsonObject.get("variables");
 

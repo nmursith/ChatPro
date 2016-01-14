@@ -14,6 +14,7 @@ import javafx.stage.StageStyle;
 import javafx.stage.WindowEvent;
 
 import javax.jms.JMSException;
+import java.io.File;
 import java.io.RandomAccessFile;
 import java.nio.channels.FileChannel;
 
@@ -25,8 +26,9 @@ public class Main extends Application {
 
 
         try{
+            File file = new File(getClass().getResource("dummy.json").getFile());
             RandomAccessFile randomFile =
-                    new RandomAccessFile("dummy.json","rw");
+                    new RandomAccessFile(file,"rw");
 
             FileChannel channel = randomFile.getChannel();
 
