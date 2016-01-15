@@ -111,7 +111,7 @@ public class OperatorController implements MessageListener {
                         try {
                             operatorController.getSesssion().createTextMessage();
                         }
-                        catch (NullPointerException | JMSException e){
+                        catch ( JMSException e){
 
                             System.out.println("Sleep Mode handling");
                             if(offlineNetworkDownHandler.isAlive()) {
@@ -124,6 +124,12 @@ public class OperatorController implements MessageListener {
                             offlineNetworkDownHandler = new OfflineNetworkDownHandler();
                             offlineNetworkDownHandler.start();
                             //e.printStackTrace();
+                        }
+                        catch (NullPointerException e){
+
+                            System.out.println("operator null");
+                            timer.cancel();
+
                         }
 
 

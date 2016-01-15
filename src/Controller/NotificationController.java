@@ -2,6 +2,7 @@ package Controller;
 
 
 import Model.UserItem;
+import com.sun.javafx.application.PlatformImpl;
 import javafx.animation.*;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
@@ -172,10 +173,11 @@ public class NotificationController {
         chatController =controller;
         setIndex(index);
         NotificationController.index = index;
-
+        PlatformImpl.setTaskbarApplication(false);
         stage.close();
-        stage.setTitle("Notification");
-        //stage.initStyle(StageStyle.UNDECORATED);
+     //   stage.setTitle("Notification");
+     //   stage.initStyle(StageStyle.UTILITY);
+
         StackPane root = new StackPane();
         root.setStyle("-fx-background-color: TRANSPARENT; -fx-border-color: #0B3861");
         Scene scene = new Scene(root, 300, 80, Color.valueOf("#0B3861"));
