@@ -56,7 +56,7 @@ public class Main extends Application {
         ChatController chatController = fxmlLoader.<ChatController>getController();
         System.out.println("ChatController Started");
 
-        chatController.setScene(scene, primaryStage);
+        chatController.setStage(primaryStage);
 
         primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
             @Override

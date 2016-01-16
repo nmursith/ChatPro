@@ -3,24 +3,9 @@
     <output-path>$PROJECT_DIR$/out/artifacts/ChatPro_jar</output-path>
     <root id="archive" name="ChatPro.jar">
       <element id="module-output" name="ChatPro" />
-      <element id="extracted-dir" path="$USER_HOME$/apache-activemq-5.12.1/lib/activemq-console-5.12.1.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$USER_HOME$/apache-activemq-5.12.1/lib/hawtbuf-1.11.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$USER_HOME$/apache-activemq-5.12.1/lib/activemq-broker-5.12.1.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$USER_HOME$/apache-activemq-5.12.1/lib/geronimo-jms_1.1_spec-1.1.1.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$USER_HOME$/apache-activemq-5.12.1/lib/slf4j-api-1.7.10.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$USER_HOME$/apache-activemq-5.12.1/lib/activemq-protobuf-1.1.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$USER_HOME$/apache-activemq-5.12.1/lib/activemq-web-5.12.1.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$USER_HOME$/apache-activemq-5.12.1/lib/slf4j-nop-1.7.13.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$PROJECT_DIR$/lib/json-simple-1.1.1.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$USER_HOME$/apache-activemq-5.12.1/lib/jcl-over-slf4j-1.7.10.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$PROJECT_DIR$/lib/javacsv.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$USER_HOME$/apache-activemq-5.12.1/lib/activemq-openwire-legacy-5.12.1.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$USER_HOME$/apache-activemq-5.12.1/lib/activemq-client-5.12.1.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$USER_HOME$/apache-activemq-5.12.1/lib/geronimo-jta_1.0.1B_spec-1.0.1.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$USER_HOME$/apache-activemq-5.12.1/lib/activemq-spring-5.12.1.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$USER_HOME$/apache-activemq-5.12.1/lib/activemq-jaas-5.12.1.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$USER_HOME$/apache-activemq-5.12.1/lib/activemq-kahadb-store-5.12.1.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$USER_HOME$/apache-activemq-5.12.1/lib/geronimo-j2ee-management_1.1_spec-1.0.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="C:/Program Files/Apache-activemq/activemq-all-5.12.1.jar" path-in-jar="/" />
     </root>
   </artifact>
 </component>

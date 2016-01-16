@@ -43,8 +43,8 @@ public class SettingsController  implements ChangeListener{
     @FXML private TextField operator;
     @FXML private TextField URL;
     ObservableList<Variable> data;
-     private TableView<Variable> tableVariables;
-
+    private TableView<Variable> tableVariables;
+    private Stage parentStage;
 
     private SettingsController settingController;
     private ChatController chatController;
@@ -72,11 +72,17 @@ public class SettingsController  implements ChangeListener{
 
 
 
-    public void showSettingsWindow() throws Exception {
+    public void showSettingsWindow(Stage parentStage) throws Exception {
       //  controller.getStage().toBack();
         System.out.println(settingsStage);
        // setting.start(settingsStage);
+
+//  System.out.println(settingsStage);
         settingsStage.show();
+        double x = parentStage.getX() + parentStage.getWidth() / 2 - settingsStage.getWidth() / 2;
+        double y = parentStage.getY() + parentStage.getHeight() / 2 - settingsStage.getHeight() / 2;
+        settingsStage.setX(x);
+        settingsStage.setY(y);
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
@@ -247,6 +253,13 @@ public class SettingsController  implements ChangeListener{
         settingsStage.close();
     }
 
+    public Stage getParentStage() {
+        return parentStage;
+    }
+
+    public void setParentStage(Stage parentStage) {
+        this.parentStage = parentStage;
+    }
 
     @Override
     public void changed(ObservableValue observable, Object oldValue, Object newValue) {

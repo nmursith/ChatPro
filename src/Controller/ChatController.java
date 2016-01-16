@@ -19,6 +19,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
@@ -58,7 +59,7 @@ public class ChatController{
 
     private final HashMap<String, BindOperator> hashMapOperator;
     private volatile  ChatController controller =null;
-    private Scene scene;
+
     private GridPane chatHolder;
     private volatile String previousID; // previous opertor message
 
@@ -726,7 +727,8 @@ public class ChatController{
     public void showSettings(Event event) {
 //        settingStage.show();
         try {
-            settingsController.showSettingsWindow();
+
+            settingsController.showSettingsWindow(stage);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -755,6 +757,9 @@ public class ChatController{
         System.out.println("show");
         //FlatterFX.style();
         settingStage.initStyle(StageStyle.UNDECORATED);
+        settingStage.initModality(Modality.APPLICATION_MODAL);
+        settingStage.initOwner(getStage());
+
         settingStage.setResizable(false);
     }
 
@@ -907,9 +912,7 @@ public class ChatController{
         this.previousID = previousID;
     }
 
-    public Scene getScene() {
-        return scene;
-    }
+
 
     public Stage getStage() {
         return stage;
@@ -923,10 +926,10 @@ public class ChatController{
         isOnline = online;
     }
 
-    public void setScene(Scene scene, Stage stage) {
+    public void setStage(Stage stage) {
        // System.out.println("setting scene");
       //  System.out.println(hashMapOperator);
-        this.scene = scene;
+
         this.stage = stage;
     }
 

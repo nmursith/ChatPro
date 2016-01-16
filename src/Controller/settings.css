@@ -91,19 +91,19 @@ color to red when activated
 }
 .tab:top
 {
--fx-background-color: -fx-tab-border-color, -fx-inner-border, -fx-body-color;
+-fx-background-color:  -fx-inner-border, -fx-body-color;
 }
 .tab:right
 {
--fx-background-color: -fx-tab-border-color, -fx-inner-border-bottomup, -fx-body-color-bottomup;
+-fx-background-color: -fx-inner-border-bottomup, -fx-body-color-bottomup;
 }
 .tab:bottom
 {
--fx-background-color: -fx-tab-border-color, -fx-inner-border-bottomup, -fx-body-color-bottomup;
+-fx-background-color:  -fx-inner-border-bottomup, -fx-body-color-bottomup;
 }
 .tab:left
 {
--fx-background-color: -fx-tab-border-color, -fx-inner-border, -fx-body-color;
+-fx-background-color:  -fx-inner-border, -fx-body-color;
 }
 .tab:hover
 {
@@ -178,7 +178,7 @@ color to red when activated
 /* CONTROL BUTTONS */
 .control-buttons-tab
 {
--fx-background-color: -fx-tab-border-color, -fx-inner-border, -fx-body-color;
+-fx-background-color:  -fx-inner-border, -fx-body-color;
 -fx-background-insets: 0, 1, 2;
 -fx-background-radius: 5 5 0 0, 4 4 0 0, 3 3 0 0;
 -fx-padding: 0.083333em 0.25em 0.083333em 0.25em; /* 1 3 1 3 */
@@ -210,26 +210,26 @@ color to red when activated
 }
 .tab-pane.floating *.tab-content-area
 {
--fx-background-color: -fx-tab-border-color, -fx-control-inner-background;
+-fx-background-color:  -fx-control-inner-background;
 -fx-background-insets: 0, 1;
 -fx-background-radius: 5, 4;
 }
 .tab-pane.floating *.tab
 {
--fx-background-color: -fx-tab-border-color, -fx-inner-border, -fx-body-color;
+-fx-background-color:  -fx-inner-border, -fx-body-color;
 -fx-background-insets: 0, 1, 2;
 -fx-background-radius: 5 5 0 0, 4 4 0 0, 3 3 0 0;
 }
 .tab-pane.floating *.tab:selected
 {
--fx-background-color: -fx-tab-border-color, -fx-control-inner-background;
+-fx-background-color:  -fx-control-inner-background;
 -fx-background-insets: 0 0 -1 0, 1 1 -1 1;
 -fx-background-radius: 5 5 0 0, 4 4 0 0;
 }
 /*.tab-pane:floating *.control-buttons-tab
 {
 -fx-padding: 0.083333em 0.25em 0.083333em 0.25em;
--fx-background-color: -fx-tab-border-color, -fx-inner-border, -fx-body-color;
+-fx-background-color:  -fx-inner-border, -fx-body-color;
 -fx-background-radius: 5 5 0 0, 4 4 0 0, 3 3 0 0;
 -fx-background-insets: 0, 1 1 0 1, 2 2 0 2;
 }*/
