@@ -22,6 +22,7 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import sun.security.jca.GetInstance;
 
 import javax.jms.IllegalStateException;
 import javax.jms.JMSException;
@@ -171,8 +172,8 @@ public class ChatController{
             this.Username.getStyleClass().add("username");
             messageDisplay.setContent(chatHolder);
             messageDisplay.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-
-
+            NotificationController.stage.initOwner(stage);
+            settingStage.initOwner(stage);
             addMenuItems();
             if(isOnline) {
                 hashMapOperator.put(defaultOperator, new BindOperator(operatorController, getGridPane()));
@@ -727,6 +728,8 @@ public class ChatController{
     public void showSettings(Event event) {
 //        settingStage.show();
         try {
+//            if(settingStage.getOwner()==null)
+//                    settingStage.initOwner(stage);
 
             settingsController.showSettingsWindow(stage);
         } catch (Exception e) {
@@ -756,9 +759,11 @@ public class ChatController{
 
         System.out.println("show");
         //FlatterFX.style();
+
         settingStage.initStyle(StageStyle.UNDECORATED);
+
         settingStage.initModality(Modality.APPLICATION_MODAL);
-        settingStage.initOwner(getStage());
+
 
         settingStage.setResizable(false);
     }
