@@ -40,7 +40,7 @@
                                         <Label prefHeight="76.0" prefWidth="165.0" style="-fx-font-weight: bold;" text="   Destination URL" GridPane.rowIndex="4" />
                                         <TextField fx:id="destination" editable="false" promptText="Please add the destination here. (Eg:  chat.* )" style="-fx-background-color: #E7F0F5;" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                                         <TextField fx:id="topic" promptText="Please add the topic here. (Eg:  chat.* )" style="-fx-background-color: #E7F0F5;" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                                        <TextField fx:id="subscription" promptText="Please add the Subscription name here" style="-fx-background-color: #E7F0F5;" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                        <TextField fx:id="subscription" editable="false" promptText="Please add the Subscription name here" style="-fx-background-color: #E7F0F5;" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                                         <TextField fx:id="operator" promptText="Please add the operator name here" style="-fx-background-color: #E7F0F5;" GridPane.columnIndex="1" />
                                         <TextField fx:id="URL" promptText="Please add the destination URL here" style="-fx-background-color: #E7F0F5;" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                                     </children>
