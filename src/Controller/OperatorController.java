@@ -312,7 +312,7 @@ public class OperatorController implements MessageListener {
 
 
                 GridPane chatHolder = controller.getGridPane();
-                OperatorController operatorController = new OperatorController(producerID, "chat."+producerID, controller);
+                OperatorController operatorController = new OperatorController(producerID, Constant.topicPrefix+producerID, controller);
 //                bindOperator.getChatHolder().addRow(0, SeperatorLine.getSeperator());//oldhistory);
 
 //                if(!producerID.equals(defaultOperator))
@@ -564,7 +564,7 @@ public class OperatorController implements MessageListener {
                         user.setuserId(tempName);
                         user.setUserName(username);
                         user.setSubscriptionName(tempName);
-                        user.setTopicName("chat." + tempName);
+                        user.setTopicName(Constant.topicPrefix+ tempName);
 
                         controller.getListItems().add(new UserItem(user,controller));
                   //      controller.getChatUsersList().setItems(controller.getListItems());
@@ -1050,7 +1050,7 @@ public class OperatorController implements MessageListener {
                         UserItem useritem = controller.getListItems().get(index);
                         String producerID =useritem.getUser().getSubscriptionName();
                         System.out.println("producerID:     "+producerID);
-                        OperatorController operatorController = new OperatorController(producerID, "chat." + producerID, controller);
+                        OperatorController operatorController = new OperatorController(producerID, Constant.topicPrefix + producerID, controller);
                         int count =   controller.getHashMapOperator().get(producerID).getOperatorController().getMessageCounter() -1;
                         int idtracker= controller.getHashMapOperator().get(producerID).getOperatorController().getIDtracker() -1;
                         operatorController.setMessageCounter(count);
@@ -1063,7 +1063,7 @@ public class OperatorController implements MessageListener {
                     }
 
 
-                    OperatorController operatorController = new OperatorController(OperatorController.defaultOperator, "chat.*", controller);
+                    OperatorController operatorController = new OperatorController(OperatorController.defaultOperator, Constant.configuration.getTopic(), controller);
                     operatorController.createSession();
                     operatorController.startDefaultOperatorAction();
 

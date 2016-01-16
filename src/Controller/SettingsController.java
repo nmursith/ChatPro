@@ -1,6 +1,7 @@
 package Controller;
 
 import Model.*;
+import com.sun.deploy.panel.TextFieldProperty;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -13,7 +14,10 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.image.Image;
+import javafx.scene.input.KeyEvent;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 import javax.jms.IllegalStateException;
 import javax.jms.JMSException;
@@ -22,11 +26,11 @@ import java.util.ArrayList;
 /**
  * Created by mmursith on 12/19/2015.
  */
-public class SettingsController  implements ChangeListener{
+public class SettingsController  implements ChangeListener, EventHandler<KeyEvent> {
 
     @FXML public Button cancelConfiguration;
     @FXML public Button okConfiguration;
-    @FXML public Button applyConfiguration;
+
     @FXML public Button cancelVariable;
     @FXML public Button okVariable;
 
@@ -45,7 +49,7 @@ public class SettingsController  implements ChangeListener{
     ObservableList<Variable> data;
     private TableView<Variable> tableVariables;
     private Stage parentStage;
-
+    private boolean isError;
     private SettingsController settingController;
     private ChatController chatController;
     private Stage settingsStage;
@@ -55,7 +59,11 @@ public class SettingsController  implements ChangeListener{
 
     }
     public void setListeners(){
+        isError = false;
         tableVariables = new TableView<>();
+
+        topic.setOnKeyReleased(this);
+        operator.setOnKeyReleased((this));
         topic.textProperty().addListener(this);
         topic.textProperty().addListener(this);
         destination.textProperty().addListener(this);
@@ -173,10 +181,15 @@ public class SettingsController  implements ChangeListener{
 
     public void setOkConfiguration(ActionEvent actionEvent) {
         //applyConfiguration();
-        if(!okConfiguration.isDisabled())
+
+
+        if(!applyConfigurationButton.isDisable() )
             apply();
-        settingsStage.hide();
-        settingsStage.close();
+
+        if(!isError) {
+            settingsStage.hide();
+            settingsStage.close();
+        }
     }
 
     public void applyConfiguration(ActionEvent actionEvent) {
@@ -185,9 +198,17 @@ public class SettingsController  implements ChangeListener{
 
     }
     public void apply()  {
-        NetworkDownHandler networkDownHandler = new NetworkDownHandler();
-        networkDownHandler.start();
-
+        if(isError) {
+            Alert alert = new Alert(Alert.AlertType.ERROR,"Topic Name Error.\nEg: chat.*");
+            alert.initModality(Modality.APPLICATION_MODAL);
+            alert.initOwner(settingsStage);
+            alert.initStyle(StageStyle.UNDECORATED);
+            alert.show();
+        }
+        {
+            NetworkDownHandler networkDownHandler = new NetworkDownHandler();
+            networkDownHandler.start();
+        }
     }
     public void setOkVariable(ActionEvent actionEvent) {
         if(!okVariable.isDisabled())
@@ -263,8 +284,48 @@ public class SettingsController  implements ChangeListener{
 
     @Override
     public void changed(ObservableValue observable, Object oldValue, Object newValue) {
+          applyConfigurationButton.setDisable(false);
+    }
 
-        applyConfigurationButton.setDisable(false);
+    @Override
+    public void handle(KeyEvent event) {
+
+        TextField textField = (TextField)event.getTarget();
+        String text = textField.getText();
+        String ID = textField.getId();
+        String operator= "."+subscription.getText();
+        String topicText = topic.getText();
+        topicText = topicText.substring(0,topicText.length()-1);
+
+        if(ID.equalsIgnoreCase("operator")) {
+                subscription.setText(text);
+                destination.setText(topicText+text);
+            }
+        else if(ID.equalsIgnoreCase("topic")){
+            String prefix = text.substring(0,text.length()-2);
+            String suffix = text.substring(text.length()-2,text.length());
+         //   System.out.println(suffix);
+            destination.setText(prefix + operator);
+
+
+            if(text.substring(text.length()-2,text.length()).equals(".*")) {
+                isError = false;
+                topic.setStyle("-fx-text-fill: black;");
+                destination.setStyle("-fx-text-fill: black;");
+
+
+            }
+            else {
+                isError = true;
+                topic.setStyle("-fx-text-fill: red;");
+                destination.setStyle("-fx-text-fill: red;");
+
+            }
+
+        }
+
+
+
     }
 
 
@@ -320,7 +381,7 @@ public class SettingsController  implements ChangeListener{
                 }
             }
 
-            if(chatController.isOnline()){
+            if(chatController.isOnline() && !isError){
 
                 System.out.println("Working");
                 Configuration previousConfiguraion = ConfigurationController.readConfig();
@@ -336,7 +397,9 @@ public class SettingsController  implements ChangeListener{
                 if(!previousConfiguraion.equals(currentConfiguration) )
                 {
                     applyConfigurationButton.setDisable(true);
-
+                    String prefix = currentConfiguration.getTopic().replace("*","");
+                    Constant.topicPrefix = prefix;
+                    Constant.configuration = currentConfiguration;
                     BindOperator bindOperator = chatController.getHashMapOperator().get(chatController.getDefaultOperator());
                     OperatorController previous = bindOperator.getOperatorController();
                     bindOperator.setOperatorController(null);
@@ -348,6 +411,8 @@ public class SettingsController  implements ChangeListener{
 
                     chatController.getHashMapOperator().remove(chatController.getDefaultOperator());
                     chatController.setConfig(currentConfiguration);
+
+
                     OperatorController operatorController = null;
                     try {
                         operatorController = new OperatorController(currentConfiguration.getOperator(), currentConfiguration.getTopic(),chatController);
@@ -394,10 +459,13 @@ public class SettingsController  implements ChangeListener{
 //                System.out.println("new" + chatController.getHashMapOperator().get(chatController.getDefaultOperator()).getOperatorController());
 
                 }
-
+                stopThread();
             }
 
-            stopThread();
+
+
+
+
         }
 
         public  void stopThread(){

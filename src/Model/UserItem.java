@@ -152,6 +152,7 @@ public class UserItem extends GridPane implements   Runnable, EventHandler<Mouse
 
         for (int i = 0; i < 3; i++) {
             this.thumbUserName.setStyle("-fx-text-fill:#ffa500; -fx-font-size:12px; -fx-font-weight:bold;");
+
             try {
                 blink.sleep(250);
             } catch (InterruptedException e) {
