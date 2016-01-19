@@ -22,7 +22,6 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import sun.security.jca.GetInstance;
 
 import javax.jms.IllegalStateException;
 import javax.jms.JMSException;
@@ -943,10 +942,8 @@ public class ChatController{
      class NetworkDownHandler extends Thread{
         Image image_offline = new Image(getClass().getResourceAsStream("offline.png")); //===========================
         Image image_online = new Image(getClass().getResourceAsStream("online.png"));   //===========================
-
-
-
         Thread thread = this;
+
         public void run() {
             thread = Thread.currentThread();
             System.out.println(isOnline);
@@ -969,11 +966,16 @@ public class ChatController{
                             statusImageView.setImage(image_offline);//===========================
                             isOnline = false;
                         }
+                        try {
+                            sleep(200);
+                        } catch (InterruptedException e1) {
+                            e1.printStackTrace();
+                        }
 
                     } catch (IllegalStateException e) {
                         isOnline = false;
                         try {
-                            sleep(100);
+                            sleep(200);
                         } catch (InterruptedException e1) {
                             e1.printStackTrace();
                         }
@@ -983,7 +985,7 @@ public class ChatController{
                         isOnline = false;
                         try {
 
-                            sleep(100);
+                            sleep(200);
                         } catch (InterruptedException e1) {
                             e1.printStackTrace();
                         }

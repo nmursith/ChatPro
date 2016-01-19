@@ -14,7 +14,7 @@ public class Operator{
     private volatile MessageProducer messageProducer;
     private volatile String topicName;
     private volatile Topic topic;
-    private volatile  Destination destination;
+    private volatile Destination destination;
     private String operatorID;
 
     private static int ackMode;

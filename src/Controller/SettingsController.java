@@ -1,7 +1,6 @@
 package Controller;
 
 import Model.*;
-import com.sun.deploy.panel.TextFieldProperty;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -420,6 +419,7 @@ public class SettingsController  implements ChangeListener, EventHandler<KeyEven
                         operatorController.startDefaultOperatorAction();
                         try {
                             previous.closeConnection();
+                            previous.getTimer().cancel();
                         } catch (JMSException e) {
                             e.printStackTrace();
                         }

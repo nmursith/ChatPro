@@ -44,7 +44,7 @@ public class OperatorController implements MessageListener {
     private final Queue<ChatMessage> cachedMessages =  new LinkedList<>();
     private volatile Queue<Notification> pendingNotification;
     private final ExecutorService executor = Executors.newFixedThreadPool(100);  // 100 blink at a time
-
+    private Timer timer;
     private volatile boolean isOnline;
     private boolean isSessionCreated;
     private String subscriptionName;
@@ -83,7 +83,7 @@ public class OperatorController implements MessageListener {
                 //this.controller.getHashMapOperator().put(defaultOperator, bindOperator);
             }
 
-            if(subscriptionName.equalsIgnoreCase(defaultOperator)) {
+            if(subscriptionName.equalsIgnoreCase(defaultOperator) &&operator.getSession()!=null) {
                 messageConsumer = operator.getSession().createDurableSubscriber(getTopic(), getSubscriptionName());
                 messageConsumer.setMessageListener(this);
                 System.out.println("Default operat:  "+ defaultOperator);
@@ -91,7 +91,7 @@ public class OperatorController implements MessageListener {
 
 
 
-                Timer timer = new Timer();
+               timer = new Timer();
                 TimerTask myTask = new TimerTask() {
 
                     @Override
@@ -108,8 +108,21 @@ public class OperatorController implements MessageListener {
                             //System.out.println("Sleepdetected");
                         }
 
+                        if(operatorController.getSesssion()==null){
+                            if(offlineNetworkDownHandler.isAlive()) {
+
+                                offlineNetworkDownHandler.stopThread();
+                            }
+
+
+                            //      System.out.println("Message Added:  "+ chatMessage.getTextMessage() +"   "+cachedMessages.size());
+                            offlineNetworkDownHandler = new OfflineNetworkDownHandler();
+                            offlineNetworkDownHandler.start();
+                        }
+
                         try {
-                            operatorController.getSesssion().createTextMessage();
+                            if(operatorController.getSesssion()!=null)
+                              operatorController.getSesssion().createTextMessage();
                         }
                         catch ( JMSException e){
 
@@ -126,9 +139,9 @@ public class OperatorController implements MessageListener {
                             //e.printStackTrace();
                         }
                         catch (NullPointerException e){
-
+                            e.printStackTrace();
                             System.out.println("operator null");
-                            timer.cancel();
+                           // timer.cancel();
 
                         }
 
@@ -143,6 +156,7 @@ public class OperatorController implements MessageListener {
 
         }
         catch (NullPointerException e){
+            e.printStackTrace();
             System.out.println("Already Answering");
         } catch (JMSException e) {
             e.printStackTrace();
@@ -194,7 +208,7 @@ public class OperatorController implements MessageListener {
                 //e.printStackTrace();
 //                  if(!isOnline){
                         //isOnline = false;
-                      System.out.println("network handling");
+                      System.out.println("network handling while sending");
                       if(offlineNetworkDownHandler.isAlive()) {
 
                           offlineNetworkDownHandler.stopThread();
@@ -1007,6 +1021,14 @@ public class OperatorController implements MessageListener {
         isClosedAlready = closedAlready;
     }
 
+    public Timer getTimer() {
+        return timer;
+    }
+
+    public void setTimer(Timer timer) {
+        this.timer = timer;
+    }
+
     private class OfflineNetworkDownHandler extends Thread{
 
 
@@ -1067,12 +1089,22 @@ public class OperatorController implements MessageListener {
                     operatorController.createSession();
                     operatorController.startDefaultOperatorAction();
 
-                    int count =   controller.getHashMapOperator().get(defaultOperator).getOperatorController().getMessageCounter();
+                    OperatorController previous =  controller.getHashMapOperator().get(defaultOperator).getOperatorController();
+                    int count =  previous.getMessageCounter();
+
                     operatorController.setMessageCounter(count);
                     controller.getHashMapOperator().get(OperatorController.defaultOperator).setOperatorController(null);
                     controller.getHashMapOperator().get(OperatorController.defaultOperator).setOperatorController(operatorController);
 
                     setOperatorController(controller.getHashMapOperator().get(OperatorController.defaultOperator).getOperatorController());
+
+
+
+
+
+
+
+
 
                     //int selected = controller.getChatUsersList().getSelectionModel().getSelectedIndex();
                     UserItem useritem = controller.getChatUsersList().getSelectionModel().getSelectedItem();
@@ -1091,6 +1123,7 @@ public class OperatorController implements MessageListener {
                     }
                 //    stop();
                     stopThread();
+
 
                 } catch (JMSException e) {
                     System.out.println("JMS problem");
@@ -1114,11 +1147,14 @@ public class OperatorController implements MessageListener {
 
 
     private class NetworkDownHandler extends Thread{
+
+
         Image image_offline = new Image(getClass().getResourceAsStream("offline.png")); //===========================
         Image image_online = new Image(getClass().getResourceAsStream("online.png"));   //===========================
         Thread thread = this;
 
         public void run() {
+
             thread = Thread.currentThread();
 
             String ID = Constant.operatorID;//Constant.getRandomString();
@@ -1136,10 +1172,15 @@ public class OperatorController implements MessageListener {
                         operator.closeConnection();
 
 
+
+
+
+
                     }
                     else {
                         controller.statusImageView.setImage(image_offline);//===========================
                         isOnline = false;
+                        System.out.println("Resolving connection...");
 
                     }
                     operator =null;
