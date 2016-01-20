@@ -230,7 +230,7 @@ public class ChatController{
                 myMessage = getReplacedVariables(myMessage);
                 myMessageMod = getObjectMessage(myMessage, operatorController.getSubscriptionName());
 
-                System.out.println("Sending:     "+hashMapOperator.size() +"       "+operatorController.getSesssion());
+                //System.out.println("Sending:     "+hashMapOperator.size() +"       "+operatorController.getSesssion());
                 operatorController.sendMessage(myMessageMod, operatorController);
 
             //    System.out.println("Message sent");

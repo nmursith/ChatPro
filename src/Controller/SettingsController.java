@@ -81,7 +81,7 @@ public class SettingsController  implements ChangeListener, EventHandler<KeyEven
 
     public void showSettingsWindow(Stage parentStage) throws Exception {
       //  controller.getStage().toBack();
-        System.out.println(settingsStage);
+        //System.out.println(settingsStage);
        // setting.start(settingsStage);
 
 //  System.out.println(settingsStage);
@@ -154,7 +154,7 @@ public class SettingsController  implements ChangeListener, EventHandler<KeyEven
         tableViewContainer.setContent(tableVariables);
         tableViewContainer.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         tableVariables.setEditable(true);
-        System.out.println(tableVariables.getColumns().get(0));
+        //System.out.println(tableVariables.getColumns().get(0));
 
     }
 
@@ -301,23 +301,30 @@ public class SettingsController  implements ChangeListener, EventHandler<KeyEven
                 destination.setText(topicText+text);
             }
         else if(ID.equalsIgnoreCase("topic")){
-            String prefix = text.substring(0,text.length()-2);
+            try {
+                String prefix = text.replace(".*","");
+                destination.setText(prefix + operator);
+            }
+            catch (Exception e){
+                e.printStackTrace();
+            }
+
             String suffix = text.substring(text.length()-2,text.length());
          //   System.out.println(suffix);
-            destination.setText(prefix + operator);
+
 
 
             if(text.substring(text.length()-2,text.length()).equals(".*")) {
                 isError = false;
-                topic.setStyle("-fx-text-fill: black;");
-                destination.setStyle("-fx-text-fill: black;");
+                topic.setStyle("-fx-text-fill: black; -fx-background-color:#E7F0F5;");
+                destination.setStyle("-fx-text-fill: black;-fx-background-color:#E7F0F5;");
 
 
             }
             else {
                 isError = true;
-                topic.setStyle("-fx-text-fill: red;");
-                destination.setStyle("-fx-text-fill: red;");
+                topic.setStyle("-fx-text-fill: red;-fx-background-color:#E7F0F5;");
+                destination.setStyle("-fx-text-fill: red;-fx-background-color:#E7F0F5;");
 
             }
 

@@ -77,6 +77,26 @@ public class Main extends Application {
                     NotificationController.stage.close();
             }
         });
+
+//        new ActionListener() {
+//            @Override
+//            public void actionPerformed(java.awt.event.ActionEvent event) {
+//                Platform.runLater(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        System.out.println("wwww");
+//                        if (primaryStage.isIconified()) {
+//                            primaryStage.requestFocus();
+//                            primaryStage.setIconified(false);
+//                        } else {
+//                            primaryStage.hide();
+//                            primaryStage.setIconified(true);
+//                        }
+//                    }
+//                });
+//            }
+//        };
+
         Image ico = new Image(getClass().getResourceAsStream("appIcon.png"));
         primaryStage.getIcons().add(ico);
 
