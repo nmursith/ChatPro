@@ -15,6 +15,8 @@ import java.util.ArrayList;
 
 public class  VariablesController {
 
+    static  String filePath = "C:\\vAssistant\\configuration\\";
+    static String fileName = filePath+"variables.json";
     private static ArrayList<Variable> variableList;
     public static void main(String[] args) {
 
@@ -48,13 +50,12 @@ public class  VariablesController {
         }
 
 
-
-
         object.put("variables", list);
 
         try {
+
             //File file1 = new File(VariablesController.class.getResource("variables.json").getFile());
-            FileWriter file = new FileWriter("variables.json");
+            FileWriter file = new FileWriter(fileName);
             file.write(object.toJSONString());
             file.flush();
             file.close();
@@ -75,7 +76,7 @@ public class  VariablesController {
  //           Scanner scanner = new Scanner(new File("variables.json"));
 //
             //File file1 = new File(VariablesController.class.getResource("variables.json").getFile());
-            JSONObject jsonObject = (JSONObject) (new JSONParser().parse(new FileReader("variables.json")));
+            JSONObject jsonObject = (JSONObject) (new JSONParser().parse(new FileReader(fileName)));
 
             JSONArray msg = (JSONArray) jsonObject.get("variables");
 
@@ -89,7 +90,7 @@ public class  VariablesController {
 
         } catch (FileNotFoundException | ParseException e) {
             setVariable();
-            e.printStackTrace();
+         //   e.printStackTrace();
         } catch (Exception e){
 
         }
@@ -99,11 +100,14 @@ public class  VariablesController {
     }
 
     private static void setVariable() {
+
         variableList = new ArrayList<>();
-        variableList.add(new Variable("userName","Username" ));
-        variableList.add(new Variable("introducedViolations","Introduced Violations"));
-        variableList.add(new Variable("openViolations", "Open Violations"));
-        variableList.add(new Variable("runtimeViolations", "Runtime Violations"));
+        variableList.add(new Variable("VARUSERNAME","Username" ));
+        variableList.add(new Variable("VARINTRODUCEDVIOLATIONS","Introduced Violations"));
+        variableList.add(new Variable("VAROPENVIOLATIONS", "Open Violations"));
+        variableList.add(new Variable("VARRUNTIMEVIOLATIONS", "Runtime Violations"));
+        new File(filePath).mkdirs();
+        writeVariables(variableList);
 
     }
 }

@@ -27,7 +27,7 @@ public class Main extends Application {
         try{
             //File file = new File(getClass().getResource("dummy.json").getFile());
             RandomAccessFile randomFile =
-                    new RandomAccessFile("dummy.json","rw");
+                    new RandomAccessFile("C:\\vAssistant\\configuration\\dummy.json","rw");
 
             FileChannel channel = randomFile.getChannel();
 

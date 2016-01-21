@@ -1189,6 +1189,8 @@ public class OperatorController implements MessageListener {
                     boolean isConnected = operator.isConnected();
                     operator.closeConnection();
                     //         System.out.println("inside:  " + isOnline);
+                    Thread.sleep(100);
+
                     if (isConnected) {
                         controller.statusImageView.setImage(image_online); //==========================
                         isOnline = true;
@@ -1219,8 +1221,9 @@ public class OperatorController implements MessageListener {
                     } catch (InterruptedException e1) {
                         e1.printStackTrace();
                     }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
-
 
 
 //            stopThread();

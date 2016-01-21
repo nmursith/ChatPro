@@ -20,9 +20,10 @@ import java.io.*;
 //
 //
 //
-//    }
-    //static InputStream inputStream= ConfigurationController.class.getResourceAsStream("config.json");
 
+
+    static  String filePath = "C:\\vAssistant\\configuration\\";
+    static String fileName = filePath+"config.json";
     public static void writeConfig(Configuration configuration){
         JSONObject obj = new JSONObject();
         obj.put("operator", configuration.getOperator());
@@ -42,13 +43,13 @@ import java.io.*;
 
         try {
 
-            FileWriter file = new FileWriter("config.json");
+            FileWriter file = new FileWriter(fileName);
             file.write(obj.toJSONString());
             file.flush();
             file.close();
 
         } catch (IOException e) {
-            e.printStackTrace();
+    //        e.printStackTrace();
         }
 
     //    System.out.println(obj);
@@ -60,16 +61,22 @@ import java.io.*;
         JSONParser parser = new JSONParser();
 
         try {
-            //File file = new File(ConfigurationController.class.getResourceAsStream("config.json"));
 
-            Object obj = parser.parse(new FileReader("config.json"));
+
+                        //FileReader fileReader = new FileReader(bufferedReader);
+            Object obj = parser.parse(new FileReader(fileName));
+
             configuration = new Configuration();
             JSONObject jsonObject = (JSONObject) obj;
+
+
             String operator = (String) jsonObject.get("operator");
             String topic = (String) jsonObject.get("topic");
             String subscription = (String) jsonObject.get("subscription");
             String destination = (String) jsonObject.get("destination");
             String URL = (String) jsonObject.get("URL");
+
+          //  System.out.println(jsonObject);
 
             configuration.setOperator(operator);
             configuration.setDestination(destination);
@@ -90,17 +97,19 @@ import java.io.*;
 
         } catch (IOException | ParseException e) {
             setConfiguration();
-            e.printStackTrace();
+        //    e.printStackTrace();
         }
         return configuration;
     }
 
     private static void setConfiguration(){
         configuration = new Configuration();
-        configuration.setOperator("Operatoa");
-        configuration.setDestination("chat.Operatoa");
-        configuration.setSubscription("Operatoa");
+        configuration.setOperator("Operator");
+        configuration.setDestination("chat.Operator");
+        configuration.setSubscription("Operator");
         configuration.setTopic("chat.*");
         configuration.setURL("tcp://cmterainsight:61616?trace=false&soTimeout=60000");
+        new File(filePath).mkdir();
+        writeConfig(configuration);
     }
 }
