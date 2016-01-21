@@ -410,8 +410,7 @@ public class SettingsController  implements ChangeListener, EventHandler<KeyEven
                     OperatorController previous = bindOperator.getOperatorController();
                     bindOperator.setOperatorController(null);
 
-                    System.out.println("Message in que:         "+ previous.getChatMessagess().size());
-
+                   System.out.println("Message in que:         "+ previous.getChatMessagess().size());
 
                     //  System.out.println("previius:   " + chatController.getHashMapOperator().get(chatController.getDefaultOperator()).getOperatorController());
 
@@ -419,6 +418,7 @@ public class SettingsController  implements ChangeListener, EventHandler<KeyEven
                     chatController.setConfig(currentConfiguration);
 
 
+/***************   can be done by creating new session*************/
                     OperatorController operatorController = null;
                     try {
                         operatorController = new OperatorController(currentConfiguration.getOperator(), currentConfiguration.getTopic(),chatController);
@@ -439,14 +439,14 @@ public class SettingsController  implements ChangeListener, EventHandler<KeyEven
                         operatorController.setChatMessagess(previous.getChatMessagess());
 
 
-
-                    } catch (JMSException e) {
+                    }
+                    catch (JMSException e) {
                         e.printStackTrace();
                     }
+
                     chatController.getHashMapOperator().put(currentConfiguration.getOperator(), new BindOperator(operatorController, chatController.getGridPane()) );
-
-
                     chatController.setDefaultOperator(currentConfiguration.getOperator());
+/******************************/
 //            if(chatController.isOnline()){
 //                try {
 //                    OperatorController operatorController = new OperatorController(currentConfiguration.getOperator(), currentConfiguration.getTopic(),chatController);

@@ -22,11 +22,9 @@ public class Operator{
     private boolean isConnected;
     private boolean isAnswered;
 
-
-
     static {
         messageBrokerUrl = Constant.configuration.getURL();////ActiveMQConnection.DEFAULT_BROKER_URL;//"tcp://localhost:61616";
-       // messageBrokerUrl ="tcp://localhost:61616";
+        //messageBrokerUrl ="tcp://localhost:61616";
         ackMode = Session.AUTO_ACKNOWLEDGE;
 
     }

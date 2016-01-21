@@ -93,7 +93,8 @@ public class ChatController{
         previousID = null;
         config = ConfigurationController.readConfig();
         Constant.correalationID = Constant.getRandomString();
-        System.out.println(Constant.correalationID);
+        Constant.operatorID = Constant.getRandomString();
+        System.out.println(Constant.operatorID);
         //operatorController = new OperatorController("operator0", "chat.*",this);
         this.isOnline = false;
 
@@ -104,13 +105,14 @@ public class ChatController{
             Operator operator = new Operator(ID, ID);
             operator.create();
             boolean isConnected = operator.isConnected();
+            operator.closeConnection();
 
             System.out.println("startup:  " + isConnected);
             if (isConnected) {
                 isOnline = true;
                 networkHandler = null;
                 System.out.println("connected");
-                operator.closeConnection();
+
             }
             else {
                 isOnline = false;
@@ -525,7 +527,7 @@ public class ChatController{
             ChatMessage myMessageMod = getObjectMessage(myMessage, operatorController.getSubscriptionName());
             ChatMessage bubbleMessageMod = getObjectMessage(bubbleMessage, operatorController.getSubscriptionName());
 
-            if(!operatorController.isClosedAlready()) {
+            if(!operatorController.isClosedAlready() && operatorController.isSessionCreated()) {
                 operatorController.sendMessage(myMessageMod, operatorController);
                 operatorController.closeConnection();
             }
@@ -634,8 +636,8 @@ public class ChatController{
 
                ChatMessage myMessageMod = getObjectMessage(myMessage, bindOperator.getOperatorController().getSubscriptionName());
                ChatMessage bubbleMessageMod = getObjectMessage(bubbleMessage, operatorController.getSubscriptionName());
-               if(!bindOperator.getOperatorController().isClosedAlready()) {
-//                   bindOperator.getOperatorController().sendMessage(myMessageMod, bindOperator.getOperatorController());
+               if(!bindOperator.getOperatorController().isClosedAlready() && bindOperator.getOperatorController().isSessionCreated()) {
+                //   bindOperator.getOperatorController().sendMessage(myMessageMod, bindOperator.getOperatorController());
 
                }
                int counter = (int) bindOperator.getOperatorController().getMessageCounter();
@@ -650,7 +652,6 @@ public class ChatController{
        //         listItems.remove(index);
                 System.out.println("Removed");
             }
-
         }
         System.exit(0);
 
@@ -954,13 +955,14 @@ public class ChatController{
                         Operator operator = new Operator(ID, ID);
                         operator.create();
                         boolean isConnected = operator.isConnected();
+                        operator.closeConnection();
 
                         //         System.out.println("inside:  " + isOnline);
                         if (isConnected) {
                             statusImageView.setImage(image_online); //==========================
                             isOnline = true;
                             System.out.println("Re-connected");
-                            operator.closeConnection();
+
                         }
                         else {
                             statusImageView.setImage(image_offline);//===========================

@@ -21,6 +21,7 @@ import java.io.*;
 //
 //
 //    }
+    //static InputStream inputStream= ConfigurationController.class.getResourceAsStream("config.json");
 
     public static void writeConfig(Configuration configuration){
         JSONObject obj = new JSONObject();
@@ -29,6 +30,8 @@ import java.io.*;
         obj.put("subscription", configuration.getSubscription());
         obj.put("destination", configuration.getDestination());
         obj.put("URL",configuration.getURL());
+
+        //new  FileReader(new FileInputStream());
 
 //        JSONArray list = new JSONArray();
 //        list.add("msg 1");
@@ -57,7 +60,8 @@ import java.io.*;
         JSONParser parser = new JSONParser();
 
         try {
-            //File file = new File(ConfigurationController.class.getResource("config.json").getFile());
+            //File file = new File(ConfigurationController.class.getResourceAsStream("config.json"));
+
             Object obj = parser.parse(new FileReader("config.json"));
             configuration = new Configuration();
             JSONObject jsonObject = (JSONObject) obj;
@@ -93,9 +97,9 @@ import java.io.*;
 
     private static void setConfiguration(){
         configuration = new Configuration();
-        configuration.setOperator("Operator");
-        configuration.setDestination("chat.*");
-        configuration.setSubscription("chat.*");
+        configuration.setOperator("Operatoa");
+        configuration.setDestination("chat.Operatoa");
+        configuration.setSubscription("Operatoa");
         configuration.setTopic("chat.*");
         configuration.setURL("tcp://cmterainsight:61616?trace=false&soTimeout=60000");
     }

@@ -33,9 +33,9 @@ public class Main extends Application {
 
             if(channel.tryLock() == null) {
                 System.out.println("Already Running...");
-
                 System.exit(1);
             }
+
         }catch( Exception e ) {
             System.out.println(e.toString());
         }

@@ -12,14 +12,15 @@ public class Constant {
     public static String correalationID = "60e232e2a20efb61";
     public static final String JMSmessageID = "60e232e2a20tef54";
     public static final String prefix = configuration.getOperator();
-    public static final String operatorID =  prefix+"60e232e2a20tafwe";
-    public static final String operatorhistoryID =  "60e232e2a20tafwe";
+    public static  String operatorID =  prefix+"60e232e2a20tafwe";
+
     public static final String exitMessage ="DIRROUTETOBOT";
     public static final String  exitBubbleMessage = "Chat closed by Operator";
     public static final String  HISTORY_TAG = "VARHISTORY";
     public static final String  BOT_TAG = "BOT";
     public static final String  DO_NOT_TRAIN_TAG = "DIRDONOTTRAIN ";
     public static String topicPrefix = "chat.";
+    public static final String operatorhistoryID =  "60e232e2a20tafwe";
 
     public static String [] usernames = {"Operator","Pubudu", "Shannon", "Nimashi","Damith","Mursith","Januka","Prabudhika","Thuan","Sameera"};
 

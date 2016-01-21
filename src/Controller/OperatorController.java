@@ -281,7 +281,7 @@ public class OperatorController implements MessageListener {
     public void onMessage(Message message) {
     String producerID = null;
 
-   //     System.out.println("Recieving......:      ");
+        System.out.println("Recieving......:      ");
         try {
 
 
@@ -296,16 +296,11 @@ public class OperatorController implements MessageListener {
 
                 }
 
-
-
                 String destination = message.getJMSDestination().toString();
-
                 destination = destination.substring(destination.indexOf('.') + 1);
-
                 //                System.out.println("destination: "+ destination);
                 producerID = destination;
                 chatMessage =  new ChatMessage();
-
                 chatMessage.setProducerID(producerID);
                 chatMessage.setMessage(message);
                 chatMessage.setTextMessage(messageText);
@@ -646,12 +641,14 @@ public class OperatorController implements MessageListener {
 
                         chatMessage =durablechatMessage.remove();
                         reply = chatMessage.getTextMessage();
+
                         String correID = chatMessage.getMessage().getJMSCorrelationID();
 
                         pID = chatMessage.getProducerID();
                     //    System.out.println("chatmessage ID: "+chatMessage.getProducerID());
 
-
+                        if(reply.equalsIgnoreCase(Constant.exitMessage))
+                            reply = Constant.exitBubbleMessage;
 
 //                        if (correID==null)
 //                            correID = "";
@@ -872,7 +869,7 @@ public class OperatorController implements MessageListener {
                     String message = messages.get("message");
                     String time = messages.get("time");
 
-                    if(!from.equals(Constant.BOT_TAG) && !from.equals(Constant.operatorID)&& userName==null ) {
+                    if(!from.equals(Constant.BOT_TAG) && !from.equals(Constant.operatorhistoryID)&& userName==null ) {
                         System.out.println("setting client from History: "+ from);
                         userName = from;
                         bindOperator.setClientName(userName);
@@ -1190,12 +1187,12 @@ public class OperatorController implements MessageListener {
                     Operator operator = new Operator(ID, ID);
                     operator.create();
                     boolean isConnected = operator.isConnected();
-
+                    operator.closeConnection();
                     //         System.out.println("inside:  " + isOnline);
                     if (isConnected) {
                         controller.statusImageView.setImage(image_online); //==========================
                         isOnline = true;
-                        operator.closeConnection();
+
 
 
                     }
@@ -1223,6 +1220,7 @@ public class OperatorController implements MessageListener {
                         e1.printStackTrace();
                     }
                 }
+
 
 
 //            stopThread();
