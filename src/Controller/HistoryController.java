@@ -133,7 +133,6 @@ public class HistoryController {
                     JSONObject obj = (JSONObject) msg.get(i);
                     //variableList.add(new Variable((String) obj.get("ID"), (String) obj.get("name")));
               //      System.out.println(obj);
-
                     String from = (String)obj.get("from");
                     String messg = (String)obj.get("msg");
                 //    System.out.println(from+"      "+messg);
