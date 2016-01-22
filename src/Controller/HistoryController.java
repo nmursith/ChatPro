@@ -95,6 +95,7 @@ public class HistoryController {
         try {
 
             String history="{"+botHistory+"}";
+            System.out.println(history);
             JSONObject jsonObject = (JSONObject) (new JSONParser().parse(history));
             System.out.println(jsonObject);
             JSONArray msg = (JSONArray) jsonObject.get("VARHISTORY");

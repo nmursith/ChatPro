@@ -297,8 +297,10 @@ public class SettingsController  implements ChangeListener, EventHandler<KeyEven
         topicText = topicText.substring(0,topicText.length()-1);
 
         if(ID.equalsIgnoreCase("operator")) {
+                text =text.replaceAll("\\s+","");
                 subscription.setText(text);
                 destination.setText(topicText+text);
+
             }
         else if(ID.equalsIgnoreCase("topic")){
             try {
@@ -397,6 +399,7 @@ public class SettingsController  implements ChangeListener, EventHandler<KeyEven
                 currentConfiguration.setTopic(topic.getText());
                 currentConfiguration.setSubscription(subscription.getText());
                 currentConfiguration.setURL(URL.getText());
+
                 currentConfiguration.setOperator(operator.getText());
                 ConfigurationController.writeConfig(currentConfiguration);
 

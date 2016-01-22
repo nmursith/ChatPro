@@ -84,7 +84,7 @@ public class OperatorController implements MessageListener {
             }
 
             if(subscriptionName.equalsIgnoreCase(defaultOperator) &&operator.getSession()!=null) {
-                messageConsumer = operator.getSession().createDurableSubscriber(getTopic(), getSubscriptionName());
+                messageConsumer = operator.getSession().createDurableSubscriber(getTopic(), Constant.operatorID);
                 messageConsumer.setMessageListener(this);
                 System.out.println("Default operat:  "+ defaultOperator);
 
@@ -202,7 +202,7 @@ public class OperatorController implements MessageListener {
     private void setListener(){
         try {
             operatorController.createSession();
-            messageConsumer = operator.getSession().createDurableSubscriber(getTopic(), getSubscriptionName());
+            messageConsumer = operator.getSession().createDurableSubscriber(getTopic(), Constant.operatorID);//getSubscriptionName());
             messageConsumer.setMessageListener(this);
         } catch (JMSException e) {
          //   e.printStackTrace();
@@ -219,7 +219,7 @@ public class OperatorController implements MessageListener {
             }
 
             if(operator.getSesssion()==null){
-                operator.setSubscriptionName(operator.getSubscriptionName()+Constant.correalationID);
+                operator.setSubscriptionName(operator.getSubscriptionName()+Constant.operatorID);
                 operator.createSession();
                 System.out.println("null and operator session:  " + operator.getSesssion());
 
@@ -267,7 +267,7 @@ public class OperatorController implements MessageListener {
 
                 }
             catch (NullPointerException e){
-                e.printStackTrace();
+             //   e.printStackTrace();
                 System.out.println("Error caused  " +e.getClass() );
 
             }
