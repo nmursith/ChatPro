@@ -61,6 +61,7 @@ public class Operator{
             messageProducer.setDeliveryMode(DeliveryMode.NON_PERSISTENT);
             connection.start();
             isConnected =true;
+
         }
         catch (JMSException e){
          //   e.printStackTrace();
@@ -110,8 +111,13 @@ public class Operator{
         this.topicName = topicName;
     }
 
-    public void closeConnection() throws JMSException {
-        connection.close();
+    public void closeConnection()  {
+        try{
+            connection.close();
+        }
+         catch (JMSException e){
+             e.printStackTrace();
+         }
     }
 
     public Destination getDestination() {

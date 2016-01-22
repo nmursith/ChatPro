@@ -127,8 +127,8 @@ public class HistoryController {
 
                 for (int i=0; i<msg.size(); i++){
 
-                    if(i==0 && isLatestHistory)
-                        continue;
+
+
 
                     JSONObject obj = (JSONObject) msg.get(i);
                     //variableList.add(new Variable((String) obj.get("ID"), (String) obj.get("name")));
@@ -136,16 +136,19 @@ public class HistoryController {
 
                     String from = (String)obj.get("from");
                     String messg = (String)obj.get("msg");
-
                 //    System.out.println(from+"      "+messg);
                     String time = (String)obj.get("time");
+
 
                     if(!from.equals(Constant.BOT_TAG) && userName==null) {
 
                         userName = from;
                     }
 
-                        if(i<(msg.size()-2) ){
+                    if(messg.equalsIgnoreCase(Constant.ConnectedMessage) || messg.equalsIgnoreCase(Constant.DisConnectedMessage)){
+                        continue;
+                    }
+                        if(i<(msg.size()) ){
                             int ID = operatorController.getMessageCounter();
                             csvOutput.write(ID + "");
                             csvOutput.write(from);

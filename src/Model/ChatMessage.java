@@ -27,8 +27,6 @@ public class ChatMessage {
     }
 
 
-
-
     public Message getMessage() {
         return message;
     }
@@ -48,8 +46,6 @@ public class ChatMessage {
     public String getTime() {
         return time;
     }
-
-
 
     public void setTextMessage(String textMessage) {
         this.textMessage = textMessage;

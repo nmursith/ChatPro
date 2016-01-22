@@ -31,10 +31,10 @@ public class Main extends Application {
 
             FileChannel channel = randomFile.getChannel();
 
-//            if(channel.tryLock() == null) {
-//                System.out.println("Already Running...");
-//                System.exit(1);
-//            }
+            if(channel.tryLock() == null) {
+                System.out.println("Already Running...");
+                System.exit(1);
+            }
 
         }catch( Exception e ) {
             System.out.println(e.toString());

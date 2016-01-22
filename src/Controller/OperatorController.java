@@ -98,10 +98,10 @@ public class OperatorController implements MessageListener {
                     public void run() {
             //                        System.out.println("Timer Working online :  "+ isOnline);
                         try{
-                            if(offlineNetworkDownHandler.isAlive()) {
-
-                                offlineNetworkDownHandler.stopThread();
-                            }
+//                            if(offlineNetworkDownHandler.isAlive()) {
+//
+//                                offlineNetworkDownHandler.stopThread();
+//                            }
 
 
                             if(networkHandler.isAlive())
@@ -154,7 +154,7 @@ public class OperatorController implements MessageListener {
                         }
 
                         try {
-                            if(operatorController.getSesssion()!=null)
+                            //if(operatorController.getSesssion()!=null)
                                 operatorController.getSesssion().createTextMessage();
                         }
                         catch ( JMSException e){
@@ -165,8 +165,6 @@ public class OperatorController implements MessageListener {
 
                                     offlineNetworkDownHandler.stopThread();
                                 }
-
-
                                 //      System.out.println("Message Added:  "+ chatMessage.getTextMessage() +"   "+cachedMessages.size());
                                 offlineNetworkDownHandler = new OfflineNetworkDownHandler();
                                 offlineNetworkDownHandler.start();
@@ -281,7 +279,7 @@ public class OperatorController implements MessageListener {
     public void onMessage(Message message) {
     String producerID = null;
 
-        System.out.println("Recieving......:      ");
+        System.out.println("Recieving......:      "+message);
         try {
 
 
@@ -308,7 +306,7 @@ public class OperatorController implements MessageListener {
 
 
             }
-            else {
+            else if (message instanceof ActiveMQBytesMessage){
 
                 //System.out.println(text.getText());
                 ActiveMQBytesMessage activeMQBytesMessage = (ActiveMQBytesMessage) message;
@@ -1161,7 +1159,7 @@ public class OperatorController implements MessageListener {
         }
 
         public  void stopThread(){
-            thread.stop();
+//            thread.stop();
             thread = null;
 
         }
