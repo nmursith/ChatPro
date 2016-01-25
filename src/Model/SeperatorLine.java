@@ -25,6 +25,12 @@ public class SeperatorLine {
         separatorController.setHistoryMessages(bindOperator.getHistoryMessages());
         separatorController.setRoot(root);
 
+        if(bindOperator.getHistoryMessages().isEmpty()){
+
+            bindOperator.getChatHolder().getChildren().remove(root);
+        }
+
+
         if(tracker ==0 && !bindOperator.getHistoryMessages().isEmpty()) {
             String time = bindOperator.getHistoryMessages().get(bindOperator.getHistoryMessages().size()-1).getTime();
             separatorController.setTime(time);
@@ -34,7 +40,11 @@ public class SeperatorLine {
 
         }
 
+
+
         bindOperator.setHistoryMessages(new ArrayList<>());
+
+
 
     }
 

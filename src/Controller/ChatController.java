@@ -955,14 +955,14 @@ public class ChatController{
                         Operator operator = new Operator(ID, ID);
                         operator.create();
                         boolean isConnected = operator.isConnected();
-                        operator.closeConnection();
+
 
                         //         System.out.println("inside:  " + isOnline);
                         if (isConnected) {
                             statusImageView.setImage(image_online); //==========================
                             isOnline = true;
                             System.out.println("Re-connected");
-
+                            operator.closeConnection();
                         }
                         else {
                             statusImageView.setImage(image_offline);//===========================
@@ -993,6 +993,9 @@ public class ChatController{
                         }
                         System.out.println("Offline: JMS");
                         System.out.println("Re-connected");
+                    }
+                    catch (NullPointerException e){
+
                     }
                 }
 

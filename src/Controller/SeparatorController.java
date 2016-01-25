@@ -1,13 +1,17 @@
 package Controller;
 
 import Model.*;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -99,11 +103,7 @@ public class SeparatorController {
     public void showHistory(ActionEvent actionEvent) {
         //System.out.println(this+"   "+ isAlreadyShown +"  " + historyMessages.size());
 
-        if(historyMessages.isEmpty()){
-
-            bindOperator.getChatHolder().getChildren().remove(getRoot());
-        }
-        else {
+     if(!historyMessages.isEmpty()) {
 
             if (!flag) {
                 flag = true;
@@ -193,8 +193,30 @@ public class SeparatorController {
                 bindOperator.getChatHolder().add(root, 0, tracker);//.addRow(0, root);
 
             }
-
+//showHistory();
         }
+    }
+
+    private void showHistory(){
+System.out.println("History on stage");
+        Stage primaryStage = new Stage();
+        Scene scene = new Scene(oldhistory);//, 550, 605);
+//        scene.getStylesheets().add(getClass().getResource("theme.css").toExternalForm());
+        primaryStage.setScene(scene);
+        System.out.println("show");
+        //FlatterFX.style();
+  //      primaryStage.initStyle(StageStyle.UNDECORATED);
+        primaryStage.show();
+        primaryStage.setResizable(false);
+
+        primaryStage.focusedProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+
+            }
+        });
+
+
     }
 
     public  void setTime(){

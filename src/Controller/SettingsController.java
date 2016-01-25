@@ -429,9 +429,14 @@ public class SettingsController  implements ChangeListener, EventHandler<KeyEven
                         operatorController.startDefaultOperatorAction();
                         try {
                             previous.closeConnection();
+                            previous.getNetworkHandler().stopThread();
+                            previous.getOfflineNetworkDownHandler().stopThread();
                             previous.getTimer().cancel();
                         } catch (JMSException e) {
                             e.printStackTrace();
+                        }
+                        catch(Exception e ){
+                            System.out.println(e.getMessage());
                         }
                         operatorController.setMessageCounter(previous.getMessageCounter());
 

@@ -88,6 +88,18 @@ public class OperatorController implements MessageListener {
                 messageConsumer.setMessageListener(this);
                 System.out.println("Default operat:  "+ defaultOperator);
 
+                try{
+
+                    if(networkHandler.isAlive())
+                        networkHandler.stopThread();
+
+                    networkHandler = new NetworkDownHandler();
+                    networkHandler.start();
+                }
+                catch (Exception e){
+                    e.printStackTrace();
+                    //System.out.println("Sleepdetected");
+                }
 
 
 
@@ -97,22 +109,6 @@ public class OperatorController implements MessageListener {
                     @Override
                     public void run() {
             //                        System.out.println("Timer Working online :  "+ isOnline);
-                        try{
-//                            if(offlineNetworkDownHandler.isAlive()) {
-//
-//                                offlineNetworkDownHandler.stopThread();
-//                            }
-
-
-                            if(networkHandler.isAlive())
-                            networkHandler.stopThread();
-
-                        networkHandler = new NetworkDownHandler();
-                        networkHandler.start();
-                        }
-                        catch (Exception e){
-                            //System.out.println("Sleepdetected");
-                        }
 
                         if(operatorController.getSesssion()==null){
                              System.out.println("Null session:  ");
@@ -171,6 +167,7 @@ public class OperatorController implements MessageListener {
                             }
                             //e.printStackTrace();
                         }
+
                         catch (NullPointerException e){
                             e.printStackTrace();
                             System.out.println("operator null");
@@ -1065,11 +1062,19 @@ public class OperatorController implements MessageListener {
         return timer;
     }
 
+    public NetworkDownHandler getNetworkHandler() {
+        return networkHandler;
+    }
+
+    public OfflineNetworkDownHandler getOfflineNetworkDownHandler() {
+        return offlineNetworkDownHandler;
+    }
+
     public void setTimer(Timer timer) {
         this.timer = timer;
     }
 
-    private class OfflineNetworkDownHandler extends Thread{
+    class OfflineNetworkDownHandler extends Thread{
 
 
         Thread thread = this;
@@ -1167,7 +1172,7 @@ public class OperatorController implements MessageListener {
     }
 
 
-    private class NetworkDownHandler extends Thread{
+    class NetworkDownHandler extends Thread{
 
 
         Image image_offline = new Image(getClass().getResourceAsStream("offline.png")); //===========================
@@ -1179,50 +1184,64 @@ public class OperatorController implements MessageListener {
             thread = Thread.currentThread();
 
             String ID = Constant.operatorID;//Constant.getRandomString();
+            while(true){
+            try {
 
+                Operator operator = new Operator(ID, ID);
+                operator.create();
+                boolean isConnected = operator.isConnected();
+                operator.closeConnection();
+                //         System.out.println("inside:  " + isOnline);
+//                    Thread.sleep(100);
+
+                if (isConnected) {
+                    controller.statusImageView.setImage(image_online); //==========================
+                    isOnline = true;
+
+
+                } else {
+                    controller.statusImageView.setImage(image_offline);//===========================
+                    isOnline = false;
+                    System.out.println("Resolving connection...");
+
+                }
+                operator = null;
+            } catch (IllegalStateException e) {
+                isOnline = false;
+                try {
+                    sleep(100);
+                } catch (InterruptedException e1) {
+                    e1.printStackTrace();
+                }
+                controller.statusImageView.setImage(image_offline);
+            } catch (JMSException e) {
+                isOnline = false;
                 try {
 
-                    Operator operator = new Operator(ID, ID);
-                    operator.create();
-                    boolean isConnected = operator.isConnected();
-                    operator.closeConnection();
-                    //         System.out.println("inside:  " + isOnline);
-                    Thread.sleep(100);
-
-                    if (isConnected) {
-                        controller.statusImageView.setImage(image_online); //==========================
-                        isOnline = true;
-
-
-
-                    }
-                    else {
-                        controller.statusImageView.setImage(image_offline);//===========================
-                        isOnline = false;
-                        System.out.println("Resolving connection...");
-
-                    }
-                    operator =null;
-                } catch (IllegalStateException e) {
-                    isOnline = false;
-                    try {
-                        sleep(100);
-                    } catch (InterruptedException e1) {
-                        e1.printStackTrace();
-                    }
-
-                } catch (JMSException e) {
-                    isOnline = false;
-                    try {
-
-                        sleep(100);
-                    } catch (InterruptedException e1) {
-                        e1.printStackTrace();
-                    }
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    sleep(100);
+                } catch (InterruptedException e1) {
+                    e1.printStackTrace();
                 }
+                controller.statusImageView.setImage(image_offline);
+            }
+                catch (Exception e){
+                    isOnline =false;
+                    System.out.println("NULL Operator");
+                    try {
 
+                        sleep(100);
+                    } catch (InterruptedException e1) {
+                        e1.printStackTrace();
+                    }
+                    controller.statusImageView.setImage(image_offline);
+                }
+                try {
+
+                    sleep(100);
+                } catch (InterruptedException e1) {
+                   // e1.printStackTrace();
+                }
+        }
 
 //            stopThread();
         }
