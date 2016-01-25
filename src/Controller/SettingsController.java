@@ -431,6 +431,7 @@ public class SettingsController  implements ChangeListener, EventHandler<KeyEven
                             previous.closeConnection();
                             previous.getNetworkHandler().stopThread();
                             previous.getOfflineNetworkDownHandler().stopThread();
+                            previous.getMessageDistributionHandler().stopThread();
                             previous.getTimer().cancel();
                         } catch (JMSException e) {
                             e.printStackTrace();

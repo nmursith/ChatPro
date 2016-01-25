@@ -17,7 +17,6 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.Queue;
-import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -39,6 +38,7 @@ public class OperatorController implements MessageListener {
     private OperatorController operatorController;      //static or volatile or something
     private static String defaultOperator;
 
+    private MessageDistributionHandler messageDistributionHandler;
     private OfflineNetworkDownHandler offlineNetworkDownHandler;
     private volatile boolean isFirstime =true;
     private final Queue<ChatMessage> cachedMessages =  new LinkedList<>();
@@ -60,6 +60,8 @@ public class OperatorController implements MessageListener {
         this.controller = controller.getInstance();
         this.operatorController = this;
         this.offlineNetworkDownHandler = new OfflineNetworkDownHandler();
+        this.messageDistributionHandler = new MessageDistributionHandler();
+
         this.pendingNotification = new LinkedList<>();
         this.defaultOperator = ConfigurationController.readConfig().getOperator();//"operator1";
 
@@ -84,7 +86,7 @@ public class OperatorController implements MessageListener {
             }
 
             if(subscriptionName.equalsIgnoreCase(defaultOperator) &&operator.getSession()!=null) {
-                messageConsumer = operator.getSession().createDurableSubscriber(getTopic(), Constant.operatorID);
+                messageConsumer = operator.getSession().createDurableSubscriber(getTopic(), getSubscriptionName());//Constant.operatorID);
                 messageConsumer.setMessageListener(this);
                 System.out.println("Default operat:  "+ defaultOperator);
 
@@ -100,6 +102,21 @@ public class OperatorController implements MessageListener {
                     e.printStackTrace();
                     //System.out.println("Sleepdetected");
                 }
+
+                try{
+                    routeMessagetoThread();
+//
+//                    if(messageDistributionHandler.isAlive())
+//                        messageDistributionHandler.stopThread();
+//
+//                    messageDistributionHandler = new MessageDistributionHandler();
+                    messageDistributionHandler.start();
+                }
+                catch (Exception e){
+                    e.printStackTrace();
+                    //System.out.println("Sleepdetected");
+                }
+
 
 
 
@@ -276,7 +293,7 @@ public class OperatorController implements MessageListener {
     public void onMessage(Message message) {
     String producerID = null;
 
-        System.out.println("Recieving......:      "+message);
+
         try {
 
 
@@ -290,7 +307,7 @@ public class OperatorController implements MessageListener {
                    messageText= messageText.replace(Constant.DO_NOT_TRAIN_TAG,"");
 
                 }
-
+                System.out.println("Recieving......:      "+messageText);
                 String destination = message.getJMSDestination().toString();
                 destination = destination.substring(destination.indexOf('.') + 1);
                 //                System.out.println("destination: "+ destination);
@@ -339,7 +356,7 @@ public class OperatorController implements MessageListener {
 //                System.out.println();
 //                System.out.println();
 //                System.out.println();
-
+                System.out.println("Recieving......:      "+messageText);
 
                     chatMessage = new ChatMessage();
                     chatMessage.setProducerID(producerID);
@@ -375,7 +392,6 @@ public class OperatorController implements MessageListener {
                 //Thread.sleep(20);
 
                 if(controller!=null){
-
 
 
                     if(!chatMessagess.contains(chatMessage)) {
@@ -504,32 +520,7 @@ public class OperatorController implements MessageListener {
 
 
             /********/
-            Service<Void> service = new Service<Void>() {
-                @Override
-                protected Task<Void> createTask() {
-                    return new Task<Void>() {
-                        @Override
-                        protected Void call() throws Exception {
-                            //Background work
-                            final CountDownLatch latch = new CountDownLatch(1);
-                            Platform.runLater(() -> {
-                                if(controller!=null && !chatMessagess.isEmpty()) {
-                                    System.out.println("Routing    "+ chatMessagess.size());
-                                    try {
-                                        routeChat();
-                                    } catch (JMSException e) {
-                                        e.printStackTrace();
-                                    }
-                                }
-                            });
-                            latch.await();
-                            //Keep with the background work
-                            return null;
-                        }
-                    };
-                }
-            };
-            service.start();
+
 
 /*            final CountDownLatch latch = new CountDownLatch(1);
             Platform.runLater(() -> {
@@ -560,7 +551,6 @@ public class OperatorController implements MessageListener {
 
             Platform.runLater(task);*/
 
-
         /***********/
 
 
@@ -568,8 +558,40 @@ public class OperatorController implements MessageListener {
         } catch (Exception e){
             e.printStackTrace();
         }
+    }
+
+
+    private  void routeMessagetoThread(){
+        Service<Void> service = new Service<Void>() {
+            @Override
+            protected Task<Void> createTask() {
+                return new Task<Void>() {
+                    @Override
+                    protected Void call() throws Exception {
+                        //Background work
+                        //final CountDownLatch latch = new CountDownLatch(1);
+                        Platform.runLater(() -> {
+                            if(controller!=null && !chatMessagess.isEmpty()) {
+                                System.out.println("Routing    "+ chatMessagess.size());
+                                try {
+                                    routeChat();
+                                } catch (JMSException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        });
+               //         latch.await();
+                        //Keep with the background work
+                        return null;
+                    }
+                };
+            }
+        };
+        service.start();
+
 
     }
+
 
     private void routeChat() throws JMSException {
 
@@ -607,7 +629,7 @@ public class OperatorController implements MessageListener {
                         String username =bindOperator.getClientName();
 
                         if(username == null)
-                            username="Anonymus "+tempName.substring(tempName.length()-2);//Constant.usernames[messageProduceID.size()-1];
+                            username="Annonymus";//+tempName.substring(tempName.length()-2);//Constant.usernames[messageProduceID.size()-1];
 
                         User user = new User();
                         user.setuserId(tempName);
@@ -1038,6 +1060,10 @@ public class OperatorController implements MessageListener {
 
     }
 
+    public MessageDistributionHandler getMessageDistributionHandler() {
+        return messageDistributionHandler;
+    }
+
     public boolean isSessionCreated() {
         return isSessionCreated;
     }
@@ -1252,5 +1278,56 @@ public class OperatorController implements MessageListener {
             t.interrupt();
         }
     }
+
+
+
+    class MessageDistributionHandler extends Thread{
+
+
+
+        Thread thread = this;
+
+        public void run() {
+
+            thread = Thread.currentThread();
+
+
+            while(true){
+                try {
+                  //  System.out.println("Distributing:     "+    chatMessagess.size());
+                    if(!chatMessagess.isEmpty()){
+                        Platform.runLater(() -> {
+                            try {
+                                routeChat(); //routeMessagetoThread();
+                            } catch (JMSException e) {
+                                e.printStackTrace();
+                            }
+                        });
+
+                    }
+
+                }
+                catch (Exception e){
+                    e.printStackTrace();
+                }
+                try {
+
+                    sleep(100);
+                } catch (InterruptedException e1) {
+                    // e1.printStackTrace();
+                }
+            }
+
+//            stopThread();
+        }
+
+        public  void stopThread(){
+            Thread t = thread;
+            thread = null;
+            t.interrupt();
+        }
+    }
+
+
 
 }
