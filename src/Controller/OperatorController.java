@@ -50,6 +50,7 @@ public class OperatorController implements MessageListener {
     private String subscriptionName;
     private boolean isClosedAlready;
     private static ChatMessage chatMessage;
+
     public OperatorController(String subscriptionName, String topicName, ChatController controller) throws JMSException {
         this.operator = new Operator(subscriptionName, topicName);
         this.subscriptionName = subscriptionName;
@@ -430,55 +431,52 @@ public class OperatorController implements MessageListener {
                 }
             }
 
+            if(chatMessage!=null && !chatMessagess.contains(chatMessage)) {
+                //Image botImage= new Image(getClass().getResourceAsStream("robotic.png"));
 
-                    if(chatMessage!=null && !chatMessagess.contains(chatMessage)) {
-                        //Image botImage= new Image(getClass().getResourceAsStream("robotic.png"));
-
-                        BindOperator bindOperator = controller.getHashMapOperator().get(chatMessage.getProducerID());
-
+                BindOperator bindOperator = controller.getHashMapOperator().get(chatMessage.getProducerID());
 
 
-                        try {
-                           final String username = bindOperator.getHistoryController().writeHistory(chatMessage.getTextMessage(), bindOperator, true);
+                try {
+                    final String username = bindOperator.getHistoryController().writeHistory(chatMessage.getTextMessage(), bindOperator, true);
 
-                            if(username!=null) {
-                                bindOperator.setClientName(username);
+                    if (username != null) {
+                        bindOperator.setClientName(username);
 
-                                int index = controller.getMessageProducerID().indexOf(chatMessage.getProducerID());
-                                UserItem userItem = controller.getChatUsersList().getItems().get(index);
-                                userItem.startBlink();
-                                userItem.getUser().setUserName(username);
-                                System.out.println(controller.getChatUsersList().getSelectionModel().isSelected(index));
-                                userItem.getThumbUserName().setText(username);
+                        int index = controller.getMessageProducerID().indexOf(chatMessage.getProducerID());
+                        UserItem userItem = controller.getChatUsersList().getItems().get(index);
+                        userItem.startBlink();
+                        userItem.getUser().setUserName(username);
+                        System.out.println(controller.getChatUsersList().getSelectionModel().isSelected(index));
+                        userItem.getThumbUserName().setText(username);
 
-                                if( controller.getChatUsersList().getSelectionModel().isSelected(index)) {
-                                    System.out.println("client Name set:  "+ username);
-                                    Platform.runLater(() -> {
-                                        controller.Username.setText(username);
-
-                                    });
-
-                                }
-
-
-                            }
-                            int trakcer = bindOperator.getHistoryController().getTracker();
-
-                            SeperatorLine seperatorLine = new SeperatorLine(bindOperator,trakcer);            // uncomment
+                        if (controller.getChatUsersList().getSelectionModel().isSelected(index)) {
+                            System.out.println("client Name set:  " + username);
                             Platform.runLater(() -> {
-                                //bindOperator.getChatHolder().addRow(trakcer, seperatorLine.getSeperator()); // uncomment
+                                controller.Username.setText(username);
 
-                                bindOperator.getChatHolder().add(seperatorLine.getSeperator(),0,trakcer); // uncomment
                             });
 
-
-
-
-                        } catch (ParseException e) {
-                            e.printStackTrace();
                         }
 
 
+                    }
+
+                    int trakcer = bindOperator.getHistoryController().getTracker();
+
+                    SeperatorLine seperatorLine = new SeperatorLine(bindOperator, trakcer);            // uncomment
+                    Platform.runLater(() -> {
+                        //bindOperator.getChatHolder().addRow(trakcer, seperatorLine.getSeperator()); // uncomment
+
+                        bindOperator.getChatHolder().add(seperatorLine.getSeperator(), 0, trakcer); // uncomment
+                    });
+
+
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+            }
 
 
                         //    bindOperator.getLatestHistoryMessages().clear();
@@ -513,7 +511,7 @@ public class OperatorController implements MessageListener {
 
                         //count = count +count2;
                         //operatorController.setMessageCounter(count);
-                    }
+  //                  }
 
 
 
@@ -659,6 +657,10 @@ public class OperatorController implements MessageListener {
                         chatMessage =durablechatMessage.remove();
                         reply = chatMessage.getTextMessage();
 
+
+
+
+
                         String correID = chatMessage.getMessage().getJMSCorrelationID();
 
                         pID = chatMessage.getProducerID();
@@ -722,7 +724,13 @@ public class OperatorController implements MessageListener {
                                             controller.sendButton.setDisable(true);
                                             controller.messageTextField.setDisable(true);
                                             controller.getDoTrain().setDisable(true);
-                                            controller.getChatUsersList().getItems().get(controller.getMessageProducerID().indexOf(chatMessage.getProducerID())).setDisable(true);
+                                            try{
+                                                controller.getChatUsersList().getItems().get(controller.getMessageProducerID().indexOf(chatMessage.getProducerID())).setDisable(true);
+                                            }
+                                            catch (Exception e){
+                                                e.printStackTrace(); /*************  do no exist --fix   IndexOutOfBoundsException*************/
+                                            }
+
 
 
 
@@ -1254,12 +1262,15 @@ public class OperatorController implements MessageListener {
                     isOnline =false;
                     System.out.println("NULL Operator");
                     try {
-
+                        controller.statusImageView.setImage(image_offline);
                         sleep(100);
                     } catch (InterruptedException e1) {
                         e1.printStackTrace();
                     }
-                    controller.statusImageView.setImage(image_offline);
+                    catch(NullPointerException e2){
+
+                    }
+
                 }
                 try {
 
@@ -1312,7 +1323,7 @@ public class OperatorController implements MessageListener {
                 }
                 try {
 
-                    sleep(100);
+                    sleep(50);
                 } catch (InterruptedException e1) {
                     // e1.printStackTrace();
                 }
