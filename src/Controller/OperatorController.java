@@ -219,11 +219,20 @@ public class OperatorController implements MessageListener {
                 System.out.println("operator session:  " + operator.getSesssion());
             }
 
+
             if(operator.getSesssion()==null){
                 operator.setSubscriptionName(operator.getSubscriptionName()+Constant.operatorID);
                 operator.createSession();
                 System.out.println("null and operator session:  " + operator.getSesssion());
 
+            }
+
+            try{
+                operator.getSesssion().createTextMessage();
+            }
+            catch(IllegalStateException e){
+                operator.createSession();
+                isOnline = operator.operator.isConnected();
             }
 
                 try{
@@ -453,11 +462,11 @@ public class OperatorController implements MessageListener {
                         int trakcer = bindOperator.getHistoryController().getTracker();
 
                         SeperatorLine seperatorLine = new SeperatorLine(bindOperator, trakcer);            // uncomment
-                        Platform.runLater(() -> {
+                        //Platform.runLater(() -> {
                             //bindOperator.getChatHolder().addRow(trakcer, seperatorLine.getSeperator()); // uncomment
 
                             bindOperator.getChatHolder().add(seperatorLine.getSeperator(), 0, trakcer); // uncomment
-                        });
+                        //});
                     }
 
                 } catch (ParseException e) {
@@ -1243,7 +1252,7 @@ public class OperatorController implements MessageListener {
             } catch (IllegalStateException e) {
               //  isOnline = false;
                 try {
-                    sleep(100);
+                    thread.sleep(100);
                 } catch (InterruptedException e1) {
                     e1.printStackTrace();
                 }
@@ -1252,7 +1261,7 @@ public class OperatorController implements MessageListener {
               //  isOnline = false;
                 try {
 
-                    sleep(100);
+                    thread.sleep(100);
                 } catch (InterruptedException e1) {
                     e1.printStackTrace();
                 }
@@ -1263,7 +1272,8 @@ public class OperatorController implements MessageListener {
                //     System.out.println("NULL Operator");
                     try {
 
-                        sleep(100);
+                        thread.sleep(100);
+
                     } catch (InterruptedException e1) {
                         e1.printStackTrace();
                     }
@@ -1277,7 +1287,7 @@ public class OperatorController implements MessageListener {
                 }
                 try {
 
-                    sleep(100);
+                    thread.sleep(200);
                 } catch (InterruptedException e1) {
                    // e1.printStackTrace();
                 }
@@ -1325,7 +1335,7 @@ public class OperatorController implements MessageListener {
                 }
                 try {
 
-                    sleep(50);
+                    thread.sleep(100);
                 } catch (InterruptedException e1) {
                     // e1.printStackTrace();
                 }
