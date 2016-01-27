@@ -51,7 +51,9 @@ import java.io.*;
         } catch (IOException e) {
     //        e.printStackTrace();
         }
-
+        catch (Exception e){
+            e.printStackTrace();
+        }
     //    System.out.println(obj);
     }
 
@@ -98,6 +100,9 @@ import java.io.*;
         } catch (IOException | ParseException e) {
             setConfiguration();
         //    e.printStackTrace();
+        }
+        catch (Exception e){
+            e.printStackTrace();
         }
         return configuration;
     }

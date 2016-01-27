@@ -273,6 +273,9 @@ public class ChatController{
         } catch (JMSException | InterruptedException e) {
             e.printStackTrace();
         }
+        catch (Exception e){
+            e.printStackTrace();
+        }
         messageTextField.setText("");
     }
 
@@ -283,6 +286,9 @@ public class ChatController{
         try {
             operatorController.sendMessage(myMessageMod, operatorController);
         } catch (JMSException e) {
+            e.printStackTrace();
+        }
+        catch (Exception e){
             e.printStackTrace();
         }
 
@@ -344,6 +350,9 @@ public class ChatController{
                 }
                 catch (NullPointerException e){
                     //e.printStackTrace();
+                }
+                catch (Exception e){
+                    e.printStackTrace();
                 }
 
 
@@ -409,6 +418,9 @@ public class ChatController{
                 catch (NullPointerException e){
                     e.printStackTrace();
                 }
+                catch (Exception e){
+                    e.printStackTrace();
+                }
 
 
             });
@@ -437,6 +449,9 @@ public class ChatController{
 
         catch (RuntimeException r ){
             //r.printStackTrace();
+        }
+        catch (Exception e){
+            e.printStackTrace();
         }
     }
 

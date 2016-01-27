@@ -49,6 +49,7 @@ public class NotificationController {
         Image image = new Image(NotificationController.class.getResourceAsStream("Background.png"));
         Label user_pic = new Label("", new ImageView(image));
         user_pic.relocate(3,10);
+
         user_pic.setOnMouseClicked(event -> {
 
 

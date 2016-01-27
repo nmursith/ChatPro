@@ -63,7 +63,9 @@ public class  VariablesController {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
+        catch (Exception e){
+            e.printStackTrace();
+        }
   //      System.out.println(object);
     }
 
@@ -92,7 +94,7 @@ public class  VariablesController {
             setVariable();
          //   e.printStackTrace();
         } catch (Exception e){
-
+            e.printStackTrace();
         }
 
 

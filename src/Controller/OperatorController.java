@@ -73,6 +73,7 @@ public class OperatorController implements MessageListener {
         this.isClosedAlready = false;
 //      this.notificationController = new NotificationController();
         this.messageCounter = -1;
+        this.IDtracker = -1;
 
     }
 
@@ -406,7 +407,7 @@ public class OperatorController implements MessageListener {
                     int count  = loadHistory(controller.getHashMapOperator().get(producerID));
                     operatorController.setMessageCounter(count);        //starting
 
-                    operatorController.setIDtracker(0);
+                    //operatorController.setIDtracker(0);
                 }
 
 
@@ -443,7 +444,7 @@ public class OperatorController implements MessageListener {
                         int index = controller.getMessageProducerID().indexOf(chatMessage.getProducerID());
                         ListView<UserItem> userItemListView =  controller.getChatUsersList();
 
-                        if (index >= 0 && !userItemListView.getItems().isEmpty()) {
+                        if (index >= 0 && !userItemListView.getItems().isEmpty() && index <userItemListView.getItems().size()) {
                             UserItem userItem = userItemListView.getItems().get(index);
                             userItem.startBlink();
                             userItem.getUser().setUserName(username);
@@ -463,7 +464,6 @@ public class OperatorController implements MessageListener {
                         }
 
                         int trakcer = bindOperator.getHistoryController().getTracker();
-
                         SeperatorLine seperatorLine = new SeperatorLine(bindOperator, trakcer);            // uncomment
                         Platform.runLater(() -> {
                             //bindOperator.getChatHolder().addRow(trakcer, seperatorLine.getSeperator()); // uncomment
@@ -680,7 +680,7 @@ public class OperatorController implements MessageListener {
                             BindOperator bindOperator =  controller.getHashMapOperator().get(chatMessage.getProducerID());
                             int counter = (int)bindOperator.getOperatorController().getMessageCounter();
                             int ID = bindOperator.getOperatorController().getIDtracker();
-                            System.out.println("ID:   "+ID);
+                            //System.out.println("ID:   "+ID);
               //              Bubble bubble = new Bubble(reply, controller);
                             int index = controller.getMessageProducerID().indexOf(chatMessage.getProducerID());
                  //           System.out.println(controller.getMessageProducerID().size()+  "   index:  "+index);
@@ -903,7 +903,7 @@ public class OperatorController implements MessageListener {
                     String message = messages.get("message");
                     String time = messages.get("time");
 
-                    if(!from.equals(Constant.BOT_TAG) && !from.equals(Constant.operatorhistoryID)&& userName==null ) {
+                    if(!from.equals(Constant.Annonymus) &&!from.equals(Constant.BOT_TAG) && !from.equals(Constant.operatorhistoryID)&& userName==null ) {
                         System.out.println("setting client from History: "+ from);
                         userName = from;
                         bindOperator.setClientName(userName);
@@ -958,11 +958,12 @@ public class OperatorController implements MessageListener {
                 messages.close();
 
                 bindOperator.setHistoryMessages(historyMessages);
-                SeperatorLine seperatorLine = new SeperatorLine(bindOperator,0);            // uncomment
+                int track=bindOperator.getOperatorController().getIDtracker();
+                SeperatorLine seperatorLine = new SeperatorLine(bindOperator,track);            // uncomment
                 //   bindOperator.getChatHolder().getChildren().clear();  // uncomment
-                Platform.runLater(() -> {
+     //           Platform.runLater(() -> {
                     bindOperator.getChatHolder().add(seperatorLine.getSeperator(),0,0); // uncomment
-                });
+      //          });
 
 
             }
@@ -970,6 +971,9 @@ public class OperatorController implements MessageListener {
             catch(IOException e){
                 count =0;
                 //e.printStackTrace();
+            }
+            catch(Exception e){
+                e.printStackTrace();
             }
 
         }
@@ -1026,9 +1030,14 @@ public class OperatorController implements MessageListener {
         this.messageProduceID = messageProduceID;
     }
 
-    public void closeConnection() throws JMSException {
-        setSessionCreated(false);
-        operatorController.operator.closeConnection();
+    public void closeConnection()  {
+
+        try{
+            setSessionCreated(false);
+            operatorController.operator.closeConnection();
+        } catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     public void setFirstime(boolean firstime) {
@@ -1076,6 +1085,7 @@ public class OperatorController implements MessageListener {
 
     public int getIDtracker() {
         operatorController.IDtracker = operatorController.IDtracker+1;
+        System.out.println("ID:  "+operatorController.IDtracker);
         return operatorController.IDtracker;
 
     }

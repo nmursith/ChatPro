@@ -433,10 +433,7 @@ public class SettingsController  implements ChangeListener, EventHandler<KeyEven
                             previous.getOfflineNetworkDownHandler().stopThread();
                             previous.getMessageDistributionHandler().stopThread();
                             previous.getTimer().cancel();
-                        } catch (JMSException e) {
-                            e.printStackTrace();
-                        }
-                        catch(Exception e ){
+                        } catch(Exception e ){
                             System.out.println(e.getMessage());
                         }
                         operatorController.setMessageCounter(previous.getMessageCounter());
@@ -450,6 +447,9 @@ public class SettingsController  implements ChangeListener, EventHandler<KeyEven
 
                     }
                     catch (JMSException e) {
+                        e.printStackTrace();
+                    }
+                    catch (Exception e){
                         e.printStackTrace();
                     }
 

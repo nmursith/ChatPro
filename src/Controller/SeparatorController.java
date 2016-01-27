@@ -160,6 +160,9 @@ public class SeparatorController {
                             } catch (IOException e) {
                                 System.out.println("Problem in loading history");
                             }
+                            catch (Exception e){
+                                e.printStackTrace();
+                            }
 
                         }
 

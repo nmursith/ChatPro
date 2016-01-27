@@ -58,7 +58,9 @@ public class HistoryController {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
+            catch (Exception e){
+                e.printStackTrace();
+            }
             // if the file didn't already exist then we need to write out the header line
             if (!alreadyExists)
             {
@@ -81,6 +83,9 @@ public class HistoryController {
 
             csvOutput.close();
         } catch (IOException e) {
+            e.printStackTrace();
+        }
+        catch (Exception e){
             e.printStackTrace();
         }
     }
@@ -110,7 +115,9 @@ public class HistoryController {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-
+                catch (Exception e){
+                    e.printStackTrace();
+                }
                 // if the file didn't already exist then we need to write out the header line
                 if (!alreadyExists)
                 {
@@ -139,7 +146,7 @@ public class HistoryController {
                     String time = (String)obj.get("time");
 
 
-                    if(!from.equals(Constant.BOT_TAG) && userName==null) {
+                    if(!from.equals(Constant.Annonymus) &&!from.equals(Constant.BOT_TAG) && userName==null ) {
 
                         userName = from;
                     }
@@ -198,6 +205,9 @@ public class HistoryController {
             messages = new CsvReader(fileName);
         } catch (IOException e) {
             //e.printStackTrace();
+        }
+        catch (Exception e){
+            e.printStackTrace();
         }
         return messages;
     }
