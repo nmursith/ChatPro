@@ -5,6 +5,7 @@ import com.csvreader.CsvReader;
 import javafx.application.Platform;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
+import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
 import org.apache.activemq.command.ActiveMQBytesMessage;
@@ -405,7 +406,7 @@ public class OperatorController implements MessageListener {
                     int count  = loadHistory(controller.getHashMapOperator().get(producerID));
                     operatorController.setMessageCounter(count);        //starting
 
-                    operatorController.setIDtracker(1);
+                    operatorController.setIDtracker(0);
                 }
 
 
@@ -440,14 +441,16 @@ public class OperatorController implements MessageListener {
                     if (username != null) {
                         bindOperator.setClientName(username);
                         int index = controller.getMessageProducerID().indexOf(chatMessage.getProducerID());
-                        if (index >= 0) {
-                            UserItem userItem = controller.getChatUsersList().getItems().get(index);
+                        ListView<UserItem> userItemListView =  controller.getChatUsersList();
+
+                        if (index >= 0 && !userItemListView.getItems().isEmpty()) {
+                            UserItem userItem = userItemListView.getItems().get(index);
                             userItem.startBlink();
                             userItem.getUser().setUserName(username);
-                            System.out.println(controller.getChatUsersList().getSelectionModel().isSelected(index));
+                            System.out.println(userItemListView.getSelectionModel().isSelected(index));
                             userItem.getThumbUserName().setText(username);
 
-                            if (controller.getChatUsersList().getSelectionModel().isSelected(index)) {
+                            if (userItemListView.getSelectionModel().isSelected(index)) {
                                 System.out.println("client Name set:  " + username);
                                 Platform.runLater(() -> {
                                     controller.Username.setText(username);
@@ -462,18 +465,18 @@ public class OperatorController implements MessageListener {
                         int trakcer = bindOperator.getHistoryController().getTracker();
 
                         SeperatorLine seperatorLine = new SeperatorLine(bindOperator, trakcer);            // uncomment
-                        //Platform.runLater(() -> {
+                        Platform.runLater(() -> {
                             //bindOperator.getChatHolder().addRow(trakcer, seperatorLine.getSeperator()); // uncomment
 
                             bindOperator.getChatHolder().add(seperatorLine.getSeperator(), 0, trakcer); // uncomment
-                        //});
+                        });
                     }
 
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
                 catch(Exception e){
-
+                        e.printStackTrace();
                 }
 
             }
@@ -677,10 +680,13 @@ public class OperatorController implements MessageListener {
                             BindOperator bindOperator =  controller.getHashMapOperator().get(chatMessage.getProducerID());
                             int counter = (int)bindOperator.getOperatorController().getMessageCounter();
                             int ID = bindOperator.getOperatorController().getIDtracker();
+                            System.out.println("ID:   "+ID);
               //              Bubble bubble = new Bubble(reply, controller);
                             int index = controller.getMessageProducerID().indexOf(chatMessage.getProducerID());
                  //           System.out.println(controller.getMessageProducerID().size()+  "   index:  "+index);
-                            String username = controller.getListItems().get(index).getUser().getUserName();
+                            String username=null;
+                            if(index>=0)
+                                username= controller.getListItems().get(index).getUser().getUserName();
 
                          //   GridPane.setHalignment(bubble.getToBubble(), HPos.LEFT );
 
@@ -791,7 +797,10 @@ public class OperatorController implements MessageListener {
                             });
                             bindOperator.getHistoryController().writehistory(counter, username,chatMessage);       //swriting to csv
                             index = controller.getMessageProducerID().indexOf(chatMessage.getProducerID());
+                            if(index>=0)
                             username = controller.getListItems().get(index).getUser().getUserName();
+                            else
+                            username=null;
 
 //                            final String uName = username;
 //                            final String rep = reply;

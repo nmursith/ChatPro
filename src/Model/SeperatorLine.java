@@ -28,7 +28,7 @@ public class SeperatorLine {
         if(bindOperator.getHistoryMessages().isEmpty()){
 
             bindOperator.getChatHolder().getChildren().remove(root);
-            separatorController.setTracker(tracker-1);
+            separatorController.setTracker(tracker);
         }
 
 
@@ -51,7 +51,7 @@ public class SeperatorLine {
 
     public Parent getSeperator()  {
 
-        System.out.println("sending sperto");
+        System.out.println("sending seperator");
         return root;
     }
 

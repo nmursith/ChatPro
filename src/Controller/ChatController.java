@@ -174,6 +174,7 @@ public class ChatController{
             messageDisplay.setContent(chatHolder);
             messageDisplay.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
             NotificationController.stage.initOwner(stage);
+
             settingStage.initOwner(stage);
             addMenuItems();
             if(isOnline) {
