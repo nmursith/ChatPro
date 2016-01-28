@@ -162,12 +162,13 @@ public class NotificationController {
     }
 
     private static void notifyLocations(){
-        UserItem userItem = chatController.getChatUsersList().getItems().get(getIndex());
-        chatController.setUsername(userItem);
-        chatController.getChatUsersList().getSelectionModel().select(getIndex());
-        chatController.getStage().setIconified(false);
-        chatController.getStage().requestFocus();
-
+        if(index<chatController.getChatUsersList().getItems().size()) {
+            UserItem userItem = chatController.getChatUsersList().getItems().get(getIndex());
+            chatController.setUsername(userItem);
+            chatController.getChatUsersList().getSelectionModel().select(getIndex());
+            chatController.getStage().setIconified(false);
+            chatController.getStage().requestFocus();
+        }
     }
 
     public static synchronized  void getNotification(String message, String userName, ChatController controller, int index){

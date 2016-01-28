@@ -150,38 +150,43 @@ public class UserItem extends GridPane implements   Runnable, EventHandler<Mouse
     @Override
     public void run() {
 
-        for (int i = 0; i < 3; i++) {
-            this.thumbUserName.setStyle("-fx-text-fill:#ffa500; -fx-font-size:12px; -fx-font-weight:bold;");
+        try{
+            for (int i = 0; i < 3; i++) {
+                this.thumbUserName.setStyle("-fx-text-fill:#ffa500; -fx-font-size:12px; -fx-font-weight:bold;");
 
-            try {
-                blink.sleep(250);
-            } catch (InterruptedException e) {
+                try {
+                    blink.sleep(250);
+                } catch (InterruptedException e) {
 
+                }
+                this.thumbUserName.setStyle("-fx-text-fill: #1e90ff; -fx-font-size:12px; -fx-font-weight:bold;");
+                try {
+                    blink.sleep(250);
+                } catch (InterruptedException e) {
+                    ///  e.printStackTrace();
+
+                }
+                //    System.out.println("Loop: " + running);
             }
-            this.thumbUserName.setStyle("-fx-text-fill: #1e90ff; -fx-font-size:12px; -fx-font-weight:bold;");
+            blink = null;
+
+            if(chatController.getChatUsersList().getSelectionModel().getSelectedItem().equals(userItem) && userItem!=null) {
+
+                this.thumbUserName.setStyle("-fx-text-fill:#696969; -fx-font-size:12px; -fx-font-weight:bold; ");
+            }
+            else
+                this.thumbUserName.setStyle("-fx-text-fill:#ffa500; -fx-font-size:12px; -fx-font-weight:bold;");
+
+
             try {
                 blink.sleep(250);
             } catch (InterruptedException e) {
                 ///  e.printStackTrace();
 
             }
-            //    System.out.println("Loop: " + running);
         }
-        blink = null;
-
-        if(chatController.getChatUsersList().getSelectionModel().getSelectedItem().equals(userItem) && userItem!=null) {
-
-            this.thumbUserName.setStyle("-fx-text-fill:#696969; -fx-font-size:12px; -fx-font-weight:bold; ");
-        }
-        else
-            this.thumbUserName.setStyle("-fx-text-fill:#ffa500; -fx-font-size:12px; -fx-font-weight:bold;");
-
-
-        try {
-            blink.sleep(250);
-        } catch (InterruptedException e) {
-            ///  e.printStackTrace();
-
+        catch(Exception e){
+            e.printStackTrace();
         }
 
 

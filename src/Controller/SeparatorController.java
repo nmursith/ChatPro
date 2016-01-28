@@ -1,17 +1,21 @@
 package Controller;
 
 import Model.*;
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -33,159 +37,117 @@ public class SeparatorController {
     private  GridPane oldhistory;
     private int tracker;
     private ArrayList<HistoryMessage> historyMessages;
-    private Image showImage =new Image(getClass().getResourceAsStream("minus75.png"));
-    private Image hideImage =new Image(getClass().getResourceAsStream("add139.png"));
+    private Image showImage =new Image(getClass().getResourceAsStream("downarrow.png"));
+    //private Image showImage =new Image(getClass().getResourceAsStream("minus75.png"));
+    //private Image hideImage =new Image(getClass().getResourceAsStream("add139.png"));
     private int id =0;
-    public static void main(String [] args) throws IOException {
-
-    //    System.setProperty("javax.net.ssl.trustStore","C:\\Program Files\\Java\\jdk1.8.0_65\\jre\\lib\\security\\cacerts");
-//        URL url = new URL("https://www.ietf.org/rfc/rfc2560.txt");
-//        Scanner s = new Scanner(url.openStream());
-//
-//        System.out.println(s.next());
-    }
-
-//    public void showHistory(ActionEvent actionEvent) {
-//        String defaultOperator = ConfigurationController.readConfig().getOperator();
-//        Image botImage =new Image(getClass().getResourceAsStream("robotic.png"));
-//
-//        bindOperator.getChatHolder().getChildren().remove(0);
-//        ArrayList<HistoryMessage> historyMessages = bindOperator.getHistoryMessages();
-//
-//        GridPane oldhistory = bindOperator.getOldchatHolder();
-//
-//        if(bindOperator.getOldchatHolder()!=null && historyMessages!=null) {
-////            for (Node node : bindOperator.getChatHolder().getChildren()) {
-////                //System.out.print("index:    "+ GridPane.getRowIndex(node)+"     ");
-////                GridPane.setRowIndex(node, GridPane.getRowIndex(node)+1);
-////                //System.out.println(GridPane.getRowIndex(node));
-////            }
-//            for (HistoryMessage history : historyMessages) {
-//                try {
-//                    int id = Integer.parseInt(history.getID());
-//                    //         System.out.println("ID:  "+ id);
-//
-//                    if (history.getFrom().equals(Constant.operatorhistoryID)) {
-//                        OperatorBubble bubble = new OperatorBubble(defaultOperator, history.getMessage(), history.getTime());
-//                        //    GridPane.setHalignment(bubble.getFromBubble(), HPos.RIGHT);
-//                        oldhistory.addRow(id, bubble.getRoot());
-//                        // bindOperator.getChatHolder().addRow(id, bubble.getRoot());
-//
-//
-//                    } else if (history.getFrom().equalsIgnoreCase(Constant.BOT_TAG)) {
-//                        OperatorBubble bubble = new OperatorBubble(Constant.BOT_TAG, history.getMessage(), history.getTime());
-//                        bubble.setImage(botImage);
-//                        //    GridPane.setHalignment(bubble.getFromBubble(), HPos.RIGHT);
-//                        oldhistory.addRow(id, bubble.getRoot());
-//                    } else {
-//                        UserBubble bubble = new UserBubble(history.getFrom(), history.getMessage(), history.getTime());
-//                        //         GridPane.setHalignment(bubble.getToBubble(), HPos.LEFT);
-//                        oldhistory.addRow(id, bubble.getRoot());
-//                        //    bindOperator.getChatHolder().addRow(id, bubble.getRoot());
-//                    }
-//                } catch (IOException e) {
-//                    System.out.println("Problem in loading history");
-//                }
-//
-//            }
-//
-//        }
-//
-//            bindOperator.getChatHolder().addRow(0, oldhistory);
-//
-//        System.out.println("show history");
-//
-//    }
+    private Stage historyStage;
 
 
 
 
     public void showHistory(ActionEvent actionEvent) {
-        //System.out.println(this+"   "+ isAlreadyShown +"  " + historyMessages.size());
+            loadHistory();
 
-     if(!historyMessages.isEmpty()) {
+    }
 
-            if (!flag) {
-                flag = true;
+    private void loadHistory(){
 
-                if (!isAlreadyShown) {
-                    isAlreadyShown = true;
+        if(!historyMessages.isEmpty()) {
 
-                    String defaultOperator = ConfigurationController.readConfig().getOperator();
-                    Image botImage = new Image(getClass().getResourceAsStream("robotic.png"));
+//            if (!flag) {
+//                flag = true;
+            //    System.out.println("show history   " + historyMessages.size());
+            if (!isAlreadyShown) {
+                isAlreadyShown = true;
+                String defaultOperator = ConfigurationController.readConfig().getOperator();
+                Image botImage = new Image(getClass().getResourceAsStream("robotic.png"));
 
-                    if (root == null) {
-                        if (tracker == 0)
-                            tracker = 1;
-                        root = getRoot();//bindOperator.getChatHolder().getChildren().get(tracker - 1);//bindOperator.getChatHolder().getChildren().get(0);
-                    }
-                    //bindOperator.getChatHolder().addRow(1,bindOperator.getChatHolder().getChildren().get(0));//+++++++++++++++++++++
-                    if (oldhistory == null) {
-                        oldhistory = bindOperator.getOperatorController().getGridPane();
-                        oldhistory.setPrefHeight(50);
-                    }
-                    //oldhistory.getChildren().clear();
+                if (root == null) {
+                    if (tracker == 0)
+                        tracker = 1;
+                    root = getRoot();//bindOperator.getChatHolder().getChildren().get(tracker - 1);//bindOperator.getChatHolder().getChildren().get(0);
+                }
+                //bindOperator.getChatHolder().addRow(1,bindOperator.getChatHolder().getChildren().get(0));//+++++++++++++++++++++
+                if (oldhistory == null) {
+                    oldhistory = bindOperator.getOperatorController().getGridPane();
+                    oldhistory.setPrefHeight(50);
+                    //oldhistory.setPrefWidth(425);
+                    //oldhistory.setMaxWidth(425);
+                }
+                //oldhistory.getChildren().clear();
 
-                    if (historyMessages != null) {
-                        //            for (Node node : bindOperator.getChatHolder().getChildren()) {
-                        //                //System.out.print("index:    "+ GridPane.getRowIndex(node)+"     ");
-                        //                GridPane.setRowIndex(node, GridPane.getRowIndex(node)+1);
-                        //                //System.out.println(GridPane.getRowIndex(node));
-                        //            }
-                        for (HistoryMessage history : historyMessages) {
+                if (historyMessages != null) {
+                    //            for (Node node : bindOperator.getChatHolder().getChildren()) {
+                    //                //System.out.print("index:    "+ GridPane.getRowIndex(node)+"     ");
+                    //                GridPane.setRowIndex(node, GridPane.getRowIndex(node)+1);
+                    //                //System.out.println(GridPane.getRowIndex(node));
+                    //            }
 
-                            try {
-                                id = Integer.parseInt(history.getID());
-                                //         System.out.println("ID:  "+ id);
+                    Platform.runLater(new Runnable(){
 
-                                if (history.getFrom().equals(Constant.operatorhistoryID)) {
-                                    OperatorBubble bubble = new OperatorBubble(defaultOperator, history.getMessage(), history.getTime());
-                                    //    GridPane.setHalignment(bubble.getFromBubble(), HPos.RIGHT);
-                                    oldhistory.add(bubble.getRoot(), 0, id);
-                                    // bindOperator.getChatHolder().addRow(id, bubble.getRoot());
+                        @Override
+                        public void run() {
+                            for (HistoryMessage history : historyMessages) {
+
+                                try {
+                                    id = Integer.parseInt(history.getID())+1;
+                                    //         System.out.println("ID:  "+ id);
+
+                                    if (history.getFrom().equals(Constant.operatorhistoryID)) {
+                                        OperatorBubble bubble = new OperatorBubble(defaultOperator, history.getMessage(), history.getTime());
+                                        //    GridPane.setHalignment(bubble.getFromBubble(), HPos.RIGHT);
+                                        oldhistory.add(bubble.getRoot(), 0, id);
+                                        // bindOperator.getChatHolder().addRow(id, bubble.getRoot());
 
 
-                                } else if (history.getFrom().equalsIgnoreCase(Constant.BOT_TAG)) {
-                                    OperatorBubble bubble = new OperatorBubble(Constant.BOT_TAG, history.getMessage(), history.getTime());
-                                    bubble.setImage(botImage);
-                                    //    GridPane.setHalignment(bubble.getFromBubble(), HPos.RIGHT);
-                                    oldhistory.add(bubble.getRoot(), 0, id);
-                                } else {
-                                    UserBubble bubble = new UserBubble(history.getFrom(), history.getMessage(), history.getTime());
-                                    //         GridPane.setHalignment(bubble.getToBubble(), HPos.LEFT);
-                                    oldhistory.add(bubble.getRoot(), 0, id);
-                                    //    bindOperator.getChatHolder().addRow(id, bubble.getRoot());
+                                    } else if (history.getFrom().equalsIgnoreCase(Constant.BOT_TAG)) {
+                                        OperatorBubble bubble = new OperatorBubble(Constant.BOT_TAG, history.getMessage(), history.getTime());
+                                        bubble.setImage(botImage);
+                                        //    GridPane.setHalignment(bubble.getFromBubble(), HPos.RIGHT);
+                                        oldhistory.add(bubble.getRoot(), 0, id);
+                                    } else {
+                                        UserBubble bubble = new UserBubble(history.getFrom(), history.getMessage(), history.getTime());
+                                        //         GridPane.setHalignment(bubble.getToBubble(), HPos.LEFT);
+                                        oldhistory.add(bubble.getRoot(), 0, id);
+                                        //    bindOperator.getChatHolder().addRow(id, bubble.getRoot());
+                                    }
+
+                                } catch (IOException e) {
+                                    System.out.println("Problem in loading history");
+                                }
+                                catch (Exception e){
+                                    e.printStackTrace();
                                 }
 
-                            } catch (IOException e) {
-                                System.out.println("Problem in loading history");
-                            }
-                            catch (Exception e){
-                                e.printStackTrace();
                             }
 
+                            //changeView();
+                            showHistory();
                         }
 
-                    }
+
+                    });
+
+
+
                 }
+            }
+            else{
+               // changeView();
+                historyStage.show();
+            }
 
-                historyButton_view.setImage(showImage);
-                middle_label.setText(" Hide History on ");
 
-                System.out.println(bindOperator.getChatHolder().getChildren().remove(root));
 
-                if (bindOperator.getChatHolder().getChildren().contains(oldhistory))
-                    bindOperator.getChatHolder().getChildren().remove(oldhistory);
 
-                bindOperator.getChatHolder().add(oldhistory, 0, tracker);
 
-                if (!oldhistory.getChildren().contains(root))
-                    oldhistory.addRow(id + 1, root);
-                System.out.println("show history   " + id);
-            } else {
+/*            }
+
+            else {
 
                 historyButton_view.setImage(hideImage);
-                System.out.println("HIDE :PPPPPPPPPPPPPPPPPPPPPPP");
+             //   System.out.println("HIDE :PPPPPPPPPPPPPPPPPPPPPPP");
                 // bindOperator.getOldchatHolder().getChildren().clear();
                 bindOperator.getChatHolder().getChildren().remove(oldhistory);
 
@@ -195,33 +157,60 @@ public class SeparatorController {
                 oldhistory.getChildren().remove(root);
                 bindOperator.getChatHolder().add(root, 0, tracker);//.addRow(0, root);
 
-            }
-//showHistory();
+            }*/
+
         }
     }
 
     private void showHistory(){
-System.out.println("History on stage");
-        Stage primaryStage = new Stage();
-        Scene scene = new Scene(oldhistory);//, 550, 605);
-//        scene.getStylesheets().add(getClass().getResource("theme.css").toExternalForm());
-        primaryStage.setScene(scene);
-        System.out.println("show");
-        //FlatterFX.style();
-  //      primaryStage.initStyle(StageStyle.UNDECORATED);
-        primaryStage.show();
-        primaryStage.setResizable(false);
+        System.out.println("History on stage");
 
-        primaryStage.focusedProperty().addListener(new ChangeListener<Boolean>() {
+        ScrollPane historyPane = new ScrollPane();
+        historyPane.setStyle("-fx-background-color:white;");
+
+        oldhistory.setStyle("-fx-background-color:white;");
+
+        historyPane.setContent(oldhistory);
+        historyPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        Scene scene = new Scene(historyPane);
+
+        historyStage.setWidth(425);
+        historyStage.setMaxWidth(425);
+        historyStage.setHeight(oldhistory.getHeight());
+        historyStage.setMaxWidth(413);
+
+
+
+
+        historyStage.setScene(scene);
+        historyStage.show();
+        historyStage.setResizable(false);
+        historyStage.focusedProperty().addListener(new ChangeListener<Boolean>() {
             @Override
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-
+                if(!newValue)
+                    historyStage.close();
             }
         });
 
 
+
     }
 
+    public  void changeView(){
+        historyButton_view.setImage(showImage);
+        middle_label.setText(" Hide History on ");
+
+        System.out.println(bindOperator.getChatHolder().getChildren().remove(root));
+
+        if (bindOperator.getChatHolder().getChildren().contains(oldhistory))
+            bindOperator.getChatHolder().getChildren().remove(oldhistory);
+
+        bindOperator.getChatHolder().add(oldhistory, 0, tracker);
+
+        if (!oldhistory.getChildren().contains(root))
+            oldhistory.addRow(id + 1, root);
+    }
     public  void setTime(){
         Date dNow = new Date( );
         SimpleDateFormat ft = new SimpleDateFormat ("E yyyy/MM/dd  hh:mm a ");
@@ -263,6 +252,34 @@ System.out.println("History on stage");
 
     public void setBindOperator(BindOperator bindOperator) {
         this.bindOperator = bindOperator;
+    }
+
+    public void hideHistory(Event event) {
+        if(historyStage!=null && historyStage.isShowing()) {
+            historyStage.close();
+            System.out.println("Mouse exited");
+        }
+    }
+
+    public void showHistoryonHover(Event event) {
+        if(historyStage==null) {
+            historyStage = new Stage(StageStyle.UNDECORATED);
+            historyStage.initOwner(bindOperator.getOperatorController().getController().getStage());
+        }
+
+        if(!historyStage.isShowing()) {
+            loadHistory();
+            System.out.println("Mouse enterd");
+        }
+    }
+
+    public void showArrow(Event event) {
+        historyButton_view.setImage(showImage);
+
+    }
+
+    public void hideArrow(Event event) {
+        historyButton_view.setImage(null);
     }
 }
 

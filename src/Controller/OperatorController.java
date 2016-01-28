@@ -84,8 +84,6 @@ public class OperatorController implements MessageListener {
             if(!messageProduceID.contains(defaultOperator)) {
                 messageProduceID.add(defaultOperator);
               //    controller.getMessageProducerID().add(defaultOperator);
-
-
                 //BindOperator bindOperator = new BindOperator(this, new TextArea());
                 //this.controller.getHashMapOperator().put(defaultOperator, bindOperator);
             }
@@ -685,7 +683,7 @@ public class OperatorController implements MessageListener {
                             int index = controller.getMessageProducerID().indexOf(chatMessage.getProducerID());
                  //           System.out.println(controller.getMessageProducerID().size()+  "   index:  "+index);
                             String username=null;
-                            if(index>=0)
+                            if(index>=0 && index<controller.getListItems().size())
                                 username= controller.getListItems().get(index).getUser().getUserName();
 
                          //   GridPane.setHalignment(bubble.getToBubble(), HPos.LEFT );
@@ -767,7 +765,7 @@ public class OperatorController implements MessageListener {
                                 int sID = controller.getChatUsersList().getSelectionModel().getSelectedIndex(); // selected ID
 
                             //    System.out.println("selected   "+cID);
-                                if(sID!=cID){
+                                if(sID!=cID && cID<controller.getChatUsersList().getItems().size()){
                                  //   System.out.println("should work");
                                     Platform.runLater(() -> controller.getChatUsersList().getItems().get(cID).startBlink());
 
@@ -797,7 +795,7 @@ public class OperatorController implements MessageListener {
                             });
                             bindOperator.getHistoryController().writehistory(counter, username,chatMessage);       //swriting to csv
                             index = controller.getMessageProducerID().indexOf(chatMessage.getProducerID());
-                            if(index>=0)
+                            if(index>=0 && index <controller.getListItems().size())
                             username = controller.getListItems().get(index).getUser().getUserName();
                             else
                             username=null;
@@ -876,6 +874,9 @@ public class OperatorController implements MessageListener {
                       //  e.printStackTrace();
                         //   break;
                     } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    catch (Exception e) {
                         e.printStackTrace();
                     }
 
@@ -970,16 +971,14 @@ public class OperatorController implements MessageListener {
 
             catch(IOException e){
                 count =0;
-                //e.printStackTrace();
+                e.printStackTrace();
             }
             catch(Exception e){
                 e.printStackTrace();
             }
 
         }
-        else{
 
-        }
 
         return count;
     }
@@ -1012,6 +1011,10 @@ public class OperatorController implements MessageListener {
     protected void createSession(){
         operator.create();
         setSessionCreated(true);
+    }
+
+    public ChatController getController() {
+        return controller;
     }
 
     protected BlockingQueue<ChatMessage> getChatMessagess() {
@@ -1344,6 +1347,10 @@ public class OperatorController implements MessageListener {
                             } catch (JMSException e) {
                                 e.printStackTrace();
                             }
+                            catch (Exception e) {
+                                e.printStackTrace();
+                            }
+
                         });
 
                     }

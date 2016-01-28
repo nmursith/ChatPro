@@ -183,6 +183,9 @@ public class ChatController{
             }
 
 
+
+
+
         });
 
         try {
@@ -504,7 +507,7 @@ public class ChatController{
 //            hashMapOperator.remove(name);
  //           hashMapOperator.get(defaultOperator).getOperatorController().getMessageProduceID().remove(name);
             //listItems.remove(index);
-            operatorController.closeConnection();
+            //operatorController.closeConnection();
             hashMapOperator.get(userID).getChatHolder().setDisable(true);
             sendButton.setDisable(true);
             messageTextField.setDisable(true);
@@ -554,6 +557,7 @@ public class ChatController{
             historyController.writehistory(counter, Constant.operatorhistoryID,myMessageMod);
             chatHolder.addRow(ID, bubble.getRoot());
             messageDisplay.setContent(chatHolder);
+
 
 
     //        UserItem useritem = controller.getListItems().get(index);
@@ -799,6 +803,13 @@ public class ChatController{
 
         c1.setPercentWidth(100);
         gridPane.getColumnConstraints().add(c1);
+
+
+
+
+
+
+
         return gridPane;
     }
 

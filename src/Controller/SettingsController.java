@@ -37,7 +37,7 @@ public class SettingsController  implements ChangeListener, EventHandler<KeyEven
     @FXML public Button deleteVariable;
     @FXML public Button settings_closeButton;
     @FXML public ScrollPane tableViewContainer;
-    @FXML  public Button removeVariableButton;
+    @FXML public Button removeVariableButton;
     @FXML private Button applyConfigurationButton;
     @FXML private  Button applyVariableButton;
     @FXML private TextField destination;

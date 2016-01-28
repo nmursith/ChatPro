@@ -26,6 +26,7 @@ public class BindOperator {
         this.chatHolder = gridPane;
         this.historyController = new HistoryController(operatorController.getSubscriptionName());
         this.historyMessages = new ArrayList<>();
+        this.clientName = null;
 
 
     }
