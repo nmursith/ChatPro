@@ -507,7 +507,7 @@ public class ChatController{
 //            hashMapOperator.remove(name);
  //           hashMapOperator.get(defaultOperator).getOperatorController().getMessageProduceID().remove(name);
             //listItems.remove(index);
-            //operatorController.closeConnection();
+            operatorController.closeConnection();
             hashMapOperator.get(userID).getChatHolder().setDisable(true);
             sendButton.setDisable(true);
             messageTextField.setDisable(true);
@@ -546,10 +546,15 @@ public class ChatController{
             ChatMessage myMessageMod = getObjectMessage(myMessage, operatorController.getSubscriptionName());
             ChatMessage bubbleMessageMod = getObjectMessage(bubbleMessage, operatorController.getSubscriptionName());
 
-            if(!operatorController.isClosedAlready() && operatorController.isSessionCreated()) {
-                operatorController.sendMessage(myMessageMod, operatorController);
-                operatorController.closeConnection();
-            }
+         //   if(!operatorController.isClosedAlready() && operatorController.isSessionCreated()) {
+                try{
+                    operatorController.sendMessage(myMessageMod, operatorController);
+                    operatorController.closeConnection();
+                }
+                catch (Exception e){
+                    e.printStackTrace();
+                }
+//            }
           //  System.out.println("exit");
             int counter = (int) operatorController.getMessageCounter();
             int ID = operatorController.getIDtracker();
