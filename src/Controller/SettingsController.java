@@ -49,6 +49,7 @@ public class SettingsController  implements ChangeListener, EventHandler<KeyEven
     private TableView<Variable> tableVariables;
     private Stage parentStage;
     private boolean isError;
+    private boolean isConnectedAlready;
     private SettingsController settingController;
     private ChatController chatController;
     private Stage settingsStage;
@@ -59,6 +60,7 @@ public class SettingsController  implements ChangeListener, EventHandler<KeyEven
     }
     public void setListeners(){
         isError = false;
+        isConnectedAlready = false;
         tableVariables = new TableView<>();
 
         topic.setOnKeyReleased(this);
@@ -182,10 +184,10 @@ public class SettingsController  implements ChangeListener, EventHandler<KeyEven
         //applyConfiguration();
 
 
-        if(!applyConfigurationButton.isDisable() )
+        if(!applyConfigurationButton.isDisable()  )
             apply();
 
-        if(!isError) {
+        if(!isError && !isConnectedAlready) {
             settingsStage.hide();
             settingsStage.close();
         }
@@ -204,6 +206,7 @@ public class SettingsController  implements ChangeListener, EventHandler<KeyEven
             alert.initStyle(StageStyle.UNDECORATED);
             alert.show();
         }
+
         {
             NetworkDownHandler networkDownHandler = new NetworkDownHandler();
             networkDownHandler.start();
@@ -425,14 +428,54 @@ public class SettingsController  implements ChangeListener, EventHandler<KeyEven
                     OperatorController operatorController = null;
                     try {
                         operatorController = new OperatorController(currentConfiguration.getOperator(), currentConfiguration.getTopic(),chatController);
-                        operatorController.createSession();
-                        operatorController.startDefaultOperatorAction();
+//                        operatorController.createSession();
+//                        operatorController.startDefaultOperatorAction();
+
+                        operatorController.getOperator().create();
+                        boolean isItConnected = operatorController.getOperator().isConnected();
+
+                        if(isItConnected) {
+                            //operatorController.createSession();
+                            isConnectedAlready = false;
+                            operatorController.startDefaultOperatorAction();
+                            settingsStage.close();
+                        }
+                        else{
+                            System.out.println("Operator "+currentConfiguration.getOperator() +" is already Connected");
+                            isConnectedAlready = true;
+                            Platform.runLater(() -> {
+                                try {
+
+                                    System.out.println("Showing settings ");
+                                    //settingsStage.show();
+                                    applyConfigurationButton.setDisable(false);
+                                    if(isConnectedAlready) {
+                                        Alert alert = new Alert(Alert.AlertType.ERROR,"Operator "+currentConfiguration.getOperator() +" is already Connected");
+                                        alert.initModality(Modality.APPLICATION_MODAL);
+                                        alert.initOwner(settingsStage);
+                                        alert.initStyle(StageStyle.UNDECORATED);
+                                        alert.show();
+
+                                    }
+                                    settingsStage.show();
+
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            });
+                        }
+
+
+
+
                         try {
+
                             previous.closeConnection();
                             previous.getNetworkHandler().stopThread();
                             previous.getOfflineNetworkDownHandler().stopThread();
                             previous.getMessageDistributionHandler().stopThread();
                             previous.getTimer().cancel();
+
                         } catch(Exception e ){
                             System.out.println(e.getMessage());
                         }
@@ -440,7 +483,6 @@ public class SettingsController  implements ChangeListener, EventHandler<KeyEven
 
                         operatorController.setMessageProduceID(previous.getMessageProduceID());
                         operatorController.getMessageProduceID().remove(0);
-
                         operatorController.getMessageProduceID().add(0,currentConfiguration.getOperator());
                         operatorController.setChatMessagess(previous.getChatMessagess());
 
@@ -450,7 +492,7 @@ public class SettingsController  implements ChangeListener, EventHandler<KeyEven
                         e.printStackTrace();
                     }
                     catch (Exception e){
-                        e.printStackTrace();
+   //                     e.printStackTrace();
                     }
 
                     chatController.getHashMapOperator().put(currentConfiguration.getOperator(), new BindOperator(operatorController, chatController.getGridPane()) );

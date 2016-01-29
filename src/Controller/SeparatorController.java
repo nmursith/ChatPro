@@ -6,6 +6,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -13,6 +14,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -42,8 +45,8 @@ public class SeparatorController {
     //private Image hideImage =new Image(getClass().getResourceAsStream("add139.png"));
     private int id =0;
     private Stage historyStage;
-
-
+    private ChatController controller;
+    private ScrollPane historyPane;
 
 
     public void showHistory(ActionEvent actionEvent) {
@@ -70,10 +73,10 @@ public class SeparatorController {
                 }
                 //bindOperator.getChatHolder().addRow(1,bindOperator.getChatHolder().getChildren().get(0));//+++++++++++++++++++++
                 if (oldhistory == null) {
-                    oldhistory = bindOperator.getOperatorController().getGridPane();
-                    oldhistory.setPrefHeight(50);
-                    //oldhistory.setPrefWidth(425);
-                    //oldhistory.setMaxWidth(425);
+                    oldhistory = getGridPane();
+
+                    oldhistory.setStyle("-fx-background-color:white;");
+
                 }
                 //oldhistory.getChildren().clear();
 
@@ -135,6 +138,8 @@ public class SeparatorController {
             }
             else{
                // changeView();
+                historyStage.setX(historyStage.getOwner().getX()+215);
+                historyStage.setY(historyStage.getOwner().getY()+120);
                 historyStage.show();
             }
 
@@ -165,31 +170,45 @@ public class SeparatorController {
     private void showHistory(){
         System.out.println("History on stage");
 
-        ScrollPane historyPane = new ScrollPane();
+
+        historyPane.setMaxWidth(400);
+        historyPane.setMaxHeight(350);
         historyPane.setStyle("-fx-background-color:white;");
 
-        oldhistory.setStyle("-fx-background-color:white;");
+        historyPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+
+        //historyStage.setWidth(425);
+
+        historyStage.setMaxWidth(400);
+
+
 
         historyPane.setContent(oldhistory);
-        historyPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         Scene scene = new Scene(historyPane);
-
-        historyStage.setWidth(425);
-        historyStage.setMaxWidth(425);
-        historyStage.setHeight(oldhistory.getHeight());
-        historyStage.setMaxWidth(413);
-
-
-
 
         historyStage.setScene(scene);
         historyStage.show();
+
+
         historyStage.setResizable(false);
         historyStage.focusedProperty().addListener(new ChangeListener<Boolean>() {
             @Override
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
                 if(!newValue)
                     historyStage.close();
+            }
+        });
+
+        historyPane.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                historyStage.requestFocus();
+            }
+        });
+        historyPane.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                historyStage.close();
             }
         });
 
@@ -254,32 +273,80 @@ public class SeparatorController {
         this.bindOperator = bindOperator;
     }
 
-    public void hideHistory(Event event) {
-        if(historyStage!=null && historyStage.isShowing()) {
-            historyStage.close();
-            System.out.println("Mouse exited");
-        }
-    }
+//    public void hideHistory(Event event) {
+//        if(historyStage!=null && historyStage.isShowing()) {
+//          //  historyStage.close();
+//            System.out.println("Mouse exited");
+//        }
+//    }
 
     public void showHistoryonHover(Event event) {
         if(historyStage==null) {
             historyStage = new Stage(StageStyle.UNDECORATED);
-            historyStage.initOwner(bindOperator.getOperatorController().getController().getStage());
+            historyPane = new ScrollPane();
+            setController(bindOperator.getOperatorController().getController());
+            Stage main = getController().getStage();
+
+            historyStage.initOwner(main);
+
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    historyStage.setX(main.getX()+215);
+                    historyStage.setY(main.getY()+120);
+
+                  //  System.out.println("X:  "+main.getX()+212);
+                //    System.out.println("Y:  "+historyButton_view.getTranslateY());
+                }
+            });
+
         }
+
 
         if(!historyStage.isShowing()) {
             loadHistory();
-            System.out.println("Mouse enterd");
+           // System.out.println("Mouse enterd");
+//            Platform.runLater(new Runnable() {
+//                @Override
+//                public void run() {
+//                  //  double width = historyPane.getContent().getBoundsInLocal().getWidth();
+//                    double height = historyPane.getContent().getBoundsInLocal().getHeight();
+//
+////                    double x = historyPane.getBoundsInParent().getMaxX();
+//                    double y = historyPane.getBoundsInParent().getMaxY();
+//
+//                    // scrolling values range from 0 to 1
+//                    System.out.println("V value:  "+y/height);
+//                    historyPane.setVvalue(y/height);
+//                  //  historyPane.setHvalue(x/width);
+//                }
+//            });
         }
     }
 
-    public void showArrow(Event event) {
-        historyButton_view.setImage(showImage);
+    public GridPane getGridPane() {
+        GridPane gridPane = new GridPane();
+        //gridPane.setMaxSize(431, 413);
+        int width = 400;
+        gridPane.setPrefWidth(width);
+        gridPane.setMinWidth(width);
+        gridPane.setMaxWidth(width);
+        gridPane.setMaxHeight(350);
+        gridPane.setVgap(7);
+        ColumnConstraints c1 = new ColumnConstraints();
 
+        c1.setPercentWidth(95);
+        gridPane.getColumnConstraints().add(c1);
+
+        return gridPane;
     }
 
-    public void hideArrow(Event event) {
-        historyButton_view.setImage(null);
+    public ChatController getController() {
+        return controller;
+    }
+
+    public void setController(ChatController controller) {
+        this.controller = controller;
     }
 }
 

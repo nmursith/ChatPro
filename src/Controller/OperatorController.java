@@ -447,11 +447,12 @@ public class OperatorController implements MessageListener {
                             userItem.startBlink();
                             userItem.getUser().setUserName(username);
                             System.out.println(userItemListView.getSelectionModel().isSelected(index));
-                            userItem.getThumbUserName().setText(username);
+
 
                             if (userItemListView.getSelectionModel().isSelected(index)) {
                                 System.out.println("client Name set:  " + username);
                                 Platform.runLater(() -> {
+                                    userItem.getThumbUserName().setText(username);
                                     controller.Username.setText(username);
 
                                 });
@@ -625,7 +626,10 @@ public class OperatorController implements MessageListener {
                         controller.getMessageProducerID().add(tempName);
 
                         BindOperator bindOperator = controller.getHashMapOperator().get(tempName);
-                        String username =bindOperator.getClientName();
+                        String username =null;
+
+                        if(bindOperator!=null)
+                        username=bindOperator.getClientName();
 
                         if(username == null)
                             username="Annonymus";//+tempName.substring(tempName.length()-2);//Constant.usernames[messageProduceID.size()-1];
@@ -728,8 +732,10 @@ public class OperatorController implements MessageListener {
                                             controller.sendButton.setDisable(true);
                                             controller.messageTextField.setDisable(true);
                                             controller.getDoTrain().setDisable(true);
+
                                             try{
-                                                controller.getChatUsersList().getItems().get(controller.getMessageProducerID().indexOf(chatMessage.getProducerID())).setDisable(true);
+                                                int index1 = controller.getMessageProducerID().indexOf(chatMessage.getProducerID());
+                                                controller.getChatUsersList().getItems().get(index1).setDisable(true);
                                             }
                                             catch (Exception e){
                                                 e.printStackTrace(); /*************  do no exist --fix   IndexOutOfBoundsException*************/
@@ -754,6 +760,7 @@ public class OperatorController implements MessageListener {
                                 UserBubble bubble = new UserBubble(username, chatMessage.getTextMessage(), chatMessage.getTime());
                                 bindOperator.getChatHolder().addRow(ID, bubble.getRoot());
                             }
+
 /******************/
 
 
@@ -789,6 +796,8 @@ public class OperatorController implements MessageListener {
 
                                 //ScrollPane messageHolder = new ScrollPane();
                                 //messageHolder.setContent((bindOperator.getChatHolder()));
+
+/****need tofix here**/
                                 controller.messageDisplay.setVvalue(controller.messageDisplay.getVmax());
                                 //messageDisplay.setVvalue(messageDisplay.getVmax());
                                 //    controller.messageDisplay.setVvalue(messageHolder.getVmax());
@@ -988,7 +997,9 @@ public class OperatorController implements MessageListener {
         return operatorController.messageCounter;
     }
 
-
+    public Operator getOperator() {
+        return operator;
+    }
 
     public GridPane getGridPane() {
 //        GridPane gridPane = new GridPane();
@@ -1348,7 +1359,7 @@ public class OperatorController implements MessageListener {
                                 e.printStackTrace();
                             }
                             catch (Exception e) {
-                                e.printStackTrace();
+//                                e.printStackTrace();
                             }
 
                         });

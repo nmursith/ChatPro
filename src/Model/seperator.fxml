@@ -9,9 +9,9 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseEntered="#showArrow" onMouseExited="#hideArrow" prefHeight="38.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.SeparatorController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="38.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.SeparatorController">
    <children>
-      <Button fx:id="historyButton" layoutX="370.5" layoutY="4.0" mnemonicParsing="false" onAction="#showHistory" onMouseExited="#hideHistory" onMouseMoved="#showHistoryonHover" prefHeight="28.0" prefWidth="13.0" style="-fx-background-color: transparent;" GridPane.columnIndex="4">
+      <Button fx:id="historyButton" layoutX="370.5" layoutY="4.0" mnemonicParsing="false" onAction="#showHistory" onMouseMoved="#showHistoryonHover" prefHeight="28.0" prefWidth="13.0" style="-fx-background-color: transparent;" GridPane.columnIndex="4">
          <graphic>
             <ImageView fx:id="historyButton_view" fitHeight="20.0" fitWidth="20.0" layoutX="5.0">
                <image>

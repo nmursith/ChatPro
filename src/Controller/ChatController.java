@@ -102,7 +102,7 @@ public class ChatController{
         String ID = Constant.operatorID;//Constant.getRandomString();
 
         try{
-            Operator operator = new Operator(ID, ID);
+            Operator operator = new Operator(config.getOperator(), config.getTopic());
             operator.create();
             boolean isConnected = operator.isConnected();
             operator.closeConnection();
@@ -217,6 +217,9 @@ public class ChatController{
 
         ChatMessage myMessageMod = getObjectMessage(myMessage, operatorController.getSubscriptionName());
         try {
+            if(myMessage==null)
+                return;
+
             if(!myMessage.trim().equals("") && !myMessage.trim().equalsIgnoreCase("exit")){
 
                 int counter =  operatorController.getMessageCounter();
@@ -809,12 +812,6 @@ public class ChatController{
         c1.setPercentWidth(100);
         gridPane.getColumnConstraints().add(c1);
 
-
-
-
-
-
-
         return gridPane;
     }
 
@@ -1035,8 +1032,24 @@ public class ChatController{
                 System.out.println("Re-connected and put the operator");
                 try {
                     OperatorController operatorController = new OperatorController(config.getOperator(), config.getTopic(),controller);
-                    operatorController.createSession();
-                    operatorController.startDefaultOperatorAction();
+
+                    operatorController.getOperator().create();
+                    boolean isItConnected = operatorController.getOperator().isConnected();
+
+                    if(isItConnected) {
+                        //operatorController.createSession();
+                        operatorController.startDefaultOperatorAction();
+                    }
+                    else{
+                        System.out.println("Operator "+config.getOperator() +" is already Connected");
+                        Platform.runLater(() -> {
+                            try {
+                               settingsController.showSettingsWindow(stage);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        });
+                    }
                     System.out.println("from network      "+operatorController.getSesssion());
                     hashMapOperator.put(config.getOperator(), new BindOperator(operatorController, getGridPane()));
                     setUsername(chatUsersList.getSelectionModel().getSelectedItem());

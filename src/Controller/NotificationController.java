@@ -162,7 +162,7 @@ public class NotificationController {
     }
 
     private static void notifyLocations(){
-        if(index<chatController.getChatUsersList().getItems().size()) {
+        if(index>=0 && index<chatController.getChatUsersList().getItems().size()) {
             UserItem userItem = chatController.getChatUsersList().getItems().get(getIndex());
             chatController.setUsername(userItem);
             chatController.getChatUsersList().getSelectionModel().select(getIndex());
