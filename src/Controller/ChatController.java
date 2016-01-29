@@ -1044,7 +1044,17 @@ public class ChatController{
                         System.out.println("Operator "+config.getOperator() +" is already Connected");
                         Platform.runLater(() -> {
                             try {
+
                                settingsController.showSettingsWindow(stage);
+
+                                    Alert alert = new Alert(Alert.AlertType.ERROR,"Operator "+config.getOperator() +" is already Connected.\nPlease Change the Operator Name");
+                                    alert.initModality(Modality.APPLICATION_MODAL);
+                                    alert.initOwner(settingStage);
+                                    alert.initStyle(StageStyle.UNDECORATED);
+                                    alert.show();
+
+
+
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
