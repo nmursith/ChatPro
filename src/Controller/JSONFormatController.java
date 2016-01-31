@@ -7,7 +7,7 @@ import org.json.simple.parser.ParseException;
 /**
  * Created by mmursith on 1/22/2016.
  */
-public class ChatMessageController {
+public class JSONFormatController {
 
 
     public static void main(String[] args){
@@ -31,20 +31,45 @@ public class ChatMessageController {
 
         String [] messg = new String[2];
         try {
+           // System.out.println("Decoding :"+  JSON);
             JSONObject jsonObject = (JSONObject) (new JSONParser().parse(JSON));
 
             String text = (String) jsonObject.get("text");
             String owner = (String) jsonObject.get("owner");
+
             messg[0] = text;
             messg[1] = owner;
+           // System.out.println(messg);
 
-        } catch (ParseException e) {
-            messg[0] = JSON;
-            messg[1] = null;
+        } catch (ParseException  e) {
+         //
 
-            e.printStackTrace();
+            String [] str = JSON.split(",");
+            if(str[1].contains("\"text\":")) {
+                String[] temp = str[1].split(":");
+                messg[0]= temp[1].substring(1, temp[1].length()-2);
+            }
+            else {
+                messg[0] = JSON;
+                messg[1] = null;
+            }
+        //    e.printStackTrace();
         }
+        catch (Exception e) {
+            String [] str = JSON.split(",");
+            if(str[1].contains("\"text\":")) {
+                String[] temp = str[1].split(":");
+                messg[0]= temp[1].substring(1, temp[1].length()-2);
 
+            }
+            else {
+                messg[0] = JSON;
+                messg[1] = null;
+            }
+
+
+          //  e.printStackTrace();
+        }
 
 
         return messg;

@@ -24,6 +24,8 @@ public class Constant {
     public static  final  String ConnectedMessage = "Operator Connected";
     public static  final  String DisConnectedMessage = "Operator Disconnected";
     public static  final  String Annonymus = "Annonymus";
+    public static  final  String ID_O = "0";
+    public static  final  String ID_U = "1";
 
 
     public static String [] usernames = {"Operator","Pubudu", "Shannon", "Nimashi","Damith","Mursith","Januka","Prabudhika","Thuan","Sameera"};

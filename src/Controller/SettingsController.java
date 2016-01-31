@@ -449,6 +449,8 @@ public class SettingsController  implements ChangeListener, EventHandler<KeyEven
                                     System.out.println("Showing settings ");
                                     //settingsStage.show();
                                     applyConfigurationButton.setDisable(false);
+                                  //  chatController.setOnline(false);
+                                    chatController.statusImageView.setImage(image_offline);
                                     if(isConnectedAlready) {
                                         Alert alert = new Alert(Alert.AlertType.ERROR,"Operator "+currentConfiguration.getOperator() +" is already Connected");
                                         alert.initModality(Modality.APPLICATION_MODAL);

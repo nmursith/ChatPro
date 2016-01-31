@@ -228,7 +228,7 @@ public class ChatController{
                 OperatorBubble bubble = new OperatorBubble(defaultOperator, myMessageMod.getTextMessage(), myMessageMod.getTime() );
                 //       GridPane.setHalignment(bubble.getFromBubble(), HPos.RIGHT);
                // Parent root = bubble.getRoot(defaultOperator, myMessageMod.getTextMessage(), myMessageMod.getTime());
-                historyController.writehistory(counter, Constant.operatorhistoryID, myMessageMod);
+                historyController.writehistory(Constant.ID_O, Constant.configuration.getOperator(), myMessageMod);
                 chatHolder.addRow(ID, bubble.getRoot());
                 messageDisplay.setContent(chatHolder);
 
@@ -491,7 +491,6 @@ public class ChatController{
         if(!listItems.isEmpty() ) {
 
             String myMessage = "exit";
-
             String bubbleMessage = "Chat closed by Operator";
             ChatMessage myMessageMod = getObjectMessage(myMessage, operatorController.getSubscriptionName());
             ChatMessage bubbleMessageMod = getObjectMessage(bubbleMessage, operatorController.getSubscriptionName());
@@ -500,7 +499,7 @@ public class ChatController{
             int ID = operatorController.getIDtracker();
             OperatorBubble bubble = new OperatorBubble(defaultOperator, bubbleMessageMod.getTextMessage(),bubbleMessageMod.getTime() );
 
-            historyController.writehistory(counter, Constant.operatorhistoryID, bubbleMessageMod);
+            historyController.writehistory(Constant.ID_O, Constant.configuration.getOperator(), bubbleMessageMod);
             chatHolder.addRow(ID, bubble.getRoot());
             messageDisplay.setContent(chatHolder);
             operatorController.sendMessage(myMessageMod, operatorController);
@@ -562,7 +561,7 @@ public class ChatController{
             int counter = (int) operatorController.getMessageCounter();
             int ID = operatorController.getIDtracker();
             OperatorBubble bubble = new OperatorBubble(defaultOperator, bubbleMessageMod.getTextMessage(), bubbleMessageMod.getTime() );
-            historyController.writehistory(counter, Constant.operatorhistoryID,myMessageMod);
+            historyController.writehistory(Constant.ID_O, Constant.configuration.getOperator(),myMessageMod);
             chatHolder.addRow(ID, bubble.getRoot());
             messageDisplay.setContent(chatHolder);
 
@@ -670,7 +669,7 @@ public class ChatController{
                }
                int counter = (int) bindOperator.getOperatorController().getMessageCounter();
             //   OperatorBubble bubble = new OperatorBubble(defaultOperator, bubbleMessageMod.getTextMessage(), bubbleMessageMod.getTime() );
-               bindOperator.getHistoryController().writehistory(counter, Constant.operatorhistoryID,bubbleMessageMod);
+               bindOperator.getHistoryController().writehistory(Constant.ID_O, Constant.configuration.getOperator(),bubbleMessageMod);
                //bindOperator.getChatHolder().addRow(counter, bubble.getRoot());
 
            }
@@ -990,7 +989,7 @@ public class ChatController{
                         if (isConnected) {
                             statusImageView.setImage(image_online); //==========================
                             isOnline = true;
-                            System.out.println("Re-connected");
+                            System.out.println("Server is Online");
                             operator.closeConnection();
                         }
                         else {
@@ -1029,7 +1028,7 @@ public class ChatController{
                 }
 
             if(isOnline){
-                System.out.println("Re-connected and put the operator");
+
                 try {
                     OperatorController operatorController = new OperatorController(config.getOperator(), config.getTopic(),controller);
 
@@ -1038,6 +1037,7 @@ public class ChatController{
 
                     if(isItConnected) {
                         //operatorController.createSession();
+                        System.out.println("Re-connected and put the operator");
                         operatorController.startDefaultOperatorAction();
                     }
                     else{
@@ -1046,7 +1046,8 @@ public class ChatController{
                             try {
 
                                settingsController.showSettingsWindow(stage);
-
+                                statusImageView.setImage(image_offline);
+                              //  setOnline(false);
                                     Alert alert = new Alert(Alert.AlertType.ERROR,"Operator "+config.getOperator() +" is already Connected.\nPlease Change the Operator Name");
                                     alert.initModality(Modality.APPLICATION_MODAL);
                                     alert.initOwner(settingStage);

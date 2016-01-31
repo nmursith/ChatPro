@@ -43,11 +43,11 @@ public class SeparatorController {
     private Image showImage =new Image(getClass().getResourceAsStream("downarrow.png"));
     //private Image showImage =new Image(getClass().getResourceAsStream("minus75.png"));
     //private Image hideImage =new Image(getClass().getResourceAsStream("add139.png"));
-    private int id =0;
+    private String ID;
     private Stage historyStage;
     private ChatController controller;
     private ScrollPane historyPane;
-
+    private int row=-1;
 
     public void showHistory(ActionEvent actionEvent) {
             loadHistory();
@@ -92,27 +92,30 @@ public class SeparatorController {
                         @Override
                         public void run() {
                             for (HistoryMessage history : historyMessages) {
+                                row++;
 
                                 try {
-                                    id = Integer.parseInt(history.getID())+1;
+                                    ID = history.getID();
                                     //         System.out.println("ID:  "+ id);
 
-                                    if (history.getFrom().equals(Constant.operatorhistoryID)) {
+                                    if (history.getID().equals(Constant.ID_O) && !history.getFrom().equalsIgnoreCase(Constant.BOT_TAG)) {
                                         OperatorBubble bubble = new OperatorBubble(defaultOperator, history.getMessage(), history.getTime());
                                         //    GridPane.setHalignment(bubble.getFromBubble(), HPos.RIGHT);
-                                        oldhistory.add(bubble.getRoot(), 0, id);
+                                        oldhistory.add(bubble.getRoot(), 0, row);
                                         // bindOperator.getChatHolder().addRow(id, bubble.getRoot());
 
 
-                                    } else if (history.getFrom().equalsIgnoreCase(Constant.BOT_TAG)) {
+                                    }
+                                    else if (history.getFrom().equalsIgnoreCase(Constant.BOT_TAG)) {
                                         OperatorBubble bubble = new OperatorBubble(Constant.BOT_TAG, history.getMessage(), history.getTime());
                                         bubble.setImage(botImage);
                                         //    GridPane.setHalignment(bubble.getFromBubble(), HPos.RIGHT);
-                                        oldhistory.add(bubble.getRoot(), 0, id);
-                                    } else {
+                                        oldhistory.add(bubble.getRoot(), 0, row);
+                                    }
+                                    else  if (history.getID().equals(Constant.ID_U)){
                                         UserBubble bubble = new UserBubble(history.getFrom(), history.getMessage(), history.getTime());
                                         //         GridPane.setHalignment(bubble.getToBubble(), HPos.LEFT);
-                                        oldhistory.add(bubble.getRoot(), 0, id);
+                                        oldhistory.add(bubble.getRoot(), 0, row);
                                         //    bindOperator.getChatHolder().addRow(id, bubble.getRoot());
                                     }
 
@@ -174,7 +177,6 @@ public class SeparatorController {
         historyPane.setMaxWidth(400);
         historyPane.setMaxHeight(350);
         historyPane.setStyle("-fx-background-color:white;");
-
         historyPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 
         //historyStage.setWidth(425);
@@ -227,8 +229,8 @@ public class SeparatorController {
 
         bindOperator.getChatHolder().add(oldhistory, 0, tracker);
 
-        if (!oldhistory.getChildren().contains(root))
-            oldhistory.addRow(id + 1, root);
+//        if (!oldhistory.getChildren().contains(root))
+//            oldhistory.addRow(id + 1, root);
     }
     public  void setTime(){
         Date dNow = new Date( );
@@ -239,8 +241,8 @@ public class SeparatorController {
     }
     public  void setTime(String time){
         time_label.setText(time);
-
     }
+
     public ArrayList<HistoryMessage> getHistoryMessages() {
         return historyMessages;
     }
@@ -305,7 +307,7 @@ public class SeparatorController {
 
         if(!historyStage.isShowing()) {
             loadHistory();
-           // System.out.println("Mouse enterd");
+            // System.out.println("Mouse enterd");
 //            Platform.runLater(new Runnable() {
 //                @Override
 //                public void run() {

@@ -16,6 +16,8 @@ public class ChatMessage {
     private String time;
     private String textMessage;
 
+    private String Owner;
+
 
 
     public ChatMessage(){
@@ -55,5 +57,11 @@ public class ChatMessage {
         return textMessage;
     }
 
+    public String getOwner() {
+        return Owner;
+    }
 
+    public void setOwner(String owner) {
+        Owner = owner;
+    }
 }

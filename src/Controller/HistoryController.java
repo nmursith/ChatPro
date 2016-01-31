@@ -44,7 +44,7 @@ public class HistoryController {
 
     }
 
-    public void writehistory(int id, String from, ChatMessage message){
+    public void writehistory(String id, String from, ChatMessage message){
 
 
         // before we open the file check to see if it already exists
@@ -73,7 +73,7 @@ public class HistoryController {
             // else assume that the file already has the correct header line
 
             // write out a few records
-            csvOutput.write(id+"");
+            csvOutput.write(id);
             csvOutput.write(from);
             //csvOutput.write(message);
             csvOutput.write(message.getTextMessage());
@@ -144,7 +144,7 @@ public class HistoryController {
                     String messg = (String)obj.get("msg");
                 //    System.out.println(from+"      "+messg);
                     String time = (String)obj.get("time");
-
+                    String ID = from.equalsIgnoreCase(Constant.BOT_TAG)?Constant.ID_O:Constant.ID_U;
 
                     if(!from.equals(Constant.Annonymus) &&!from.equals(Constant.BOT_TAG) && userName==null ) {
 
@@ -155,8 +155,9 @@ public class HistoryController {
                         continue;
                     }
                         if(i<(msg.size()) ){
-                            int ID = operatorController.getMessageCounter();
-                            csvOutput.write(ID + "");
+
+
+                            csvOutput.write(ID);
                             csvOutput.write(from);
                             //csvOutput.write(message);
                             csvOutput.write(messg);
@@ -164,7 +165,7 @@ public class HistoryController {
 
                             csvOutput.endRecord();
                             //if(historyMessages!=null)
-                            historyMessages.add(new HistoryMessage(i + "", from, messg, time));
+                            historyMessages.add(new HistoryMessage(ID, from, messg, time));
                         }
                         else {
                             bindOperator.setHistoryMessages(historyMessages);
