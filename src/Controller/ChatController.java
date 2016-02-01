@@ -128,9 +128,16 @@ public class ChatController{
 
             }
             if(isOnline) {
-                operatorController = new OperatorController(config.getOperator(), config.getTopic(), this);
-                operatorController.createSession();
-                operatorController.startDefaultOperatorAction();
+                Platform.runLater(() -> {
+                    try {
+                        operatorController = new OperatorController(config.getOperator(), config.getTopic(), controller);
+                        operatorController.createSession();
+                        operatorController.startDefaultOperatorAction();
+                    } catch (JMSException e) {
+                        e.printStackTrace();
+                    }
+
+                });
             }
 
         }
