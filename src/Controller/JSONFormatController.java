@@ -43,30 +43,37 @@ public class JSONFormatController {
 
         } catch (ParseException  e) {
          //
+            messg[0] = JSON;
+            messg[1] = null;
 
-            String [] str = JSON.split(",");
-            if(str[1].contains("\"text\":")) {
-                String[] temp = str[1].split(":");
-                messg[0]= temp[1].substring(1, temp[1].length()-2);
+            if(JSON.contains(",")) {
+                String[] str = JSON.split(",");
+                if (str[1].contains("\"text\":")) {
+                    String[] temp = str[1].split(":");
+                    messg[0] = temp[1].substring(1, temp[1].length() - 2);
+
+                } else {
+                    messg[0] = JSON;
+                    messg[1] = null;
+                }
             }
-            else {
-                messg[0] = JSON;
-                messg[1] = null;
-            }
+
         //    e.printStackTrace();
         }
         catch (Exception e) {
-            String [] str = JSON.split(",");
-            if(str[1].contains("\"text\":")) {
-                String[] temp = str[1].split(":");
-                messg[0]= temp[1].substring(1, temp[1].length()-2);
+            messg[0] = JSON;
+            messg[1] = null;
+            if(JSON.contains(",")) {
+                String[] str = JSON.split(",");
+                if (str[1].contains("\"text\":")) {
+                    String[] temp = str[1].split(":");
+                    messg[0] = temp[1].substring(1, temp[1].length() - 2);
 
+                } else {
+                    messg[0] = JSON;
+                    messg[1] = null;
+                }
             }
-            else {
-                messg[0] = JSON;
-                messg[1] = null;
-            }
-
 
           //  e.printStackTrace();
         }

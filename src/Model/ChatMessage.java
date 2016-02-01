@@ -58,6 +58,8 @@ public class ChatMessage {
     }
 
     public String getOwner() {
+        if(Owner==null)
+            Owner ="";
         return Owner;
     }
 

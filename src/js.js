@@ -195,12 +195,18 @@
 	}
 	
 	function createJSON(text){
-	var str="{\"owner\":\"Mursith\",\"text\":\""+text+"\"}";
-	return str;
+	//var str="{\"owner\":\"Mursith\",\"text\":\""+text+"\"}";
+			 var obj = new Object();
+    		   obj.text = text;
+    		   obj.owner  = owner;
+
+    		var jsonString= JSON.stringify(obj);
+
+    		return jsonString;
 	}
 		
       } else {
-        $("#connect").html("\
+        $("#connect").html(
             <h1>Get a new Web Browser!</h1>\
             <p>\
             Your browser does not support WebSockets. This example will not work properly.<br>\

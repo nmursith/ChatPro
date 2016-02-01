@@ -47,7 +47,7 @@ public class SeparatorController {
     private Stage historyStage;
     private ChatController controller;
     private ScrollPane historyPane;
-    private int row=-1;
+    private int row=0;
 
     public void showHistory(ActionEvent actionEvent) {
             loadHistory();
@@ -141,7 +141,7 @@ public class SeparatorController {
             }
             else{
                // changeView();
-                historyStage.setX(historyStage.getOwner().getX()+215);
+                historyStage.setX(historyStage.getOwner().getX()+216);
                 historyStage.setY(historyStage.getOwner().getY()+120);
                 historyStage.show();
             }
@@ -174,14 +174,15 @@ public class SeparatorController {
         System.out.println("History on stage");
 
 
-        historyPane.setMaxWidth(400);
-        historyPane.setMaxHeight(350);
-        historyPane.setStyle("-fx-background-color:white;");
+        historyPane.setMaxWidth(408);
+        historyPane.setMaxHeight(380);
+        historyPane.setStyle("-fx-background-color:white;-fx-background-insets: -0.4, 1, 2;-fx-background-radius: 3.4, 2, 2;-fx-border-color:black;-fx-border-width: 0 0.25 0.25 0.25;");
         historyPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        historyPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 
         //historyStage.setWidth(425);
 
-        historyStage.setMaxWidth(400);
+        historyStage.setMaxWidth(408);
 
 
 
@@ -294,7 +295,7 @@ public class SeparatorController {
             Platform.runLater(new Runnable() {
                 @Override
                 public void run() {
-                    historyStage.setX(main.getX()+215);
+                    historyStage.setX(main.getX()+216);
                     historyStage.setY(main.getY()+120);
 
                   //  System.out.println("X:  "+main.getX()+212);
@@ -329,12 +330,15 @@ public class SeparatorController {
     public GridPane getGridPane() {
         GridPane gridPane = new GridPane();
         //gridPane.setMaxSize(431, 413);
-        int width = 400;
+        int width = 408;
         gridPane.setPrefWidth(width);
         gridPane.setMinWidth(width);
         gridPane.setMaxWidth(width);
-        gridPane.setMaxHeight(350);
+        gridPane.setPrefHeight(400);
+        gridPane.setMaxHeight(400);
         gridPane.setVgap(7);
+
+
         ColumnConstraints c1 = new ColumnConstraints();
 
         c1.setPercentWidth(95);

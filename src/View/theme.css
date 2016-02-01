@@ -282,7 +282,14 @@ scrollbar
      -fx-background-color: #00AFF0;
  }
 
+
+
  .closeButton:hover{
+        -fx-opacity: 0.5;
+        -fx-effect: dropshadow( gaussian , rgba(0,0,0,100) , 10,0,0,1 );
+ }
+
+ .downArrow:hover{
         -fx-opacity: 0.5;
         -fx-effect: dropshadow( gaussian , rgba(0,0,0,100) , 10,0,0,1 );
  }
@@ -291,6 +298,7 @@ scrollbar
      -fx-background-color: black;
      -fx-effect: dropshadow( gaussian , rgba(0,0,0,100) , 10,0,0,1 );
  }
+
 
  .minimizeButton{
      -fx-background-color: #00AFF0;

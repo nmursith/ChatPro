@@ -80,7 +80,7 @@ public class OperatorController implements MessageListener {
         this.isReceived = false;
 //      this.notificationController = new NotificationController();
         this.messageCounter = -1;
-        this.IDtracker = -1;
+        this.IDtracker = 0;
 
     }
 
@@ -241,12 +241,17 @@ public class OperatorController implements MessageListener {
             }
 
             try{
+
                 operator.getSesssion().createTextMessage();
             }
             catch(IllegalStateException e){
                 operator.createSession();
                 isOnline = operator.operator.isConnected();
             }
+            catch (NullPointerException e ){
+                e.printStackTrace();
+            }
+
 
                 try{
 
@@ -403,7 +408,12 @@ public class OperatorController implements MessageListener {
 //                    operatorController.getMessageConsumer().setMessageListener(null);
 
                 BindOperator bindOperator = new BindOperator(operatorController, chatHolder);
-            bindOperator.setClientName(chatMessage.getOwner());
+                if(chatMessage.getOwner()!=null || chatMessage.getOwner()!="") {
+                    bindOperator.setClientName(chatMessage.getOwner());
+                }
+                else {
+                    bindOperator.setClientName(null);
+                }
                 System.out.println("Setting client Name from Mesasge: "+ chatMessage.getOwner());
 
 
@@ -432,6 +442,38 @@ public class OperatorController implements MessageListener {
                     //operatorController.setIDtracker(0);
                 }
 
+                String tempName = producerID;
+                if (!controller.getMessageProducerID().contains(tempName) && !tempName.equals(null) && !tempName.trim().equalsIgnoreCase(defaultOperator) ) {
+
+                    System.out.println("updating:  "+tempName);
+                    controller.getMessageProducerID().add(tempName);
+
+                    bindOperator = controller.getHashMapOperator().get(tempName);
+                    String username =null;
+
+                    if(bindOperator!=null)
+                        username=bindOperator.getClientName();
+
+                    if(username == null)
+                        username="Annonymus";//+tempName.substring(tempName.length()-2);//Constant.usernames[messageProduceID.size()-1];
+
+                    User user = new User();
+                    user.setuserId(tempName);
+                    user.setUserName(username);
+                    user.setSubscriptionName(tempName);
+                    user.setTopicName(Constant.topicPrefix+ tempName);
+                    Platform.runLater(() -> controller.getListItems().add(new UserItem(user,controller)));
+
+                    //      controller.getChatUsersList().setItems(controller.getListItems());
+                    //        System.out.println("updated:   "+ defaultOperator +"        "+ tempName);
+
+                }
+
+
+
+
+
+
 
                }
             else {
@@ -452,6 +494,10 @@ public class OperatorController implements MessageListener {
                 }
             }
 
+
+
+
+
             if(chatMessage!=null && !chatMessagess.contains(chatMessage)) {
                 //Image botImage= new Image(getClass().getResourceAsStream("robotic.png"));
 
@@ -463,6 +509,7 @@ public class OperatorController implements MessageListener {
                     final String username = bindOperator.getHistoryController().writeHistory(chatMessage.getTextMessage(), bindOperator, true);
 
                     if (username != null) {
+                        if(bindOperator.getClientName()!=null)
                         bindOperator.setClientName(username);
                         int index = controller.getMessageProducerID().indexOf(chatMessage.getProducerID());
                         ListView<UserItem> userItemListView =  controller.getChatUsersList();
@@ -505,78 +552,6 @@ public class OperatorController implements MessageListener {
 
             }
 
-
-                        //    bindOperator.getLatestHistoryMessages().clear();
-                        //System.out.println(bindOperator.getLatestHistoryMessages().size());
-
-
-//                        for (HistoryMessage history : historyMessages) {
-//
-//                            try {
-//                                int id = Integer.parseInt(history.getID());
-//                                //         System.out.println("ID:  "+ id);
-//
-//                                if (history.getFrom().equalsIgnoreCase(Constant.BOT_TAG)) {
-//                                    OperatorBubble bubble = new OperatorBubble(Constant.BOT_TAG, history.getMessage(), history.getTime());
-//                                    bubble.setImage(botImage);
-//                                    //    GridPane.setHalignment(bubble.getFromBubble(), HPos.RIGHT);
-//                                    bindOperator.getChatHolder().addRow(id, bubble.getRoot());
-//                                } else {
-//                                    UserBubble bubble = new UserBubble(history.getFrom(), history.getMessage(), history.getTime());
-//                                    //         GridPane.setHalignment(bubble.getToBubble(), HPos.LEFT);
-//                                    bindOperator.getChatHolder().addRow(id, bubble.getRoot());
-//                                    //    bindOperator.getChatHolder().addRow(id, bubble.getRoot());
-//                                }
-//
-//                            }
-//                            catch (IOException e) {
-//                                System.out.println("Problem in loading latest history");
-//                            }
-//
-//                        }
-
-
-                        //count = count +count2;
-                        //operatorController.setMessageCounter(count);
-  //                  }
-
-
-
-
-
-            /********/
-
-
-/*            final CountDownLatch latch = new CountDownLatch(1);
-            Platform.runLater(() -> {
-                try {
-                    if(controller!=null)
-                        routeChat();
-                } catch (JMSException e) {
-                    e.printStackTrace();
-                }
-            });
-            latch.await();*/
-
-/*            Task<Void> task = new Task<Void>() {
-                @Override protected Void call() throws Exception {
-                    final CountDownLatch latch = new CountDownLatch(1);
-                    Platform.runLater(() -> {
-                        try {
-                            if(controller!=null)
-                                routeChat();
-                        } catch (JMSException e) {
-                            e.printStackTrace();
-                        }
-                    });
-                    latch.await();
-                    return null;
-                }
-            };
-
-            Platform.runLater(task);*/
-
-        /***********/
 
 
 
@@ -630,6 +605,7 @@ public class OperatorController implements MessageListener {
   //      System.out.println("Routing...");
 
 
+/*
         if(controller.getListItems().size()< producerID.size()){
  //           System.out.println("Condition ");
             for(int index=1; index < producerID.size(); index++) {
@@ -646,36 +622,13 @@ public class OperatorController implements MessageListener {
 //                    //  e.printStackTrace();
 //                }
 
-                    if (!controller.getMessageProducerID().contains(tempName) && !tempName.equals(null) && !tempName.trim().equalsIgnoreCase(defaultOperator) ) {
 
-                        System.out.println("updating:  "+tempName);
-                        controller.getMessageProducerID().add(tempName);
-
-                        BindOperator bindOperator = controller.getHashMapOperator().get(tempName);
-                        String username =null;
-
-                        if(bindOperator!=null)
-                        username=bindOperator.getClientName();
-
-                        if(username == null)
-                            username="Annonymus";//+tempName.substring(tempName.length()-2);//Constant.usernames[messageProduceID.size()-1];
-
-                        User user = new User();
-                        user.setuserId(tempName);
-                        user.setUserName(username);
-                        user.setSubscriptionName(tempName);
-                        user.setTopicName(Constant.topicPrefix+ tempName);
-
-                        controller.getListItems().add(new UserItem(user,controller));
-                  //      controller.getChatUsersList().setItems(controller.getListItems());
-                //        System.out.println("updated:   "+ defaultOperator +"        "+ tempName);
-
-                    }
 
 
 
             }
         }
+*/
 
         durablechatMessage = getChatMessagess();
 
@@ -704,7 +657,7 @@ public class OperatorController implements MessageListener {
                         if( correID==null ||  !correID.equals(Constant.correalationID)){  //|| !correID.equals(Constant.correalationID)
 
                             BindOperator bindOperator =  controller.getHashMapOperator().get(chatMessage.getProducerID());
-                            int counter = bindOperator.getOperatorController().getMessageCounter();
+
 
                             int ID = bindOperator.getOperatorController().getIDtracker();
 
@@ -712,7 +665,11 @@ public class OperatorController implements MessageListener {
               //              Bubble bubble = new Bubble(reply, controller);
                             int index = controller.getMessageProducerID().indexOf(chatMessage.getProducerID());
                  //           System.out.println(controller.getMessageProducerID().size()+  "   index:  "+index);
+
                             String username = chatMessage.getOwner();
+
+                            if(bindOperator!=null)
+                               username = username.equals("")?bindOperator.getClientName():username;
                             /*if(index>=0 && index<controller.getListItems().size())            //don't get from list
                                 username= controller.getListItems().get(index).getUser().getUserName();*/
 
@@ -764,7 +721,8 @@ public class OperatorController implements MessageListener {
 
                                             try{
                                                 int index1 = controller.getMessageProducerID().indexOf(chatMessage.getProducerID());
-                                                controller.getChatUsersList().getItems().get(index1).setDisable(true);
+                                                if(index1>=0 && index1<controller.getChatUsersList().getItems().size())
+                                                    controller.getChatUsersList().getItems().get(index1).setDisable(true);
                                             }
                                             catch (Exception e){
                                                 e.printStackTrace(); /*************  do no exist --fix   IndexOutOfBoundsException*************/
@@ -804,7 +762,12 @@ public class OperatorController implements MessageListener {
                             //    System.out.println("selected   "+cID);
                                 if(sID!=cID && cID<controller.getChatUsersList().getItems().size()){
                                  //   System.out.println("should work");
-                                    Platform.runLater(() -> controller.getChatUsersList().getItems().get(cID).startBlink());
+                                    try{
+                                        Platform.runLater(() -> controller.getChatUsersList().getItems().get(cID).startBlink());
+                                    }
+                                    catch (Exception e){
+                                        System.out.println("Not in the Chat user list");
+                                    }
 
                                 }
 
@@ -999,7 +962,7 @@ public class OperatorController implements MessageListener {
                 messages.close();
 
                 bindOperator.setHistoryMessages(historyMessages);
-                int track=bindOperator.getOperatorController().getIDtracker();
+   //             int track=bindOperator.getOperatorController().getIDtracker();
                 SeperatorLine seperatorLine = new SeperatorLine(bindOperator,0);            // uncomment
                 //   bindOperator.getChatHolder().getChildren().clear();  // uncomment
      //           Platform.runLater(() -> {

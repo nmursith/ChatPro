@@ -132,7 +132,7 @@ public class HistoryController {
                 // write out a few records
 
 
-                for (int i=0; i<msg.size(); i++){
+                for (int i=0; i<msg.size()-1; i++){
 
 
 
@@ -154,7 +154,7 @@ public class HistoryController {
                     if(messg.equalsIgnoreCase(Constant.ConnectedMessage) || messg.equalsIgnoreCase(Constant.DisConnectedMessage)){
                         continue;
                     }
-                        if(i<(msg.size()) ){
+                        if(i<(msg.size()-2)  ){
 
 
                             csvOutput.write(ID);

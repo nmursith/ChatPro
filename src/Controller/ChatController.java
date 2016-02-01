@@ -222,7 +222,7 @@ public class ChatController{
 
             if(!myMessage.trim().equals("") && !myMessage.trim().equalsIgnoreCase("exit")){
 
-                int counter =  operatorController.getMessageCounter();
+               // int counter =  operatorController.getMessageCounter();
                 int ID = operatorController.getIDtracker();
           //      System.out.println("value chat:  "+counter+"     ****"+operatorController);
                 OperatorBubble bubble = new OperatorBubble(defaultOperator, myMessageMod.getTextMessage(), myMessageMod.getTime() );
@@ -495,7 +495,7 @@ public class ChatController{
             ChatMessage myMessageMod = getObjectMessage(myMessage, operatorController.getSubscriptionName());
             ChatMessage bubbleMessageMod = getObjectMessage(bubbleMessage, operatorController.getSubscriptionName());
 
-            int counter = (int) operatorController.getMessageCounter();
+          //  int counter = (int) operatorController.getMessageCounter();
             int ID = operatorController.getIDtracker();
             OperatorBubble bubble = new OperatorBubble(defaultOperator, bubbleMessageMod.getTextMessage(),bubbleMessageMod.getTime() );
 
@@ -558,7 +558,7 @@ public class ChatController{
                 }
 //            }
           //  System.out.println("exit");
-            int counter = (int) operatorController.getMessageCounter();
+           // int counter = (int) operatorController.getMessageCounter();
             int ID = operatorController.getIDtracker();
             OperatorBubble bubble = new OperatorBubble(defaultOperator, bubbleMessageMod.getTextMessage(), bubbleMessageMod.getTime() );
             historyController.writehistory(Constant.ID_O, Constant.configuration.getOperator(),myMessageMod);
@@ -667,7 +667,7 @@ public class ChatController{
                 //   bindOperator.getOperatorController().sendMessage(myMessageMod, bindOperator.getOperatorController());
 
                }
-               int counter = (int) bindOperator.getOperatorController().getMessageCounter();
+               //int counter = (int) bindOperator.getOperatorController().getMessageCounter();
             //   OperatorBubble bubble = new OperatorBubble(defaultOperator, bubbleMessageMod.getTextMessage(), bubbleMessageMod.getTime() );
                bindOperator.getHistoryController().writehistory(Constant.ID_O, Constant.configuration.getOperator(),bubbleMessageMod);
                //bindOperator.getChatHolder().addRow(counter, bubble.getRoot());
@@ -944,8 +944,6 @@ public class ChatController{
     public void setPreviousID(String previousID) {
         this.previousID = previousID;
     }
-
-
 
     public Stage getStage() {
         return stage;

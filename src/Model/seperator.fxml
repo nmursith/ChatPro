@@ -9,11 +9,11 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="38.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.SeparatorController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="34.0" prefWidth="410.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.SeparatorController">
    <children>
-      <Button fx:id="historyButton" layoutX="370.5" layoutY="4.0" mnemonicParsing="false" onAction="#showHistory" onMouseMoved="#showHistoryonHover" prefHeight="28.0" prefWidth="13.0" style="-fx-background-color: transparent;" GridPane.columnIndex="4">
+      <Button fx:id="historyButton" layoutX="378.5" layoutY="3.0" mnemonicParsing="false" onAction="#showHistory" onMouseMoved="#showHistoryonHover" prefHeight="28.0" prefWidth="13.0" style="-fx-background-color: transparent;" GridPane.columnIndex="4">
          <graphic>
-            <ImageView fx:id="historyButton_view" fitHeight="20.0" fitWidth="20.0" layoutX="5.0">
+            <ImageView fx:id="historyButton_view" fitHeight="20.0" fitWidth="20.0" layoutX="8.0">
                <image>
                   <Image url="@../Controller/downarrow.png" />
                </image>
@@ -22,15 +22,9 @@
          <cursor>
             <Cursor fx:constant="WAIT" />
          </cursor></Button>
-      <Label fx:id="time_label" layoutX="108.0" layoutY="5.0" minWidth="163.0" prefHeight="25.0" prefWidth="245.0" text="Tue 2016/01/26 11:43 AM  " textAlignment="CENTER" textFill="#514e4e" wrapText="false" GridPane.columnIndex="1">
-         <font>
-            <Font size="14.0" />
-         </font></Label>
-      <Label fx:id="middle_label" alignment="CENTER_RIGHT" layoutY="5.0" prefHeight="25.0" text=" Show History on " textAlignment="CENTER" textFill="#514e4e" wrapText="true">
-         <font>
-            <Font size="14.0" />
-         </font></Label>
-      <Separator blendMode="MULTIPLY" cache="true" layoutY="5.0" prefHeight="30.0" prefWidth="380.0" valignment="BOTTOM">
+      <Label fx:id="time_label" layoutX="114.0" layoutY="4.0" minWidth="163.0" prefHeight="25.0" prefWidth="245.0" style="-fx-font-weight: bold;" text="Tue 2016/01/26 11:43 AM  " textAlignment="CENTER" textFill="#514e4e" wrapText="false" GridPane.columnIndex="1" />
+      <Label fx:id="middle_label" alignment="CENTER_RIGHT" layoutY="4.0" prefHeight="25.0" style="-fx-font-weight: bold;" text=" History Starting on " textAlignment="CENTER" textFill="#514e4e" wrapText="true" />
+      <Separator blendMode="MULTIPLY" cache="true" layoutY="2.0" prefHeight="30.0" prefWidth="388.0" valignment="BOTTOM">
          <cursor>
             <Cursor fx:constant="DEFAULT" />
          </cursor>
