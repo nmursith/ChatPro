@@ -103,10 +103,11 @@ public class UserItem extends GridPane implements   Runnable, EventHandler<Mouse
         close.setFitWidth(9);
         Label closeLabel = new Label("", close);
         closeLabel.setOnMouseClicked(this);
+        GridPane.setHalignment(closeLabel, HPos.RIGHT);
+
 
         this.addRow(0,userImage);
         this.addRow(0,thumbUserName);
-
         this.addRow(0,closeLabel);
 
         this.disableProperty().addListener(new ChangeListener<Boolean>() {
@@ -192,7 +193,7 @@ public class UserItem extends GridPane implements   Runnable, EventHandler<Mouse
                 }
             blink = null;
 
-            if(chatController.getChatUsersList().getSelectionModel().getSelectedItem().equals(userItem) && userItem!=null) {
+            if(userItem!=null && chatController.getChatUsersList().getSelectionModel().getSelectedItem().equals(userItem) ) {
 
                 this.thumbUserName.setStyle("-fx-text-fill:#696969; -fx-font-size:12px; -fx-font-weight:bold; ");
             }

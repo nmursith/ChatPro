@@ -3,6 +3,7 @@ package View;
 import Controller.ChatController;
 import Controller.NotificationController;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.CacheHint;
@@ -31,10 +32,10 @@ public class Main extends Application {
 
             FileChannel channel = randomFile.getChannel();
 
-//            if(channel.tryLock() == null) {
-//                System.out.println("Already Running...");
-//                System.exit(1);
-//            }
+            if(channel.tryLock() == null) {
+                System.out.println("Already Running...");
+                System.exit(1);
+            }
 
         }catch( Exception e ) {
             System.out.println(e.toString());
@@ -52,64 +53,53 @@ public class Main extends Application {
         Scene scene = new Scene(root);//, 550, 605);
         scene.getStylesheets().add(getClass().getResource("theme.css").toExternalForm());
 
-        System.out.println("ChatController Starting");
-        ChatController chatController = fxmlLoader.<ChatController>getController();
-        System.out.println("ChatController Started");
 
-        chatController.setStage(primaryStage);
-
-        primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-            @Override
-            public void handle(WindowEvent event) {
-                try {
-                    chatController.closeAllConnections();
-                    System.exit(0);
-                } catch (JMSException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-
-        primaryStage.setOnShowing(new EventHandler<WindowEvent>() {
-            @Override
-            public void handle(WindowEvent event) {
-                if(NotificationController.stage.isShowing())
-                    NotificationController.stage.close();
-            }
-        });
-
-//        new ActionListener() {
-//            @Override
-//            public void actionPerformed(java.awt.event.ActionEvent event) {
-//                Platform.runLater(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        System.out.println("wwww");
-//                        if (primaryStage.isIconified()) {
-//                            primaryStage.requestFocus();
-//                            primaryStage.setIconified(false);
-//                        } else {
-//                            primaryStage.hide();
-//                            primaryStage.setIconified(true);
-//                        }
-//                    }
-//                });
-//            }
-//        };
 
         Image ico = new Image(getClass().getResourceAsStream("appIcon.png"));
         primaryStage.getIcons().add(ico);
 
 
-        primaryStage.setTitle("vAssistant");
-        primaryStage.setScene(scene);
         System.out.println("show");
         //FlatterFX.style();
         primaryStage.initStyle(StageStyle.UNDECORATED);
-        primaryStage.show();
+
         primaryStage.setResizable(false);
+        primaryStage.setTitle("vAssistant");
+        primaryStage.setScene(scene);
+        primaryStage.show();
 
+        Platform.runLater(new Runnable(){
+            @Override
+            public void run() {
 
+                System.out.println("ChatController Starting");
+
+                ChatController chatController = fxmlLoader.<ChatController>getController();
+                System.out.println("ChatController Started");
+                chatController.setStage(primaryStage);
+
+                primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+                    @Override
+                    public void handle(WindowEvent event) {
+                        try {
+                            chatController.closeAllConnections();
+                            System.exit(0);
+                        } catch (JMSException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+
+                primaryStage.setOnShowing(new EventHandler<WindowEvent>() {
+                    @Override
+                    public void handle(WindowEvent event) {
+                        if(NotificationController.stage.isShowing())
+                            NotificationController.stage.close();
+                    }
+                });
+
+            }
+        });
 
 
     }

@@ -142,7 +142,7 @@ public class SeparatorController {
             else{
                // changeView();
                 historyStage.setX(historyStage.getOwner().getX()+216);
-                historyStage.setY(historyStage.getOwner().getY()+120);
+                historyStage.setY(historyStage.getOwner().getY()+90);
                 historyStage.show();
             }
 
@@ -175,7 +175,7 @@ public class SeparatorController {
 
 
         historyPane.setMaxWidth(408);
-        historyPane.setMaxHeight(380);
+        historyPane.setMaxHeight(410);
         historyPane.setStyle("-fx-background-color:white;-fx-background-insets: -0.4, 1, 2;-fx-background-radius: 3.4, 2, 2;-fx-border-color:black;-fx-border-width: 0 0.25 0.25 0.25;");
         historyPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         historyPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
@@ -296,7 +296,7 @@ public class SeparatorController {
                 @Override
                 public void run() {
                     historyStage.setX(main.getX()+216);
-                    historyStage.setY(main.getY()+120);
+                    historyStage.setY(main.getY()+90);
 
                   //  System.out.println("X:  "+main.getX()+212);
                 //    System.out.println("Y:  "+historyButton_view.getTranslateY());
@@ -334,8 +334,8 @@ public class SeparatorController {
         gridPane.setPrefWidth(width);
         gridPane.setMinWidth(width);
         gridPane.setMaxWidth(width);
-        gridPane.setPrefHeight(400);
-        gridPane.setMaxHeight(400);
+        gridPane.setPrefHeight(410);
+        gridPane.setMaxHeight(410);
         gridPane.setVgap(7);
 
 

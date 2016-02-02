@@ -654,10 +654,12 @@ public class OperatorController implements MessageListener {
 //                        if (correID==null)
 //                            correID = "";
 //                       System.out.println(correID);
-                        if( correID==null ||  !correID.equals(Constant.correalationID)){  //|| !correID.equals(Constant.correalationID)
+                        if( correID==null ||  !correID.equals(Constant.correalationID) ){  //|| !correID.equals(Constant.correalationID)
 
                             BindOperator bindOperator =  controller.getHashMapOperator().get(chatMessage.getProducerID());
 
+                            if(bindOperator==null)
+                                continue;
 
                             int ID = bindOperator.getOperatorController().getIDtracker();
 
@@ -760,10 +762,13 @@ public class OperatorController implements MessageListener {
                                 int sID = controller.getChatUsersList().getSelectionModel().getSelectedIndex(); // selected ID
 
                             //    System.out.println("selected   "+cID);
-                                if(sID!=cID && cID<controller.getChatUsersList().getItems().size()){
+                                if(sID!=cID && cID<controller.getChatUsersList().getItems().size() && cID>=0){
                                  //   System.out.println("should work");
                                     try{
                                         Platform.runLater(() -> controller.getChatUsersList().getItems().get(cID).startBlink());
+                                    }
+                                    catch (ArrayIndexOutOfBoundsException e){
+                                        System.out.println("Not in the Chat user list");
                                     }
                                     catch (Exception e){
                                         System.out.println("Not in the Chat user list");

@@ -1,54 +1,53 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.text.*?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
-<AnchorPane fx:id="chat_block_pane" maxWidth="335.0" minWidth="335.0" prefHeight="77.0" prefWidth="335.0"
-            style="-fx-background-color: transparent; -fx-background-radius: 5px;" xmlns="http://javafx.com/javafx/8"
-            xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.OperatorBubbleController">
-   <Label fx:id="bubble_triangle_label" layoutX="268.0" layoutY="10.0" prefHeight="29.0" prefWidth="25.0" rotate="45.0"
-          style="-fx-background-color: #DDDDDD;"/>
-   <GridPane fx:id="chat_bubble_pane" maxWidth="290.0" minWidth="290.0" prefWidth="290.0"
-             style="-fx-background-color: #DDD; -fx-background-radius: 10px;">
-      <children>
-         <Label fx:id="operatorname" layoutX="10.0" layoutY="5.0" maxHeight="15.0" maxWidth="200.0" opacity="0.6"
-                prefHeight="15.0" prefWidth="150.0" style="-fx-font-weight: bold;">
-            <font>
-               <Font size="11.0"/>
-            </font>
-         </Label>
-         <Label fx:id="operatormessage" alignment="TOP_LEFT" layoutX="10.0" layoutY="31.0" maxWidth="276.0"
-                prefWidth="276.0" style="-fx-font-weight: bold;" wrapText="true" GridPane.rowIndex="1"/>
-         <Label fx:id="time" alignment="BOTTOM_RIGHT" layoutX="234.0" layoutY="5.0" maxHeight="16.0" maxWidth="273.0"
-                opacity="0.6" prefHeight="16.0" prefWidth="273.0" style="-fx-font-weight: bold;" GridPane.rowIndex="2">
-            <font>
-               <Font size="11.0"/>
-            </font>
-         </Label>
-      </children>
-      <columnConstraints>
-         <ColumnConstraints/>
-      </columnConstraints>
-      <rowConstraints>
-         <RowConstraints minHeight="10.0" prefHeight="30.0"/>
-         <RowConstraints/>
-         <RowConstraints minHeight="10.0" prefHeight="30.0"/>
-      </rowConstraints>
-      <padding>
-         <Insets left="5.0" right="5.0"/>
-      </padding>
-   </GridPane>
-   <Label fx:id="operator_picture_label" layoutX="302.0" layoutY="8.0" prefHeight="30.0" prefWidth="30.0"
-          style="-fx-background-color: transparent; -fx-graphic: url('Background.png');">
-      <graphic>
-         <ImageView fx:id="operator_pic_image_view" fitHeight="30.0" fitWidth="30.0" y="5.0">
-            <image>
-               <Image url="@operator.png"/>
-            </image>
-         </ImageView>
-      </graphic>
-   </Label>
+
+<AnchorPane fx:id="chat_block_pane" maxWidth="335.0" minWidth="335.0" prefHeight="77.0" prefWidth="335.0" style="-fx-background-color: transparent; -fx-background-radius: 5px;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.OperatorBubbleController">
+   <children>
+      <Label fx:id="bubble_triangle_label" layoutX="268.0" layoutY="10.0" prefHeight="29.0" prefWidth="25.0" rotate="45.0" style="-fx-background-color: #DDDDDD;" />
+      <GridPane fx:id="chat_bubble_pane" maxWidth="290.0" minWidth="290.0" prefWidth="290.0" style="-fx-background-color: #DDD; -fx-background-radius: 10px;">
+         <children>
+            <Label fx:id="operatorname" layoutX="10.0" layoutY="5.0" maxHeight="15.0" maxWidth="200.0" opacity="0.6" prefHeight="15.0" prefWidth="150.0" style="-fx-font-weight: bold;" wrapText="true">
+               <font>
+                  <Font size="11.0" />
+               </font>
+            </Label>
+            <Label fx:id="operatormessage" alignment="TOP_LEFT" layoutX="10.0" layoutY="31.0" maxWidth="276.0" prefWidth="276.0" style="-fx-font-weight: bold;" wrapText="true" GridPane.rowIndex="1" />
+            <Label fx:id="time" alignment="BOTTOM_RIGHT" layoutX="234.0" layoutY="5.0" maxHeight="16.0" maxWidth="273.0" opacity="0.6" prefHeight="16.0" prefWidth="273.0" style="-fx-font-weight: bold;" wrapText="true" GridPane.rowIndex="2">
+               <font>
+                  <Font size="11.0" />
+               </font>
+            </Label>
+         </children>
+         <columnConstraints>
+            <ColumnConstraints />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints minHeight="10.0" prefHeight="30.0" />
+            <RowConstraints />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" />
+         </rowConstraints>
+         <padding>
+            <Insets left="5.0" right="5.0" />
+         </padding>
+      </GridPane>
+      <Label fx:id="operator_picture_label" layoutX="302.0" layoutY="8.0" prefHeight="30.0" prefWidth="30.0" style="-fx-background-color: transparent; -fx-graphic: url('Background.png');">
+         <graphic>
+            <ImageView fx:id="operator_pic_image_view" fitHeight="30.0" fitWidth="30.0" y="5.0">
+               <image>
+                  <Image url="@operator.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </Label>
+   </children>
 </AnchorPane>

@@ -180,6 +180,7 @@ public class ChatController{
             this.Username.getStyleClass().add("username");
             messageDisplay.setContent(chatHolder);
             messageDisplay.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+            
             NotificationController.stage.initOwner(stage);
 
             settingStage.initOwner(stage);
@@ -392,6 +393,8 @@ public class ChatController{
 
     public void setUsername(UserItem useritem) {
 
+        if(useritem==null)
+            return;
         try {
             String message = messageTextField.getText();
             if(previousID !=null) {
