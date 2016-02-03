@@ -406,8 +406,7 @@ public class SettingsController  implements ChangeListener, EventHandler<KeyEven
                 currentConfiguration.setOperator(operator.getText());
                 ConfigurationController.writeConfig(currentConfiguration);
 
-                if(!previousConfiguraion.equals(currentConfiguration) )
-                {
+                if(!previousConfiguraion.equals(currentConfiguration) ){
                     applyConfigurationButton.setDisable(true);
                     String prefix = currentConfiguration.getTopic().replace("*","");
                     Constant.topicPrefix = prefix;
@@ -438,7 +437,14 @@ public class SettingsController  implements ChangeListener, EventHandler<KeyEven
                             //operatorController.createSession();
                             isConnectedAlready = false;
                             operatorController.startDefaultOperatorAction();
-                            settingsStage.close();
+                            Platform.runLater(new Runnable() {
+                                @Override
+                                public void run() {
+                                    settingsStage.close();
+                                }
+                            });
+
+
                         }
                         else{
                             System.out.println("Operator "+currentConfiguration.getOperator() +" is already Connected");
@@ -467,20 +473,48 @@ public class SettingsController  implements ChangeListener, EventHandler<KeyEven
                             });
                         }
 
-
-
-
                         try {
 
                             previous.closeConnection();
-                            previous.getNetworkHandler().stopThread();
+
+                        } catch(Exception e ){
+                            System.out.println(e.getMessage());
+                        }
+
+                        try {
+                            System.out.println("Stopping thread");
+                            bindOperator.getOperatorController().getNetworkHandler().stopThread();
+                           // previous.getNetworkHandler().stopThread();
+
+                        } catch(Exception e ){
+                            System.out.println(e.getMessage());
+                        }
+
+                        try {
                             previous.getOfflineNetworkDownHandler().stopThread();
+
+
+                        } catch(Exception e ){
+                            System.out.println(e.getMessage());
+                        }
+
+                        try {
+
                             previous.getMessageDistributionHandler().stopThread();
+
+
+                        } catch(Exception e ){
+                            System.out.println(e.getMessage());
+                        }
+
+                        try {
+
                             previous.getTimer().cancel();
 
                         } catch(Exception e ){
                             System.out.println(e.getMessage());
                         }
+
                         operatorController.setMessageCounter(previous.getMessageCounter());
 
                         operatorController.setMessageProduceID(previous.getMessageProduceID());
@@ -494,12 +528,13 @@ public class SettingsController  implements ChangeListener, EventHandler<KeyEven
                         e.printStackTrace();
                     }
                     catch (Exception e){
-   //                     e.printStackTrace();
+                        e.printStackTrace();
                     }
 
                     chatController.getHashMapOperator().put(currentConfiguration.getOperator(), new BindOperator(operatorController, chatController.getGridPane()) );
                     chatController.setDefaultOperator(currentConfiguration.getOperator());
 /******************************/
+
 //            if(chatController.isOnline()){
 //                try {
 //                    OperatorController operatorController = new OperatorController(currentConfiguration.getOperator(), currentConfiguration.getTopic(),chatController);

@@ -15,7 +15,9 @@ public class Constant {
     public static  String operatorID =  prefix+"60e232e2a20tafwe";
 
     public static final String exitMessage ="DIRROUTETOBOT";
+    public static final String exitUserMessage ="DIRDISCONNECT";
     public static final String  exitBubbleMessage = "Chat closed by Operator";
+    public static final String  exitUserBubbleMessage = "Chat closed by User";
     public static final String  HISTORY_TAG = "VARHISTORY";
     public static final String  BOT_TAG = "BOT";
     public static final String  DO_NOT_TRAIN_TAG = "DIRDONOTTRAIN ";

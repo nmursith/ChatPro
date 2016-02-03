@@ -454,8 +454,8 @@ public class OperatorController implements MessageListener {
                     if(bindOperator!=null)
                         username=bindOperator.getClientName();
 
-                    if(username == null)
-                        username="Annonymus";//+tempName.substring(tempName.length()-2);//Constant.usernames[messageProduceID.size()-1];
+                    if(username == null || username=="")
+                        username=Constant.Annonymus;//+tempName.substring(tempName.length()-2);//Constant.usernames[messageProduceID.size()-1];
 
                     User user = new User();
                     user.setuserId(tempName);
@@ -650,6 +650,8 @@ public class OperatorController implements MessageListener {
 
                         if(reply.equalsIgnoreCase(Constant.exitMessage))
                             reply = Constant.exitBubbleMessage;
+                        else if(reply.equalsIgnoreCase(Constant.exitUserMessage))
+                            reply = Constant.exitUserBubbleMessage;
 
 //                        if (correID==null)
 //                            correID = "";
@@ -665,7 +667,7 @@ public class OperatorController implements MessageListener {
 
                             //System.out.println("ID:   "+ID);
               //              Bubble bubble = new Bubble(reply, controller);
-                            int index = controller.getMessageProducerID().indexOf(chatMessage.getProducerID());
+                            //int index = controller.getMessageProducerID().indexOf(chatMessage.getProducerID());
                  //           System.out.println(controller.getMessageProducerID().size()+  "   index:  "+index);
 
                             String username = chatMessage.getOwner();
@@ -700,7 +702,7 @@ public class OperatorController implements MessageListener {
                             if(correID!=null) {
                               //  System.out.println("MessageID working"+ JMSreplyTo);
                                 if (!correID.equalsIgnoreCase(Constant.correalationID)) {
-                                        if(!chatMessage.getTextMessage().equals(Constant.exitMessage)){
+                                        if(!chatMessage.getTextMessage().equals(Constant.exitMessage) ){
                                             OperatorBubble bubble = new OperatorBubble(chatMessage.getOwner(), chatMessage.getTextMessage(), chatMessage.getTime());
                                             //    GridPane.setHalignment(bubble.getFromBubble(), HPos.RIGHT);
                                             bindOperator.getChatHolder().addRow(ID, bubble.getRoot());
@@ -709,12 +711,19 @@ public class OperatorController implements MessageListener {
                                         }
 
                                         else {
-                                            chatMessage.setTextMessage(Constant.exitBubbleMessage);
 
+                                            if( chatMessage.getTextMessage().equals(Constant.exitMessage)){
+                                                chatMessage.setTextMessage(Constant.exitBubbleMessage);
+
+                                            }
                                             OperatorBubble bubble = new OperatorBubble(chatMessage.getOwner(), chatMessage.getTextMessage(), chatMessage.getTime());
+                                            bindOperator.getChatHolder().addRow(ID, bubble.getRoot());
+
+
+
                                             //    GridPane.setHalignment(bubble.getFromBubble(), HPos.RIGHT);
                                             bindOperator.getOperatorController().setClosedAlready(true);
-                                            bindOperator.getChatHolder().addRow(ID, bubble.getRoot());
+
 
                                             controller.getHashMapOperator().get(chatMessage.getProducerID()).getChatHolder().setDisable(true);
                                             controller.sendButton.setDisable(true);
@@ -746,9 +755,34 @@ public class OperatorController implements MessageListener {
 //                                }
                             }
                             else {
+
+                                if( chatMessage.getTextMessage().equals(Constant.exitUserMessage)){
+                                    chatMessage.setTextMessage(Constant.exitUserBubbleMessage);
+
+                                    bindOperator.getHistoryController().writehistory(Constant.ID_U, username,chatMessage);
+
+                                    bindOperator.getOperatorController().setClosedAlready(true);
+
+
+                                    controller.getHashMapOperator().get(chatMessage.getProducerID()).getChatHolder().setDisable(true);
+                                    controller.sendButton.setDisable(true);
+                                    controller.messageTextField.setDisable(true);
+                                    controller.getDoTrain().setDisable(true);
+
+                                    try{
+                                        int index1 = controller.getMessageProducerID().indexOf(chatMessage.getProducerID());
+                                        if(index1>=0 && index1<controller.getChatUsersList().getItems().size())
+                                            controller.getChatUsersList().getItems().get(index1).setDisable(true);
+                                    }
+                                    catch (Exception e){
+                                        e.printStackTrace(); /*************  do no exist --fix   IndexOutOfBoundsException*************/
+                                    }
+
+                                }
+
                                 UserBubble bubble = new UserBubble(username, chatMessage.getTextMessage(), chatMessage.getTime());
                                 bindOperator.getChatHolder().addRow(ID, bubble.getRoot());
-                                bindOperator.getHistoryController().writehistory(Constant.ID_U, username,chatMessage);
+
                             }
 
 /******************/
@@ -802,11 +836,11 @@ public class OperatorController implements MessageListener {
                             });
 
                                  //swriting to csv
-                            index = controller.getMessageProducerID().indexOf(chatMessage.getProducerID());
+                            final int index = controller.getMessageProducerID().indexOf(chatMessage.getProducerID());
                             if(index>=0 && index <controller.getListItems().size())
-                            username = controller.getListItems().get(index).getUser().getUserName();
+                                username = controller.getListItems().get(index).getUser().getUserName();
                             else
-                            username=null;
+                                username=null;
 
 //                            final String uName = username;
 //                            final String rep = reply;
@@ -822,6 +856,10 @@ public class OperatorController implements MessageListener {
                            //         notificationHandler.start();
 
                                     NotificationController.getNotification(reply, username,controller,index);
+                                    Platform.runLater(() -> {
+                                        controller.chatUsersList.getFocusModel().focus(index);
+                                        controller.chatUsersList.scrollTo(index);
+                                    });
 
                                 }
 
@@ -1253,14 +1291,16 @@ public class OperatorController implements MessageListener {
     class NetworkDownHandler extends Thread{
 
         Thread thread = this;
-        boolean isRunning = true;
+        volatile boolean isRunning = true;
+        String ID = Constant.getRandomString();
         public void run() {
             thread = Thread.currentThread();
             isRunning = true;
 
-            String ID = Constant.operatorID;//Constant.getRandomString();
+           //Constant.getRandomString();
 
             while(isRunning ){
+             //   System.out.println("network thread   "+isRunning);
                 //System.out.println("Im running");
                 if(controller.statusImageView ==null )
                     continue;
@@ -1334,10 +1374,11 @@ public class OperatorController implements MessageListener {
         }
 
         public  void stopThread(){
+
             isRunning = false;
-            Thread t = thread;
+            //Thread t = thread;
             thread = null;
-            t.interrupt();
+            //t.interrupt();
         }
     }
 
@@ -1389,6 +1430,7 @@ public class OperatorController implements MessageListener {
         public  void stopThread(){
             isRunning = false;
             Thread t = thread;
+            thread.stop();
             thread = null;
             t.interrupt();
         }
