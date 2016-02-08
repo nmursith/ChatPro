@@ -525,10 +525,10 @@ public class SettingsController  implements ChangeListener, EventHandler<KeyEven
 
                     }
                     catch (JMSException e) {
-                        e.printStackTrace();
+                    //    e.printStackTrace();
                     }
                     catch (Exception e){
-                        e.printStackTrace();
+                      //  e.printStackTrace();
                     }
 
                     chatController.getHashMapOperator().put(currentConfiguration.getOperator(), new BindOperator(operatorController, chatController.getGridPane()) );

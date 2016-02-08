@@ -169,6 +169,9 @@ public class NotificationController {
             chatController.getStage().setIconified(false);
             chatController.getStage().requestFocus();
         }
+        else {
+            System.out.println("PROBLEM SHOWING INDEX:  "+index);
+        }
     }
 
     public static synchronized  void getNotification(String message, String userName, ChatController controller, int index){

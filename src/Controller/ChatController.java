@@ -65,7 +65,8 @@ public class ChatController{
 
 
     final ObservableList<UserItem> listItems = FXCollections.observableArrayList();
-    private Vector<String> messageProducerID;
+    public Vector<String> messageProducerID;
+    private Vector<String> operatorProducerID;
     private ArrayList<Variable> contextMenuVariables;
     private Configuration config;
     private  OperatorController operatorController ;
@@ -228,7 +229,7 @@ public class ChatController{
             if(myMessage==null)
                 return;
 
-            if(!myMessage.trim().equals("") && !myMessage.trim().equalsIgnoreCase("exit")){
+//            if(!myMessage.trim().equals("") && !myMessage.trim().equalsIgnoreCase("exit")){
 
                // int counter =  operatorController.getMessageCounter();
                 int ID = operatorController.getIDtracker();
@@ -255,32 +256,32 @@ public class ChatController{
                 Platform.runLater(() -> messageDisplay.setVvalue(messageDisplay.getVmax()));
 
 
-            }
+//            }
 
-            else if(myMessage.trim().equalsIgnoreCase("exit")){
-                if(!operatorController.getSubscriptionName().equals(defaultOperator)) {
-
+//            else if(myMessage.trim().equalsIgnoreCase("exit")){
+//                if(!operatorController.getSubscriptionName().equals(defaultOperator)) {
+//
 //                    operatorController.sendMessage(myMessageMod, operatorController);
 //                    int counter = (int) operatorController.getMessageCounter();
-                    //             System.out.println("value chat:  "+counter+"     ****"+operatorController);
-
+//                                 System.out.println("value chat:  "+counter+"     ****"+operatorController);
+//
 //                    OperatorBubble bubble = new OperatorBubble(defaultOperator, myMessageMod.getTextMessage(),myMessageMod.getTime() );
 //                    //           GridPane.setHalignment(bubble.getFromBubble(), HPos.RIGHT);
 //
-//                    historyController.writehistory(counter, "operator",myMessageMod);
+//
 //                    chatHolder.addRow(counter, bubble.getRoot());
 //                    //          chatBubble.appendText("Admin : "+myMessageMod);
 //                    messageDisplay.setContent(chatHolder);
 //                    Thread.sleep(50);
 //                    Platform.runLater(() -> messageDisplay.setVvalue(messageDisplay.getVmax()));
-
-                    controller.closeChat();//closeConnection();
-                }
-                else {
-
-                    System.exit(0);
-                }
-            }
+//
+//                    controller.closeChat();//closeConnection();
+//                }
+//                else {
+//
+//                    System.exit(0);
+//                }
+//            }
 
 
 
@@ -363,7 +364,7 @@ public class ChatController{
 
                 }
                 catch (NullPointerException e){
-                    //e.printStackTrace();
+                    e.printStackTrace();
                 }
                 catch (Exception e){
                     e.printStackTrace();
@@ -423,7 +424,6 @@ public class ChatController{
                     messageTextField.setText(hashMapOperator.get(userID).getTypedMessage());
                     chatHolder = hashMapOperator.get(userID).getChatHolder();
                     operatorController = hashMapOperator.get(userID).getOperatorController();
-
                     historyController = hashMapOperator.get(userID).getHistoryController();
                     messageDisplay.setContent(chatHolder);
                     messageDisplay.setVvalue(messageDisplay.getVmax());
@@ -548,6 +548,9 @@ public class ChatController{
 
     public void closeChat(UserItem useritem) throws JMSException, IOException, InterruptedException {
         int index = chatUsersList.getSelectionModel().getSelectedIndex();
+
+     //   Platform.runLater(() -> setUsername(useritem));
+
         System.out.println("Closing index: "+ index);
         //  operatorController.closeConnection();
 
@@ -559,36 +562,98 @@ public class ChatController{
             ChatMessage bubbleMessageMod = getObjectMessage(bubbleMessage, operatorController.getSubscriptionName());
 
          //   if(!operatorController.isClosedAlready() && operatorController.isSessionCreated()) {
-                try{
-                    operatorController.sendMessage(myMessageMod, operatorController);
-                    operatorController.closeConnection();
-                }
-                catch (Exception e){
-                    e.printStackTrace();
-                }
+
 //            }
           //  System.out.println("exit");
            // int counter = (int) operatorController.getMessageCounter();
-            int ID = operatorController.getIDtracker();
+
+
+/*** add bubble*****/
+            /*int ID = operatorController.getIDtracker();
             OperatorBubble bubble = new OperatorBubble(defaultOperator, bubbleMessageMod.getTextMessage(), bubbleMessageMod.getTime() );
-            historyController.writehistory(Constant.ID_O, Constant.configuration.getOperator(),myMessageMod);
+
             chatHolder.addRow(ID, bubble.getRoot());
-            messageDisplay.setContent(chatHolder);
+            messageDisplay.setContent(chatHolder);*/
 
-
+            historyController.writehistory(Constant.ID_O, Constant.configuration.getOperator(),myMessageMod);
 
     //        UserItem useritem = controller.getListItems().get(index);
             String userID = useritem.getUser().getSubscriptionName();
 //            hashMapOperator.remove(name);
             //           hashMapOperator.get(defaultOperator).getOperatorController().getMessageProduceID().remove(name);
             //listItems.remove(index);
-            hashMapOperator.get(userID).getChatHolder().setDisable(true);
-            sendButton.setDisable(true);
-            messageTextField.setDisable(true);
-            doTrain.setDisable(true);
-            useritem.setDisable(true);
-            Thread.sleep(50);
-            Platform.runLater(() -> messageDisplay.setVvalue(messageDisplay.getVmax()));
+/**Major Changes**/
+//            hashMapOperator.get(userID).getChatHolder().setDisable(true);
+//            sendButton.setDisable(true);
+//            messageTextField.setDisable(true);
+//            doTrain.setDisable(true);
+//            useritem.setDisable(true);
+           // Thread.sleep(50);
+
+            Platform.runLater(() -> {
+                messageDisplay.setVvalue(messageDisplay.getVmax());
+                if(index>=0){
+                    try{
+
+                        System.out.println("REMOVING:  "+index +"       " + messageProducerID.get(index) +"       SIZE: "+ listItems.size());
+               //         hashMapOperator.remove(messageProducerID.get(index));
+
+                       // chatUsersList.getItems().remove(index);
+
+                        //operatorProducerID.remove(index+1);
+                        if(index>0){
+                            if(listItems.get(index-1)!=null) {
+                             System.out.println("SETTING PREVIOUS USERITEM");
+                               setUsername(listItems.get(index - 1));
+                            }
+                        }
+                        else if(index==0){
+
+                            if(listItems.size()>0) {
+                                System.out.println("SETTING NEXT USERITEM");
+                                    try {
+                                        setUsername(listItems.get(index +1));
+                                    }
+                                    catch (Exception e){
+
+                                    }
+                            }
+
+                           //messageDisplay.setContent(getGridPane());
+                            //messageDisplay.setDisable(true);
+
+                        }
+
+                        hashMapOperator.remove(messageProducerID.get(index));
+                        messageProducerID.remove(index);
+                        listItems.remove(index);
+
+
+                        if(index==0 &&listItems.isEmpty()){
+                            sendButton.setDisable(true);
+                            messageTextField.setDisable(true);
+                            doTrain.setDisable(true);
+                            Username.setText("");
+                            messageDisplay.setContent(null);
+                        }
+
+
+                    }
+                    catch (Exception e){
+e.printStackTrace();
+                    }
+
+                }
+
+            });
+
+            try{
+                operatorController.sendMessage(myMessageMod, operatorController);
+                operatorController.closeConnection();
+            }
+            catch (Exception e){
+                e.printStackTrace();
+            }
 
         }
 
@@ -895,7 +960,7 @@ public class ChatController{
         AddChatBtn = addChatBtn;
     }
 
-    public ListView<UserItem> getChatUsersList() {
+    public synchronized ListView<UserItem> getChatUsersList() {
         return chatUsersList;
     }
 
@@ -923,15 +988,15 @@ public class ChatController{
         this.messageDisplay = messageDisplay;
     }
 
-    public ObservableList<UserItem> getListItems() {
+    public synchronized ObservableList<UserItem> getListItems() {
         return listItems;
     }
 
-    public HashMap<String, BindOperator> getHashMapOperator() {
+    public synchronized HashMap<String, BindOperator> getHashMapOperator() {
         return hashMapOperator;
     }
 
-    public Vector<String> getMessageProducerID() {
+    public synchronized Vector<String> getMessageProducerID() {
         return messageProducerID;
     }
 
@@ -975,8 +1040,7 @@ public class ChatController{
     }
 
 
-
-     class NetworkDownHandler extends Thread{
+    class NetworkDownHandler extends Thread{
         Image image_offline = new Image(getClass().getResourceAsStream("offline.png")); //===========================
         Image image_online = new Image(getClass().getResourceAsStream("online.png"));   //===========================
         Thread thread = this;

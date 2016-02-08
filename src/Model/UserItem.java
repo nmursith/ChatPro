@@ -49,7 +49,7 @@ public class UserItem extends GridPane implements   Runnable, EventHandler<Mouse
 
         this.setHgap(8);
         this.setStyle("-fx-background-color:transparent; -fx-border-color:transparent;");
-        userItem = this;                //
+                   //
 
         // ========================================
         /*statusOnline = new Image(getClass().getResourceAsStream("statusOnline.png"));
@@ -115,6 +115,7 @@ public class UserItem extends GridPane implements   Runnable, EventHandler<Mouse
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
                 if(isDisabled()){
                     userImage.setImage(statusOffline);
+                    closeLabel.setDisable(false);
                 }else{
                     userImage.setImage(statusOnline);
                 }
@@ -134,7 +135,21 @@ public class UserItem extends GridPane implements   Runnable, EventHandler<Mouse
         });
 
         //   System.out.println("focueed:  "+this.isFocused());
+        userItem = this;
+    }
 
+    public  void changePicture(boolean isDisabled){
+        try{
+            if(isDisabled){
+                userImage.setImage(statusOffline);
+
+            }else{
+                userImage.setImage(statusOnline);
+            }
+        }
+        catch (Exception e){
+
+        }
     }
 
     public void startBlink(){
@@ -144,13 +159,10 @@ public class UserItem extends GridPane implements   Runnable, EventHandler<Mouse
     }
 
 
-
-
-
-
     @Override
     public void run() {
-
+if (userItem == null)
+    return;
         try{
                 try{
                     for (int i = 0; i < 3; i++) {
@@ -161,7 +173,10 @@ public class UserItem extends GridPane implements   Runnable, EventHandler<Mouse
                             this.thumbUserName.setStyle("-fx-text-fill:#ffa500; -fx-font-size:12px; -fx-font-weight:bold;");
                         }
                         catch (NullPointerException e){
-
+                            break;
+                        }
+                         catch (Exception e){
+                             break;
                         }
 
                         try {
@@ -175,9 +190,11 @@ public class UserItem extends GridPane implements   Runnable, EventHandler<Mouse
                             this.thumbUserName.setStyle("-fx-text-fill: #1e90ff; -fx-font-size:12px; -fx-font-weight:bold;");
                         }
                         catch (NullPointerException e){
-
+                            break;
                         }
-
+                        catch (Exception e){
+                            break;
+                        }
 
                         try {
                             blink.sleep(250);

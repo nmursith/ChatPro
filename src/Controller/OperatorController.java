@@ -63,14 +63,14 @@ public class OperatorController implements MessageListener {
         this.operator = new Operator(subscriptionName, topicName);
         this.subscriptionName = subscriptionName;
 
-        this.messageProduceID = new Vector<>();
+
         this.chatMessagess= new LinkedBlockingQueue<>();
         this.networkHandler = new NetworkDownHandler();
         this.controller = controller.getInstance();
         this.operatorController = this;
         this.offlineNetworkDownHandler = new OfflineNetworkDownHandler();
         this.messageDistributionHandler = new MessageDistributionHandler();
-
+        this.messageProduceID = this.controller.messageProducerID;//new Vector<>();
         this.pendingNotification = new LinkedList<>();
         this.defaultOperator = Constant.configuration.getOperator();//"operator1";
 
@@ -80,21 +80,22 @@ public class OperatorController implements MessageListener {
         this.isReceived = false;
 //      this.notificationController = new NotificationController();
         this.messageCounter = -1;
-        this.IDtracker = 0;
+        this.IDtracker = -1;
 
     }
 
     protected void startDefaultOperatorAction(){
         try {
             //if
-
-            if(!messageProduceID.contains(defaultOperator)) {
+/**** single producerID**/
+/*            if(!messageProduceID.contains(defaultOperator)) {
                 messageProduceID.add(defaultOperator);
               //    controller.getMessageProducerID().add(defaultOperator);
                 //BindOperator bindOperator = new BindOperator(this, new TextArea());
                 //this.controller.getHashMapOperator().put(defaultOperator, bindOperator);
-            }
+            }*/
 
+            //controller.setOperatorProducerID(messageProduceID);
             if(subscriptionName.equalsIgnoreCase(defaultOperator) &&operator.getSession()!=null) {
                 messageConsumer = operator.getSession().createDurableSubscriber(getTopic(), getSubscriptionName());//Constant.operatorID);
                 messageConsumer.setMessageListener(this);
@@ -195,7 +196,7 @@ public class OperatorController implements MessageListener {
 //
 //                    }
 //                };
-                Timer timer2 = new Timer();
+
                 Platform.runLater(() -> timer.schedule(offlineModeTask, 500, 3000));
                 //Platform.runLater(() -> timer2.schedule(routeMessageTask, 100, 1000));
 
@@ -261,7 +262,7 @@ public class OperatorController implements MessageListener {
                     String myMessage = chatMessage.getTextMessage();
                     //System.out.println("message: "+ myMessage);
                     myMessage = myMessage.trim().equalsIgnoreCase("exit") ? "DIRROUTETOBOT":myMessage;
-                    myMessage = jsonFormatController.createJSONmessage( OperatorController.defaultOperator,myMessage);
+                    myMessage = jsonFormatController.createJSONmessage(OperatorController.defaultOperator,myMessage);
                     response.setText(myMessage);
                     //System.out.println("offline:   "+myMessage);
                     String random = Constant.correalationID;
@@ -307,7 +308,8 @@ public class OperatorController implements MessageListener {
 
      @Override
     public void onMessage(Message message) {
-    String producerID = null;
+        String producerID = null;
+        String correlationID =null;
 
 
         try {
@@ -331,6 +333,7 @@ public class OperatorController implements MessageListener {
                 destination = destination.substring(destination.indexOf('.') + 1);
                 //                System.out.println("destination: "+ destination);
                 producerID = destination;
+                correlationID = message.getJMSCorrelationID();
                 chatMessage =  new ChatMessage();
                 chatMessage.setProducerID(producerID);
                 chatMessage.setMessage(message);
@@ -345,9 +348,9 @@ public class OperatorController implements MessageListener {
             else if (message instanceof ActiveMQBytesMessage){
 
                 //System.out.println(text.getText());
-                ActiveMQBytesMessage activeMQBytesMessage = (ActiveMQBytesMessage) message;
+                     ActiveMQBytesMessage activeMQBytesMessage = (ActiveMQBytesMessage) message;
 
-                String destination = ((ActiveMQBytesMessage) message).getDestination().getPhysicalName();
+                    String destination = ((ActiveMQBytesMessage) message).getDestination().getPhysicalName();
 
                     destination = destination.substring(destination.indexOf('.') + 1);
 
@@ -367,13 +370,14 @@ public class OperatorController implements MessageListener {
 
                     messageText = jsoNmessage[0];
                     String owner = jsoNmessage[1];
+                    correlationID = message.getJMSCorrelationID();
          //       System.out.println(messageText);
 
                 if(messageText.contains(Constant.DO_NOT_TRAIN_TAG)){
                     messageText= messageText.replace(Constant.DO_NOT_TRAIN_TAG,"");
                 }
 
-                System.out.println("Recieving......:      "+messageText);
+                System.out.println("Recieving... byte...:      "+messageText);
 
                     chatMessage = new ChatMessage();
                     chatMessage.setProducerID(producerID);
@@ -394,10 +398,11 @@ public class OperatorController implements MessageListener {
 //                System.out.println(chatMessagess.isEmpty());
             }
 
-   //         System.out.println("deffaulsas :  "+  producerID);
-            if(!messageProduceID.contains(producerID) && producerID!=null && !producerID.equalsIgnoreCase("*") ){
+            System.out.println(correlationID +"         PRODUCERID :  "+  producerID);
+
+            if(!controller.getMessageProducerID().contains(producerID) && producerID!=null && !producerID.equalsIgnoreCase("*") && !producerID.equals(defaultOperator) && correlationID==null){
                 System.out.println("Adding:  "+  producerID);
-                messageProduceID.add(producerID);
+                controller.getMessageProducerID().add(producerID);
 
 
                 GridPane chatHolder = controller.getGridPane();
@@ -414,14 +419,16 @@ public class OperatorController implements MessageListener {
                 else {
                     bindOperator.setClientName(null);
                 }
+
                 System.out.println("Setting client Name from Mesasge: "+ chatMessage.getOwner());
 
 
-                controller.getHashMapOperator().put(producerID, bindOperator);
+                if(!controller.getHashMapOperator().containsKey(producerID))
+                    controller.getHashMapOperator().put(producerID, bindOperator);
 
                 //Thread.sleep(20);
 
-                if(controller!=null){
+
 
 
                     if(!chatMessagess.contains(chatMessage)) {
@@ -440,13 +447,13 @@ public class OperatorController implements MessageListener {
                     operatorController.setMessageCounter(count);        //starting
 
                     //operatorController.setIDtracker(0);
-                }
 
-                String tempName = producerID;
-                if (!controller.getMessageProducerID().contains(tempName) && !tempName.equals(null) && !tempName.trim().equalsIgnoreCase(defaultOperator) ) {
 
-                    System.out.println("updating:  "+tempName);
-                    controller.getMessageProducerID().add(tempName);
+                    String tempName = producerID;
+
+
+//                    System.out.println("updating:  "+tempName);
+            //        controller.getMessageProducerID().add(tempName);
 
                     bindOperator = controller.getHashMapOperator().get(tempName);
                     String username =null;
@@ -467,31 +474,16 @@ public class OperatorController implements MessageListener {
                     //      controller.getChatUsersList().setItems(controller.getListItems());
                     //        System.out.println("updated:   "+ defaultOperator +"        "+ tempName);
 
-                }
 
-
-
-
-
+                setENDisableUI(producerID);
 
 
                }
             else {
-               // System.out.println(controller.getHashMapOperator().get(producerID).getChatHolder().isDisabled());
-                try{
-                    if(controller.getHashMapOperator().get(producerID).getChatHolder().isDisabled()) {
-                        controller.getHashMapOperator().get(producerID).getChatHolder().setDisable(false);
-                        controller.getSendButton().setDisable(false);
-                        controller.getMessageTextField().setDisable(false);
-                        controller.getDoTrain().setDisable(false);
-                        controller.getSendButton().setDisable(false);
-                        controller.getListItems().get(controller.getMessageProducerID().indexOf(producerID)).setDisable(false);
-                    }
 
-                }
-                catch (NullPointerException e){
-                        //System.out.println("First startup fails");
-                }
+                setENDisableUI(producerID);
+               // System.out.println(controller.getHashMapOperator().get(producerID).getChatHolder().isDisabled());
+
             }
 
 
@@ -561,6 +553,29 @@ public class OperatorController implements MessageListener {
          isReceived = true;
     }
 
+    protected void setENDisableUI(String producerID){
+        boolean isdisable = false;
+        try{
+            if(controller.getHashMapOperator().get(producerID).getChatHolder().isDisabled()) {
+                controller.getHashMapOperator().get(producerID).getChatHolder().setDisable(isdisable);
+                controller.getSendButton().setDisable(isdisable);
+                controller.getMessageTextField().setDisable(isdisable);
+                controller.getDoTrain().setDisable(isdisable);
+                controller.getSendButton().setDisable(isdisable);
+
+                controller.getListItems().get(controller.getMessageProducerID().indexOf(producerID)).changePicture(isdisable);
+            }
+
+        }
+        catch (NullPointerException e){
+     //       e.printStackTrace();
+        }
+        catch (Exception e){
+            //       e.printStackTrace();
+        }
+
+    }
+
 
     private  void routeMessagetoThread(){
         Service<Void> service = new Service<Void>() {
@@ -598,7 +613,7 @@ public class OperatorController implements MessageListener {
 
         String reply;
         Queue<ChatMessage> durablechatMessage;
-        Vector<String> producerID = getMessageProduceID();
+
         ChatMessage chatMessage;
         String pID;
 
@@ -729,11 +744,11 @@ public class OperatorController implements MessageListener {
                                             controller.sendButton.setDisable(true);
                                             controller.messageTextField.setDisable(true);
                                             controller.getDoTrain().setDisable(true);
-
+/****Disabling user Item***/
                                             try{
                                                 int index1 = controller.getMessageProducerID().indexOf(chatMessage.getProducerID());
                                                 if(index1>=0 && index1<controller.getChatUsersList().getItems().size())
-                                                    controller.getChatUsersList().getItems().get(index1).setDisable(true);
+                                                    controller.getChatUsersList().getItems().get(index1).changePicture(true);
                                             }
                                             catch (Exception e){
                                                 e.printStackTrace(); /*************  do no exist --fix   IndexOutOfBoundsException*************/
@@ -768,11 +783,11 @@ public class OperatorController implements MessageListener {
                                     controller.sendButton.setDisable(true);
                                     controller.messageTextField.setDisable(true);
                                     controller.getDoTrain().setDisable(true);
-
+/**** disabling useritem***/
                                     try{
                                         int index1 = controller.getMessageProducerID().indexOf(chatMessage.getProducerID());
                                         if(index1>=0 && index1<controller.getChatUsersList().getItems().size())
-                                            controller.getChatUsersList().getItems().get(index1).setDisable(true);
+                                            controller.getChatUsersList().getItems().get(index1).changePicture(true);
                                     }
                                     catch (Exception e){
                                         e.printStackTrace(); /*************  do no exist --fix   IndexOutOfBoundsException*************/
@@ -813,12 +828,14 @@ public class OperatorController implements MessageListener {
 
 
                             Platform.runLater(() -> {
+
+
                              //   System.out.println("firsttime:   " + isFirstime + "    " + controller.getListItems().isEmpty());
-                                if (!controller.getListItems().isEmpty() && isFirstime) {
-                                    controller.getMessageTextField().setDisable(false);
-                                    controller.getDoTrain().setDisable(false);
+                                if (controller.getListItems().size()==1) {
+//                                    controller.getMessageTextField().setDisable(false);
+//                                    controller.getDoTrain().setDisable(false);
                                     System.out.println("first");
-                                    isFirstime = false;
+                                    //isFirstime = false;
 
                                     UserItem item = controller.getListItems().get(0);
                                     controller.getChatUsersList().getSelectionModel().select(0);
@@ -826,6 +843,13 @@ public class OperatorController implements MessageListener {
 
                                 }
 
+
+                                if(controller.getMessageTextField().isDisabled()){
+                                    controller.messageDisplay.setDisable(false);
+                                    controller.sendButton.setDisable(false);
+                                    controller.messageTextField.setDisable(false);
+                                    controller.getDoTrain().setDisable(false);
+                                }
                                 //ScrollPane messageHolder = new ScrollPane();
                                 //messageHolder.setContent((bindOperator.getChatHolder()));
 
@@ -835,33 +859,27 @@ public class OperatorController implements MessageListener {
                                 //    controller.messageDisplay.setVvalue(messageHolder.getVmax());
                             });
 
-                                 //swriting to csv
-                            final int index = controller.getMessageProducerID().indexOf(chatMessage.getProducerID());
-                            if(index>=0 && index <controller.getListItems().size())
-                                username = controller.getListItems().get(index).getUser().getUserName();
-                            else
-                                username=null;
 
-//                            final String uName = username;
-//                            final String rep = reply;
+                            final String finalReply = reply;
+                            final String producerIDDD = chatMessage.getProducerID();
+                            Platform.runLater(() -> {
+                                    if(!controller.getStage().isFocused() || controller.getStage().isIconified() || !controller.getStage().isShowing()) {
+                                        final int index = controller.getMessageProducerID().indexOf(producerIDDD);
+                                        String username1 =null;
+                                        if(index>=0 && index <controller.getListItems().size())
+                                             username1 = controller.getListItems().get(index).getUser().getUserName();
+                                        else
+                                            username1 =Constant.Annonymus;
 
+                                        NotificationController.getNotification(finalReply, username1,controller,index);
+                                        Platform.runLater(() -> {
 
-                                if(!controller.getStage().isFocused() || controller.getStage().isIconified()) {
+                                            controller.chatUsersList.getFocusModel().focus(index);
+                                            controller.chatUsersList.scrollTo(index);
+                                        });
 
-                           //         pendingNotification.add(new Notification(reply, username, index));
-                                    //System.out.println("pending noti  "+ pendingNotification.size());
-
-
-
-                           //         notificationHandler.start();
-
-                                    NotificationController.getNotification(reply, username,controller,index);
-                                    Platform.runLater(() -> {
-                                        controller.chatUsersList.getFocusModel().focus(index);
-                                        controller.chatUsersList.scrollTo(index);
-                                    });
-
-                                }
+                                    }
+                                });
 
 
 
@@ -938,7 +956,7 @@ public class OperatorController implements MessageListener {
         CsvReader messages = bindOperator.getHistoryController().readHistory();
         String userName = null;
         if(messages != null){
-
+            int track=bindOperator.getOperatorController().getIDtracker();
             try {
                 messages.readHeaders();
 
@@ -1005,7 +1023,7 @@ public class OperatorController implements MessageListener {
                 messages.close();
 
                 bindOperator.setHistoryMessages(historyMessages);
-   //             int track=bindOperator.getOperatorController().getIDtracker();
+
                 SeperatorLine seperatorLine = new SeperatorLine(bindOperator,0);            // uncomment
                 //   bindOperator.getChatHolder().getChildren().clear();  // uncomment
      //           Platform.runLater(() -> {
@@ -1027,7 +1045,7 @@ public class OperatorController implements MessageListener {
 
         }
         else {
-            System.out.println("////////////////////////   " +getIDtracker());
+      //      System.out.println("////////////////////////   " +getIDtracker());
             //IDtracker =0;
         }
 
@@ -1141,7 +1159,7 @@ public class OperatorController implements MessageListener {
         this.messageCounter = messageCounter;
     }
 
-    public int getIDtracker() {
+    public synchronized int getIDtracker() {
         IDtracker = IDtracker+1;
         System.out.println("ID:  "+IDtracker);
         return IDtracker;
@@ -1226,25 +1244,25 @@ public class OperatorController implements MessageListener {
 
             if (isOnline ) {
                 try {
-                    for (int index = 0; index < controller.getListItems().size(); index++) {
-
-                        UserItem useritem = controller.getListItems().get(index);
-                        String producerID =useritem.getUser().getSubscriptionName();
-                        System.out.println("producerID:     "+producerID);
-                        controller.getHashMapOperator().get(producerID).getOperatorController().createSession();
-/*                        OperatorController operatorController = new OperatorController(producerID, Constant.topicPrefix + producerID, controller);
-                        int count =   controller.getHashMapOperator().get(producerID).getOperatorController().getMessageCounter() -1;
-                        int idtracker= controller.getHashMapOperator().get(producerID).getOperatorController().getIDtracker() -1;
-                        operatorController.setMessageCounter(count);
-                        operatorController.setIDtracker(idtracker);
-//                        ChatMessage chat = new ChatMessage();
-//                        chat.setTextMessage("sdfsdfssdgs");
-                      //  operatorController.sendMessage(chat, operatorController);
-//                        controller.getHashMapOperator().get(producerID).getOperatorController().closeConnection();
-                        controller.getHashMapOperator().get(producerID).setOperatorController(operatorController);*/
-
-
-                    }
+//                    for (int index = 0; index < controller.getListItems().size(); index++) {
+//
+//                        UserItem useritem = controller.getListItems().get(index);
+//                        String producerID =useritem.getUser().getSubscriptionName();
+//                        System.out.println("producerID:     "+producerID);
+//                        controller.getHashMapOperator().get(producerID).getOperatorController().createSession();
+///*                        OperatorController operatorController = new OperatorController(producerID, Constant.topicPrefix + producerID, controller);
+//                        int count =   controller.getHashMapOperator().get(producerID).getOperatorController().getMessageCounter() -1;
+//                        int idtracker= controller.getHashMapOperator().get(producerID).getOperatorController().getIDtracker() -1;
+//                        operatorController.setMessageCounter(count);
+//                        operatorController.setIDtracker(idtracker);
+////                        ChatMessage chat = new ChatMessage();
+////                        chat.setTextMessage("sdfsdfssdgs");
+//                      //  operatorController.sendMessage(chat, operatorController);
+////                        controller.getHashMapOperator().get(producerID).getOperatorController().closeConnection();
+//                        controller.getHashMapOperator().get(producerID).setOperatorController(operatorController);*/
+//
+//
+//                    }
 
 
 
