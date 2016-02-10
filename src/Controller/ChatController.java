@@ -161,6 +161,7 @@ public class ChatController{
 
 
         Platform.runLater(() -> {
+        try{
 
             if(isOnline){
                 statusImageView.setImage(image_online);
@@ -175,21 +176,27 @@ public class ChatController{
             this.sendButton.getStyleClass().add("sendButton");
 
             chatUsersList.setItems(listItems);
+
             messageTextField.setDisable(true);
             doTrain.setDisable(true);
             sendButton.setDisable(true);
             this.Username.getStyleClass().add("username");
             messageDisplay.setContent(chatHolder);
             messageDisplay.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-            
+
             NotificationController.stage.initOwner(stage);
 
             settingStage.initOwner(stage);
             addMenuItems();
             if(isOnline) {
                 hashMapOperator.put(defaultOperator, new BindOperator(operatorController, getGridPane()));
-              //  historyController = hashMapOperator.get(config.getSubscription()).getHistoryController();
+                //  historyController = hashMapOperator.get(config.getSubscription()).getHistoryController();
             }
+
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
 
 
 

@@ -469,13 +469,22 @@ public class OperatorController implements MessageListener {
                     user.setUserName(username);
                     user.setSubscriptionName(tempName);
                     user.setTopicName(Constant.topicPrefix+ tempName);
-                    Platform.runLater(() -> controller.getListItems().add(new UserItem(user,controller)));
+
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            controller.getListItems().add(new UserItem(user,controller));
+
+                            System.out.println("USERITEM IS ADDED       ");// +controller.getListItems().get(controller.getListItems().size()-1) );
+
+                        }
+                    });
 
                     //      controller.getChatUsersList().setItems(controller.getListItems());
                     //        System.out.println("updated:   "+ defaultOperator +"        "+ tempName);
 
 
-                setENDisableUI(producerID);
+                     setENDisableUI(producerID);
 
 
                }
