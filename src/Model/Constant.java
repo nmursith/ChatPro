@@ -25,7 +25,7 @@ public class Constant {
     public static final String operatorhistoryID =  "60e232e2a20tafwe";
     public static  final  String ConnectedMessage = "Operator Connected";
     public static  final  String DisConnectedMessage = "Operator Disconnected";
-    public static  final  String Annonymus = "Annonymus";
+    public static  final  String Annonymus = "USER";
     public static  final  String ID_O = "0";
     public static  final  String ID_U = "1";
 

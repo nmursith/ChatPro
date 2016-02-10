@@ -37,13 +37,13 @@
                      <contextMenu>
                         <ContextMenu fx:id="variablesMenu" onAction="#setSelectedItem" style="-fx-background-color: rgb(255.0, 255.0, 255.0, 0.95); fx-background-radius: 2.0;" />
                      </contextMenu></TextArea>
-                  <Line endX="330.0" layoutX="315.0" layoutY="56.0" startX="-100.0" stroke="#9b9d9e">
+                  <Line endX="330.0" layoutX="315.0" layoutY="56.0" startX="-100.0" stroke="#2a3137">
                      <rotationAxis>
                         <Point3D />
                      </rotationAxis></Line>
                   <ListView fx:id="chatUsersList" maxHeight="609.0" maxWidth="210" minHeight="538.0" minWidth="210.0" onMouseClicked="#setUsername" prefHeight="581.0" prefWidth="210" style="-fx-border-color: white; -fx-border-width: 0 0 0 0;" />
-                  <Line endX="508.0" layoutX="11.0" layoutY="301.0" rotate="90.0" startX="-106.0" stroke="#3498db" />
-                  <Button fx:id="sendButton" layoutX="575.0" layoutY="567.0" mnemonicParsing="false" onAction="#getMyMessage" prefHeight="32.0" prefWidth="63.0" style="-fx-background-color: #00AFF0; -fx-font-weight: bold;" text="Send">
+                  <Line endX="508.0" layoutX="11.0" layoutY="301.0" rotate="90.0" startX="-106.0" stroke="#2a3137" />
+                  <Button fx:id="sendButton" layoutX="575.0" layoutY="567.0" mnemonicParsing="false" onAction="#getMyMessage" prefHeight="32.0" prefWidth="63.0" style="-fx-background-color: #2a3137; -fx-font-weight: bold; -fx-text-fill: white;" text="Send">
 
                   </Button>
                   <ImageView fx:id="settings" fitHeight="20.0" fitWidth="20.0" layoutX="186.0" layoutY="586.0" onMouseClicked="#showSettings" pickOnBounds="true" preserveRatio="true">
@@ -56,7 +56,7 @@
             </AnchorPane>
          </items>
       </SplitPane>
-      <Pane fx:id="titleBar" onMouseDragged="#moveApp" onMousePressed="#moveApp" prefHeight="42.0" prefWidth="650.0" style="-fx-background-color: #00AFF0;">
+      <Pane fx:id="titleBar" onMouseDragged="#moveApp" onMousePressed="#moveApp" prefHeight="42.0" prefWidth="650.0" style="-fx-background-color: #2a3137;">
          <children>
             <Label layoutX="30.0" layoutY="6.0" style="-fx-background-color: transparent; -fx-font-weight: bold; -fx-text-fill: white; -fx-font-size: 12px;" text="vAssist" />
             <Label fx:id="statusIcon" layoutX="6.0" layoutY="5.0" maxHeight="17.0" maxWidth="17.0" minHeight="17.0" minWidth="17.0" prefHeight="17.0" prefWidth="17.0">

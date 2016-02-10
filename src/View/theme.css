@@ -98,7 +98,7 @@
     -fx-text-color:#000;
     -fx-background-insets:  0.0;
     -fx-background-radius: 2.0;
-    -fx-padding: 0.7em;
+    -fx-padding: 0; /*.7em;*/
     -fx-border-width: 0.0;
     -fx-prompt-text-fill: derive(-dark, 50.0%);
     -fx-highlight-fill: rgb(94.0, 203.0, 234.0);
@@ -345,7 +345,7 @@ For the "Train the Bot" check box
 */
 .check-box .box {
     -fx-background-color: transparent;
-    -fx-border-color: #9b9d9e;
+    -fx-border-color: #2a3137;
     -fx-border-width: 1.5px;
     -fx-background-insets: 0 0 0 0, 0, 1, 2;
     -fx-background-radius: 2, 2, 1, 1;
@@ -353,5 +353,5 @@ For the "Train the Bot" check box
 }
 
 .check-box:selected .mark{
-    -fx-background-color: #00aff0;
+    -fx-background-color: #2a3137;
 }

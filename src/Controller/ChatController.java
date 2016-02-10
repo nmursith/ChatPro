@@ -602,9 +602,15 @@ public class ChatController{
 
                         //operatorProducerID.remove(index+1);
                         if(index>0){
-                            if(listItems.get(index-1)!=null) {
-                             System.out.println("SETTING PREVIOUS USERITEM");
-                               setUsername(listItems.get(index - 1));
+                            System.out.println("SETTING NEXT USERITEM");
+                            try {
+                                setUsername(listItems.get(index +1));
+                            }
+                            catch (NullPointerException e){
+
+                            }
+                            catch (Exception e){
+
                             }
                         }
                         else if(index==0){
@@ -613,6 +619,9 @@ public class ChatController{
                                 System.out.println("SETTING NEXT USERITEM");
                                     try {
                                         setUsername(listItems.get(index +1));
+                                    }
+                                    catch (NullPointerException e){
+
                                     }
                                     catch (Exception e){
 
@@ -629,12 +638,12 @@ public class ChatController{
                         listItems.remove(index);
 
 
-                        if(index==0 &&listItems.isEmpty()){
+                        if(listItems.isEmpty()){
                             sendButton.setDisable(true);
                             messageTextField.setDisable(true);
                             doTrain.setDisable(true);
                             Username.setText("");
-                            messageDisplay.setContent(null);
+                            messageDisplay.setContent(getGridPane());
                         }
 
 

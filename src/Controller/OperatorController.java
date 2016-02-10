@@ -794,7 +794,8 @@ public class OperatorController implements MessageListener {
                                     }
 
                                 }
-
+                                if(username.equals(""))
+                                    username = Constant.Annonymus;
                                 UserBubble bubble = new UserBubble(username, chatMessage.getTextMessage(), chatMessage.getTime());
                                 bindOperator.getChatHolder().addRow(ID, bubble.getRoot());
 
@@ -838,8 +839,9 @@ public class OperatorController implements MessageListener {
                                     //isFirstime = false;
 
                                     UserItem item = controller.getListItems().get(0);
-                                    controller.getChatUsersList().getSelectionModel().select(0);
                                     controller.setUsername(item);
+                                    controller.getChatUsersList().getSelectionModel().select(0);
+
 
                                 }
 
@@ -873,7 +875,6 @@ public class OperatorController implements MessageListener {
 
                                         NotificationController.getNotification(finalReply, username1,controller,index);
                                         Platform.runLater(() -> {
-
                                             controller.chatUsersList.getFocusModel().focus(index);
                                             controller.chatUsersList.scrollTo(index);
                                         });

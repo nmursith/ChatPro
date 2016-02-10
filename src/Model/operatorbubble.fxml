@@ -13,8 +13,8 @@
 
 <AnchorPane fx:id="chat_block_pane" maxWidth="335.0" minWidth="335.0" prefHeight="77.0" prefWidth="335.0" style="-fx-background-color: transparent; -fx-background-radius: 5px;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.OperatorBubbleController">
    <children>
-      <Label fx:id="bubble_triangle_label" layoutX="268.0" layoutY="10.0" prefHeight="29.0" prefWidth="25.0" rotate="45.0" style="-fx-background-color: #DDDDDD;" />
-      <GridPane fx:id="chat_bubble_pane" maxWidth="290.0" minWidth="290.0" prefWidth="290.0" style="-fx-background-color: #DDD; -fx-background-radius: 10px;">
+      <Label fx:id="bubble_triangle_label" layoutX="268.0" layoutY="10.0" prefHeight="29.0" prefWidth="25.0" rotate="45.0" style="-fx-background-color: #babbbc;" />
+      <GridPane fx:id="chat_bubble_pane" maxWidth="290.0" minWidth="290.0" prefWidth="290.0" style="-fx-background-color: #babbbc; -fx-background-radius: 10px;">
          <children>
             <Label fx:id="operatorname" layoutX="10.0" layoutY="5.0" maxHeight="15.0" maxWidth="200.0" opacity="0.6" prefHeight="15.0" prefWidth="150.0" style="-fx-font-weight: bold;" wrapText="true">
                <font>
