@@ -623,10 +623,13 @@ public class ChatController{
                                 setUsername(listItems.get(index +1));
                             }
                             catch (NullPointerException e){
-
+                                e.printStackTrace();
+                            }
+                            catch (ArrayIndexOutOfBoundsException e){
+                                e.printStackTrace();
                             }
                             catch (Exception e){
-
+                                e.printStackTrace();
                             }
                         }
                         else if(index==0){
@@ -637,10 +640,13 @@ public class ChatController{
                                         setUsername(listItems.get(index +1));
                                     }
                                     catch (NullPointerException e){
-
+                                        e.printStackTrace();
+                                    }
+                                    catch (ArrayIndexOutOfBoundsException e){
+                                        e.printStackTrace();
                                     }
                                     catch (Exception e){
-
+                              //          e.printStackTrace();
                                     }
                             }
 
@@ -649,9 +655,18 @@ public class ChatController{
 
                         }
 
-                        hashMapOperator.remove(messageProducerID.get(index));
-                        messageProducerID.remove(index);
-                        listItems.remove(index);
+                        try {
+                            hashMapOperator.remove(messageProducerID.get(index));
+                            messageProducerID.remove(index);
+                            listItems.remove(index);
+                        }
+                        catch (NullPointerException e){
+                            e.printStackTrace();
+                        }
+                        catch (Exception e){
+                            e.printStackTrace();
+                        }
+
 
 
                         if(listItems.isEmpty()){
@@ -665,7 +680,7 @@ public class ChatController{
 
                     }
                     catch (Exception e){
-e.printStackTrace();
+                        e.printStackTrace();
                     }
 
                 }

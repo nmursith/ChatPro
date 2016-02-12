@@ -470,14 +470,11 @@ public class OperatorController implements MessageListener {
                     user.setSubscriptionName(tempName);
                     user.setTopicName(Constant.topicPrefix+ tempName);
 
-                    Platform.runLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            controller.getListItems().add(new UserItem(user,controller));
+                    Platform.runLater(() -> {
+                        controller.getListItems().add(new UserItem(user,controller));
 
-                            System.out.println("USERITEM IS ADDED       ");// +controller.getListItems().get(controller.getListItems().size()-1) );
+                        System.out.println("USERITEM IS ADDED       ");// +controller.getListItems().get(controller.getListItems().size()-1) );
 
-                        }
                     });
 
                     //      controller.getChatUsersList().setItems(controller.getListItems());
@@ -658,7 +655,7 @@ public class OperatorController implements MessageListener {
 
 
             if(!durablechatMessage.isEmpty()) {
-                while (!durablechatMessage.isEmpty()) {
+                while (!durablechatMessage.isEmpty() && isReceived) {
                     //                  System.out.println("internal");
                     try {
 
@@ -841,15 +838,20 @@ public class OperatorController implements MessageListener {
 
 
                              //   System.out.println("firsttime:   " + isFirstime + "    " + controller.getListItems().isEmpty());
-                                if (controller.getListItems().size()==1) {
+                                if (controller.getListItems().isEmpty() || isFirstime) {
 //                                    controller.getMessageTextField().setDisable(false);
 //                                    controller.getDoTrain().setDisable(false);
-                                    System.out.println("first");
-                                    //isFirstime = false;
+                                    try {
+                                        System.out.println("first");
+                                        //isFirstime = false;
 
-                                    UserItem item = controller.getListItems().get(0);
-                                    controller.setUsername(item);
-                                    controller.getChatUsersList().getSelectionModel().select(0);
+                                        UserItem item = controller.getListItems().get(0);
+                                        controller.setUsername(item);
+                                        controller.getChatUsersList().getSelectionModel().select(0);
+                                    }
+                                    catch (NullPointerException e){
+                                     e.printStackTrace();
+                                    }
 
 
                                 }

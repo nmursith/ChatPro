@@ -161,8 +161,9 @@ public class UserItem extends GridPane implements   Runnable, EventHandler<Mouse
 
     @Override
     public void run() {
-if (userItem == null)
-    return;
+        if (userItem == null)
+            return;
+
         try{
                 try{
                     for (int i = 0; i < 3; i++) {
@@ -210,7 +211,7 @@ if (userItem == null)
                 }
             blink = null;
 
-            if(userItem!=null && chatController.getChatUsersList().getSelectionModel().getSelectedItem().equals(userItem) ) {
+            if(chatController.getChatUsersList().getSelectionModel().getSelectedItem().equals(userItem) ) {
 
                 this.thumbUserName.setStyle("-fx-text-fill:#696969; -fx-font-size:12px; -fx-font-weight:bold; ");
             }
