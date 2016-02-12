@@ -1,5 +1,6 @@
 package Controller;
 
+import Model.Constant;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -22,6 +23,7 @@ public class JSONFormatController {
         JSONObject obj = new JSONObject();
         obj.put("owner", owner);
         obj.put("text",text);
+        obj.put("corre-id", Constant.correalationID);
         return obj.toString();
 
 

@@ -231,6 +231,15 @@ public class ChatController{
 
         String myMessage = messageTextField.getText();
 
+        try {
+            if(myMessage.equals(""))
+                return;
+            if(myMessage.trim().equals(""))
+                return;
+        }
+        catch (Exception e){
+
+        }
         ChatMessage myMessageMod = getObjectMessage(myMessage, operatorController.getSubscriptionName());
         try {
             if(myMessage==null)
