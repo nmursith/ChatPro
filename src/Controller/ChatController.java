@@ -617,33 +617,36 @@ public class ChatController{
                        // chatUsersList.getItems().remove(index);
 
                         //operatorProducerID.remove(index+1);
-                        if(index>0){
+                        if(index>0 && (index+1)<listItems.size()){
                             System.out.println("SETTING NEXT USERITEM");
                             try {
-                                setUsername(listItems.get(index +1));
+
+                                UserItem userItem =listItems.get(index +1);
+                                setUsername(userItem);
                             }
                             catch (NullPointerException e){
                                 e.printStackTrace();
                             }
                             catch (ArrayIndexOutOfBoundsException e){
-                                e.printStackTrace();
+                     //           e.printStackTrace();
                             }
                             catch (Exception e){
                                 e.printStackTrace();
                             }
                         }
-                        else if(index==0){
+                        else if(index==0 && (index+1)<listItems.size()){
 
                             if(listItems.size()>0) {
                                 System.out.println("SETTING NEXT USERITEM");
                                     try {
-                                        setUsername(listItems.get(index +1));
+                                        UserItem userItem =listItems.get(index +1);
+                                        setUsername(userItem);
                                     }
                                     catch (NullPointerException e){
                                         e.printStackTrace();
                                     }
                                     catch (ArrayIndexOutOfBoundsException e){
-                                        e.printStackTrace();
+                             //           e.printStackTrace();
                                     }
                                     catch (Exception e){
                               //          e.printStackTrace();

@@ -112,6 +112,7 @@ public class NotificationController {
             //cnt--;
             ///       System.out.println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
             //////////////////
+        //    System.out.println(mouseEvent.getSource());
             notifyLocations();
             stage.close();
         });
@@ -119,6 +120,7 @@ public class NotificationController {
 
         popup.addEventFilter(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
 /////////////////
+            //System.out.println(mouseEvent.getSource());
             notifyLocations();
             //cnt--;
             //System.out.println("$$$$$$$$$$$$$$$iiii$$$$$$$$$$$$$");
