@@ -1082,6 +1082,11 @@ public class ChatController{
         this.stage = stage;
     }
 
+    public void showLastmessage(Event event) {
+        Platform.runLater(() -> messageDisplay.setVvalue(messageDisplay.getVmax()));
+
+    }
+
 
     class NetworkDownHandler extends Thread{
         Image image_offline = new Image(getClass().getResourceAsStream("offline.png")); //===========================

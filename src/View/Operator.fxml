@@ -15,7 +15,7 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 
-<GridPane fx:id="parentGrid" alignment="center" maxHeight="641.0" prefHeight="641.0" prefWidth="650.0" style="-fx-border-color: black; -fx-background-color: white; -fx-border-width: 0.25px;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.ChatController">
+<GridPane fx:id="parentGrid" alignment="center" maxHeight="641.0" onMouseEntered="#showLastmessage" prefHeight="641.0" prefWidth="650.0" style="-fx-border-color: black; -fx-background-color: white; -fx-border-width: 0.25px;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.ChatController">
    <columnConstraints>
       <ColumnConstraints />
    </columnConstraints>

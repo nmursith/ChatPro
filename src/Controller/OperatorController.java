@@ -838,20 +838,26 @@ public class OperatorController implements MessageListener {
 
 
                              //   System.out.println("firsttime:   " + isFirstime + "    " + controller.getListItems().isEmpty());
-                                if (controller.getListItems().isEmpty() || isFirstime) {
+                                if (controller.getListItems().size()==1 || isFirstime) {
 //                                    controller.getMessageTextField().setDisable(false);
 //                                    controller.getDoTrain().setDisable(false);
                                     try {
                                         System.out.println("first");
-                                        //isFirstime = false;
+                                        isFirstime = false;
 
                                         UserItem item = controller.getListItems().get(0);
-                                        controller.setUsername(item);
-                                        controller.getChatUsersList().getSelectionModel().select(0);
+                                        if(item!=null) {
+                                            controller.setUsername(item);
+                                            controller.getChatUsersList().getSelectionModel().select(0);
+                                        }
                                     }
                                     catch (NullPointerException e){
                                      e.printStackTrace();
                                     }
+                                    catch (Exception e){
+                                        e.printStackTrace();
+                                    }
+
 
 
                                 }
