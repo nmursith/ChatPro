@@ -531,14 +531,13 @@ public class OperatorController implements MessageListener {
 
 
                         }
-
-                        int trakcer = bindOperator.getOperatorController().getIDtracker();//getTracker();
+/******** Eliminate History*********/
+/*                        int trakcer = bindOperator.getOperatorController().getIDtracker();//getTracker();
                         SeperatorLine seperatorLine = new SeperatorLine(bindOperator, trakcer);            // uncomment
                         Platform.runLater(() -> {
                             //bindOperator.getChatHolder().addRow(trakcer, seperatorLine.getSeperator()); // uncomment
-
                             bindOperator.getChatHolder().add(seperatorLine.getSeperator(), 0, trakcer); // uncomment
-                        });
+                        });*/
                     }
 
                 } catch (ParseException e) {
@@ -858,8 +857,6 @@ public class OperatorController implements MessageListener {
                                         e.printStackTrace();
                                     }
 
-
-
                                 }
 
 
@@ -1041,12 +1038,12 @@ public class OperatorController implements MessageListener {
                 messages.close();
 
                 bindOperator.setHistoryMessages(historyMessages);
-
-                SeperatorLine seperatorLine = new SeperatorLine(bindOperator,0);            // uncomment
+/***History**/
+/*                SeperatorLine seperatorLine = new SeperatorLine(bindOperator,0);            // uncomment
                 //   bindOperator.getChatHolder().getChildren().clear();  // uncomment
      //           Platform.runLater(() -> {
                     bindOperator.getChatHolder().add(seperatorLine.getSeperator(),0,0); // uncomment
-      //          });
+      //          });*/
 
 
             }
