@@ -314,7 +314,7 @@ public class OperatorController implements MessageListener {
 
         try {
 
-
+            isReceived =false;
             if (message instanceof TextMessage) {
                 //System.out.println("Object: "+message.toString());
                 TextMessage txtMsg = (TextMessage) message;
@@ -398,7 +398,7 @@ public class OperatorController implements MessageListener {
 //                System.out.println(chatMessagess.isEmpty());
             }
 
-            System.out.println(correlationID +"         PRODUCERID :  "+  producerID);
+          //  System.out.println(correlationID +"         PRODUCERID :  "+  producerID);
 
             if(!controller.getMessageProducerID().contains(producerID) && producerID!=null && !producerID.equalsIgnoreCase("*") && !producerID.equals(defaultOperator) && correlationID==null){
                 System.out.println("Adding:  "+  producerID);
@@ -443,8 +443,8 @@ public class OperatorController implements MessageListener {
                         //operatorController.setMessageCounter(count);
                   }
 
-                    int count  = loadHistory(controller.getHashMapOperator().get(producerID));
-                    operatorController.setMessageCounter(count);        //starting
+             //       int count  = loadHistory(controller.getHashMapOperator().get(producerID));
+                    operatorController.setMessageCounter(0);        //starting
 
                     //operatorController.setIDtracker(0);
 
@@ -549,13 +549,14 @@ public class OperatorController implements MessageListener {
 
             }
 
-
+            isReceived = true;
 
 
         } catch (Exception e){
+            isReceived =false;
             e.printStackTrace();
         }
-         isReceived = true;
+
     }
 
     protected void setENDisableUI(String producerID){

@@ -128,7 +128,8 @@ public class UserItem extends GridPane implements   Runnable, EventHandler<Mouse
             //           stop();
             // blink = null;
             //         System.out.println("stopping");
-            this.thumbUserName.setStyle("-fx-text-fill:#696969; -fx-font-size:12px; -fx-font-weight:bold; ");
+            Platform.runLater(() -> this.thumbUserName.setStyle("-fx-text-fill:#696969; -fx-font-size:12px; -fx-font-weight:bold; "));
+
 
             //blink = new Blink();
 
@@ -302,10 +303,10 @@ public class UserItem extends GridPane implements   Runnable, EventHandler<Mouse
     public void handle(MouseEvent event) {
         final UserItem userItem = this;
 
-
-        chatController.setUsername(userItem);
+    //    chatController.setUsername(userItem);
         Platform.runLater(() -> {
             try {
+
                 chatController.closeChat(userItem);
             } catch (JMSException e) {
                 e.printStackTrace();

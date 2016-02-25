@@ -102,7 +102,7 @@ public class HistoryController {
             String history="{"+botHistory+"}";
             //System.out.println(history);
             JSONObject jsonObject = (JSONObject) (new JSONParser().parse(history));
-            System.out.println(jsonObject);
+       //     System.out.println(jsonObject);
             JSONArray msg = (JSONArray) jsonObject.get("VARHISTORY");
 
             boolean alreadyExists = new File(fileName).exists();
