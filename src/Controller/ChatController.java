@@ -562,26 +562,28 @@ public class ChatController{
     }
 
 
-    public void closeChat(UserItem useritem) throws JMSException, IOException, InterruptedException {
-        int index = chatUsersList.getSelectionModel().getSelectedIndex();
+    public void closeChat(UserItem useritem)  {
 
-     //   Platform.runLater(() -> setUsername(useritem));
+        try{
+            int index = chatUsersList.getSelectionModel().getSelectedIndex();
 
-        System.out.println("Closing index: "+ index);
-        //  operatorController.closeConnection();
+            //   Platform.runLater(() -> setUsername(useritem));
 
-        if(!listItems.isEmpty()) {
+            System.out.println("Closing index: "+ index);
+            //  operatorController.closeConnection();
 
-            String myMessage = "exit";
-            String bubbleMessage = "Chat closed by Operator";
-            ChatMessage myMessageMod = getObjectMessage(myMessage, operatorController.getSubscriptionName());
-            ChatMessage bubbleMessageMod = getObjectMessage(bubbleMessage, operatorController.getSubscriptionName());
+            if(!listItems.isEmpty()) {
 
-         //   if(!operatorController.isClosedAlready() && operatorController.isSessionCreated()) {
+                String myMessage = "exit";
+                String bubbleMessage = "Chat closed by Operator";
+                ChatMessage myMessageMod = getObjectMessage(myMessage, operatorController.getSubscriptionName());
+                ChatMessage bubbleMessageMod = getObjectMessage(bubbleMessage, operatorController.getSubscriptionName());
+
+                //   if(!operatorController.isClosedAlready() && operatorController.isSessionCreated()) {
 
 //            }
-          //  System.out.println("exit");
-           // int counter = (int) operatorController.getMessageCounter();
+                //  System.out.println("exit");
+                // int counter = (int) operatorController.getMessageCounter();
 
 
 /*** add bubble*****/
@@ -591,53 +593,53 @@ public class ChatController{
             chatHolder.addRow(ID, bubble.getRoot());
             messageDisplay.setContent(chatHolder);*/
 
-            historyController.writehistory(Constant.ID_O, Constant.configuration.getOperator(),myMessageMod);
+                historyController.writehistory(Constant.ID_O, Constant.configuration.getOperator(),myMessageMod);
 
-    //        UserItem useritem = controller.getListItems().get(index);
-            String userID = useritem.getUser().getSubscriptionName();
+                //        UserItem useritem = controller.getListItems().get(index);
+                String userID = useritem.getUser().getSubscriptionName();
 //            hashMapOperator.remove(name);
-            //           hashMapOperator.get(defaultOperator).getOperatorController().getMessageProduceID().remove(name);
-            //listItems.remove(index);
+                //           hashMapOperator.get(defaultOperator).getOperatorController().getMessageProduceID().remove(name);
+                //listItems.remove(index);
 /**Major Changes**/
 //            hashMapOperator.get(userID).getChatHolder().setDisable(true);
 //            sendButton.setDisable(true);
 //            messageTextField.setDisable(true);
 //            doTrain.setDisable(true);
 //            useritem.setDisable(true);
-           // Thread.sleep(50);
+                // Thread.sleep(50);
 
-            Platform.runLater(() -> {
-                messageDisplay.setVvalue(messageDisplay.getVmax());
-                if(index>=0){
-                    try{
+                Platform.runLater(() -> {
+                    messageDisplay.setVvalue(messageDisplay.getVmax());
+                    if(index>=0 && index< listItems.size()){
+                        try{
 
-                        System.out.println("REMOVING:  "+index +"       " + messageProducerID.get(index) +"       SIZE: "+ listItems.size());
-               //         hashMapOperator.remove(messageProducerID.get(index));
+                            System.out.println("REMOVING:  "+index +"       " + messageProducerID.get(index) +"       SIZE: "+ listItems.size());
+                            //         hashMapOperator.remove(messageProducerID.get(index));
 
-                       // chatUsersList.getItems().remove(index);
+                            // chatUsersList.getItems().remove(index);
 
-                        //operatorProducerID.remove(index+1);
-                        if(index>0 && (index+1)<listItems.size()){
-                            System.out.println("SETTING NEXT USERITEM");
-                            try {
-
-                                UserItem userItem =listItems.get(index +1);
-                                setUsername(userItem);
-                            }
-                            catch (NullPointerException e){
-                                e.printStackTrace();
-                            }
-                            catch (ArrayIndexOutOfBoundsException e){
-                     //           e.printStackTrace();
-                            }
-                            catch (Exception e){
-                                e.printStackTrace();
-                            }
-                        }
-                        else if(index==0 && (index+1)<listItems.size()){
-
-                            if(listItems.size()>0) {
+                            //operatorProducerID.remove(index+1);
+                            if(index>0 && (index +1)< listItems.size()){
                                 System.out.println("SETTING NEXT USERITEM");
+                                try {
+
+                                    UserItem userItem =listItems.get(index +1);
+                                    setUsername(userItem);
+                                }
+                                catch (NullPointerException e){
+                                    e.printStackTrace();
+                                }
+                                catch (ArrayIndexOutOfBoundsException e){
+                                    //           e.printStackTrace();
+                                }
+                                catch (Exception e){
+                                    e.printStackTrace();
+                                }
+                            }
+                            else if(index==0  ){
+
+                                if(listItems.size()==2) {
+                                    System.out.println("SETTING NEXT USERITEM");
                                     try {
                                         UserItem userItem =listItems.get(index +1);
                                         setUsername(userItem);
@@ -646,59 +648,93 @@ public class ChatController{
                                         e.printStackTrace();
                                     }
                                     catch (ArrayIndexOutOfBoundsException e){
-                             //           e.printStackTrace();
+                                        //           e.printStackTrace();
                                     }
                                     catch (Exception e){
-                              //          e.printStackTrace();
+                                                  e.printStackTrace();
                                     }
+                                }
+
+                                //messageDisplay.setContent(getGridPane());
+                                //messageDisplay.setDisable(true);
+
+                            }
+                            else if(listItems.size() == (index+1)  ){
+
+                                if(listItems.size()>0) {
+                                    System.out.println("SETTING previous USERITEM");
+                                    try {
+                                        UserItem userItem =listItems.get(index -1);
+                                        setUsername(userItem);
+                                    }
+                                    catch (NullPointerException e){
+                                        e.printStackTrace();
+                                    }
+                                    catch (ArrayIndexOutOfBoundsException e){
+                                        //           e.printStackTrace();
+                                    }
+                                    catch (Exception e){
+                                                  e.printStackTrace();
+                                    }
+                                }
+
+                                //messageDisplay.setContent(getGridPane());
+                                //messageDisplay.setDisable(true);
+
                             }
 
-                           //messageDisplay.setContent(getGridPane());
-                            //messageDisplay.setDisable(true);
 
-                        }
 
-                        try {
-                            hashMapOperator.remove(messageProducerID.get(index));
-                            messageProducerID.remove(index);
-                            listItems.remove(index);
-                        }
-                        catch (NullPointerException e){
-                            e.printStackTrace();
+                            try {
+                                hashMapOperator.remove(messageProducerID.get(index));
+                                messageProducerID.remove(index);
+                                listItems.remove(index);
+                            }
+                            catch (NullPointerException e){
+                                e.printStackTrace();
+                            }
+                            catch (Exception e){
+                                e.printStackTrace();
+                            }
+
+
+
+                            if(listItems.isEmpty()){
+                                sendButton.setDisable(true);
+                                messageTextField.setDisable(true);
+                                doTrain.setDisable(true);
+                                Username.setText("");
+                                messageDisplay.setContent(getGridPane());
+                            }
+
+
                         }
                         catch (Exception e){
                             e.printStackTrace();
                         }
 
-
-
-                        if(listItems.isEmpty()){
-                            sendButton.setDisable(true);
-                            messageTextField.setDisable(true);
-                            doTrain.setDisable(true);
-                            Username.setText("");
-                            messageDisplay.setContent(getGridPane());
-                        }
-
-
-                    }
-                    catch (Exception e){
-                        e.printStackTrace();
                     }
 
+                });
+
+                try{
+                    operatorController.sendMessage(myMessageMod, operatorController);
+                    operatorController.closeConnection();
+                }
+                catch (Exception e){
+                    e.printStackTrace();
                 }
 
-            });
-
-            try{
-                operatorController.sendMessage(myMessageMod, operatorController);
-                operatorController.closeConnection();
             }
-            catch (Exception e){
-                e.printStackTrace();
-            }
-
         }
+        catch(ArrayIndexOutOfBoundsException e){
+            e.printStackTrace();
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+
+
 
 
     }

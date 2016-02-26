@@ -16,9 +16,6 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
-import javax.jms.JMSException;
-import java.io.IOException;
-
 /**
  * Created by PPNPERERA on 11/24/2015.
  */
@@ -212,13 +209,27 @@ public class UserItem extends GridPane implements   Runnable, EventHandler<Mouse
                 }
             blink = null;
 
-            if(chatController.getChatUsersList().getSelectionModel().getSelectedItem().equals(userItem) ) {
+            /*****Change text Color*/
+/*            if(chatController!=null && userItem !=null && chatController.getChatUsersList()!=null ){
+                try{
 
-                this.thumbUserName.setStyle("-fx-text-fill:#696969; -fx-font-size:12px; -fx-font-weight:bold; ");
-            }
-            else
-                this.thumbUserName.setStyle("-fx-text-fill:#ffa500; -fx-font-size:12px; -fx-font-weight:bold;");
+                    if(chatController.getChatUsersList().getSelectionModel().getSelectedItem().equals(userItem) ) {
 
+                        this.thumbUserName.setStyle("-fx-text-fill:#696969; -fx-font-size:12px; -fx-font-weight:bold; ");
+                    }
+                    else {
+                        this.thumbUserName.setStyle("-fx-text-fill:#ffa500; -fx-font-size:12px; -fx-font-weight:bold;");
+
+                    }
+                }
+                catch (NullPointerException e){
+                    e.printStackTrace();
+
+                }
+                catch (Exception e){
+                    e.printStackTrace();
+                }
+            }*/
 
             try {
                 blink.sleep(250);
@@ -226,6 +237,9 @@ public class UserItem extends GridPane implements   Runnable, EventHandler<Mouse
                 ///  e.printStackTrace();
 
             }
+        }
+        catch(NullPointerException e){
+            e.printStackTrace();
         }
         catch(Exception e){
             e.printStackTrace();
@@ -301,18 +315,15 @@ public class UserItem extends GridPane implements   Runnable, EventHandler<Mouse
 
     @Override
     public void handle(MouseEvent event) {
-        final UserItem userItem = this;
+
 
     //    chatController.setUsername(userItem);
         Platform.runLater(() -> {
             try {
-
+                final UserItem userItem = this;
                 chatController.closeChat(userItem);
-            } catch (JMSException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (InterruptedException e) {
+
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         });

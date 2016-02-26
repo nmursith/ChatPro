@@ -514,7 +514,6 @@ public class OperatorController implements MessageListener {
 
                         if (index >= 0 && !userItemListView.getItems().isEmpty() && index <userItemListView.getItems().size()) {
                             UserItem userItem = userItemListView.getItems().get(index);
-                            userItem.startBlink();
                             userItem.getUser().setUserName(username);
                             System.out.println(userItemListView.getSelectionModel().isSelected(index));
 
@@ -528,7 +527,7 @@ public class OperatorController implements MessageListener {
                                 });
 
                             }
-
+                            Platform.runLater(() -> userItem.startBlink());
 
                         }
 /******** Eliminate History*********/
@@ -842,13 +841,19 @@ public class OperatorController implements MessageListener {
 //                                    controller.getMessageTextField().setDisable(false);
 //                                    controller.getDoTrain().setDisable(false);
                                     try {
-                                        System.out.println("first");
+
                                         isFirstime = false;
 
                                         UserItem item = controller.getListItems().get(0);
                                         if(item!=null) {
-                                            controller.setUsername(item);
-                                            controller.getChatUsersList().getSelectionModel().select(0);
+                                            try{
+                                                System.out.println("first");
+                                                controller.getChatUsersList().getSelectionModel().select(0);
+                                                controller.setUsername(item);
+                                            }
+                                            catch (Exception e){
+                                                e.printStackTrace();
+                                            }
                                         }
                                     }
                                     catch (NullPointerException e){

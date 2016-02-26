@@ -98,7 +98,7 @@ public class NotificationController {
             popup.setX(stage.getX()+10);
             popup.setY(stage.getY()+5);
             //stage.getScene().setFill(Color.valueOf("#f4f4f4"));
-            stage.getScene().setFill(Color.valueOf("#2a3137"));
+            stage.getScene().setFill(Color.valueOf("#0B3861"));
             PauseTransition delay = new PauseTransition(Duration.seconds(5));
             //PauseTransition delay1 = new PauseTransition(Duration.seconds(2));
             delay.setOnFinished( event -> stage.close() );
