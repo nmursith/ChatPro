@@ -18,13 +18,14 @@ public class Operator{
     private String operatorID;
 
     private static int ackMode;
-    private static String messageBrokerUrl;
+    public static String messageBrokerUrl;
     private boolean isConnected;
     private boolean isAnswered;
 
     static {
         messageBrokerUrl = Constant.configuration.getURL();////ActiveMQConnection.DEFAULT_BROKER_URL;//"tcp://localhost:61616";
-      //  messageBrokerUrl ="tcp://localhost:61616";
+        //messageBrokerUrl ="tcp://localhost:61616";
+       // messageBrokerUrl ="tcp://104.131.100.20:61616";
         ackMode = Session.AUTO_ACKNOWLEDGE;
 
     }
@@ -72,6 +73,13 @@ public class Operator{
 
     }
 
+    public static String getMessageBrokerUrl() {
+        return messageBrokerUrl;
+    }
+
+    public static void setMessageBrokerUrl(String messageBrokerUrl) {
+        Operator.messageBrokerUrl = messageBrokerUrl;
+    }
 
     public void setSubscriptionName(String subscriptionName) {
         this.subscriptionName = subscriptionName;

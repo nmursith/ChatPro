@@ -421,11 +421,12 @@ public class SettingsController  implements ChangeListener, EventHandler<KeyEven
 
                     chatController.getHashMapOperator().remove(chatController.getDefaultOperator());
                     chatController.setConfig(currentConfiguration);
-
+                    Operator.messageBrokerUrl = currentConfiguration.getURL();
 
 /***************   can be done by creating new session*************/
                     OperatorController operatorController = null;
                     try {
+                        operatorController.getOperator().messageBrokerUrl = currentConfiguration.getURL();
                         operatorController = new OperatorController(currentConfiguration.getOperator(), currentConfiguration.getTopic(),chatController);
 //                        operatorController.createSession();
 //                        operatorController.startDefaultOperatorAction();

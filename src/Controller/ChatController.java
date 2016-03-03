@@ -68,7 +68,7 @@ public class ChatController{
     public Vector<String> messageProducerID;
     private Vector<String> operatorProducerID;
     private ArrayList<Variable> contextMenuVariables;
-    private Configuration config;
+    public static Configuration config;
     private  OperatorController operatorController ;
     private  HistoryController historyController;
     private NetworkDownHandler networkHandler;
@@ -432,6 +432,8 @@ public class ChatController{
             //        System.out.println("previousID:     "+previousID);
 
             Username.setText(name);
+            operatorController = hashMapOperator.get(userID).getOperatorController();
+            historyController = hashMapOperator.get(userID).getHistoryController();
             Platform.runLater(() -> {
                 //     chatBubble = hashMapOperator.get(name).getTextArea();
                 //         System.out.println(chatHolder +"                    ");
@@ -439,8 +441,6 @@ public class ChatController{
                 try{
                     messageTextField.setText(hashMapOperator.get(userID).getTypedMessage());
                     chatHolder = hashMapOperator.get(userID).getChatHolder();
-                    operatorController = hashMapOperator.get(userID).getOperatorController();
-                    historyController = hashMapOperator.get(userID).getHistoryController();
                     messageDisplay.setContent(chatHolder);
                     messageDisplay.setVvalue(messageDisplay.getVmax());
                     //Thread.sleep(10);
