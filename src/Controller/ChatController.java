@@ -1128,12 +1128,13 @@ public class ChatController{
         Image image_offline = new Image(getClass().getResourceAsStream("offline.png")); //===========================
         Image image_online = new Image(getClass().getResourceAsStream("online.png"));   //===========================
         Thread thread = this;
+        volatile boolean isStopped = false;
 
         public void run() {
             thread = Thread.currentThread();
             System.out.println(isOnline);
             String ID = Constant.operatorID;//Constant.getRandomString();
-                while (!isOnline) {
+                while (!isOnline && !isStopped) {
                     try {
                         System.out.println("Trying to resolve");
                         Operator operator = new Operator(ID, ID);
@@ -1153,7 +1154,7 @@ public class ChatController{
                             isOnline = false;
                         }
                         try {
-                            sleep(200);
+                            thread.sleep(200);
                         } catch (InterruptedException e1) {
                             e1.printStackTrace();
                         }
@@ -1161,7 +1162,7 @@ public class ChatController{
                     } catch (IllegalStateException e) {
                         isOnline = false;
                         try {
-                            sleep(200);
+                            thread.sleep(200);
                         } catch (InterruptedException e1) {
                             e1.printStackTrace();
                         }
@@ -1171,7 +1172,7 @@ public class ChatController{
                         isOnline = false;
                         try {
 
-                            sleep(200);
+                            thread.sleep(200);
                         } catch (InterruptedException e1) {
                             e1.printStackTrace();
                         }
@@ -1252,13 +1253,20 @@ public class ChatController{
 
             }
 
-            stopThread();
+            //stopThread();
         }
 
         public  void stopThread(){
-            Thread t = thread;
-            thread = null;
-            t.interrupt();
+            try{
+                isStopped = true;
+                //thread.stop();
+//                Thread t = thread;
+//                thread = null;
+//                t.interrupt();
+            }
+            catch (Exception e){
+                    e.printStackTrace();
+            }
         }
     }
 

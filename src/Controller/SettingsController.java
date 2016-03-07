@@ -343,52 +343,83 @@ public class SettingsController  implements ChangeListener, EventHandler<KeyEven
     class NetworkDownHandler extends Thread{
         Image image_offline = new Image(getClass().getResourceAsStream("offline.png")); //===========================
         Image image_online = new Image(getClass().getResourceAsStream("online.png"));   //===========================
+        boolean isConnected = false;
 
         Thread thread = this;
-
+        Configuration currentConfiguration = new Configuration();
         public void run() {
 
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+
+                    currentConfiguration.setDestination(destination.getText());
+                    currentConfiguration.setTopic(topic.getText());
+                    currentConfiguration.setSubscription(subscription.getText());
+                    currentConfiguration.setURL(URL.getText());
+
+                    currentConfiguration.setOperator(operator.getText());
+
+                    Operator.messageBrokerUrl = currentConfiguration.getURL();
+                }
+            });
+            chatController.getNetworkHandler().stopThread();
             thread = Thread.currentThread();
             System.out.println(chatController.isOnline());
             String ID = Constant.operatorID;//Constant.getRandomString();
-            while (!chatController.isOnline()) {
+            try{
+                Operator operator1 = new Operator(ID, ID);
+                 isConnected = operator1.isConnected();
+            } catch (JMSException e) {
+                e.printStackTrace();
+            }
+
+            while (!isConnected) {
                 try {
-                    System.out.println("Trying to resolve");
+                    System.out.println("[INFO] Settings Changed: Trying to resolve ");
                     Operator operator = new Operator(ID, ID);
-                    boolean isConnected = operator.isConnected();
+                     isConnected = operator.isConnected();
 
                     //         System.out.println("inside:  " + isOnline);
                     if (isConnected) {
                         chatController.statusImageView.setImage(image_online); //==========================
                         chatController.setOnline(true);
+                        isConnected = true;
                         System.out.println("Re-connected");
                         operator.closeConnection();
                     }
                     else {
                         chatController.statusImageView.setImage(image_offline);//===========================
                         chatController.setOnline(false);
+                        isConnected = false;
                     }
-                    operator = null;
+                 //   operator = null;
 
                 } catch (IllegalStateException e) {
                     chatController.setOnline(false);
-                    try {
-                        sleep(100);
-                    } catch (InterruptedException e1) {
-                        e1.printStackTrace();
-                    }
+                    isConnected = false;
                     System.out.println("Offline: Session");
                     System.out.println("Re-connected");
                 } catch (JMSException e) {
                     chatController.setOnline(false);
+                    isConnected = false;
                     try {
 
-                        sleep(100);
+                        thread.sleep(200);
                     } catch (InterruptedException e1) {
                         e1.printStackTrace();
                     }
                     System.out.println("Offline: JMS");
                     System.out.println("Re-connected");
+                }
+
+                try {
+                    thread.sleep(200);
+                } catch (InterruptedException e1) {
+                    e1.printStackTrace();
+                }
+                catch (Exception e1) {
+                    e1.printStackTrace();
                 }
             }
 
@@ -397,16 +428,10 @@ public class SettingsController  implements ChangeListener, EventHandler<KeyEven
                 System.out.println("Working");
                 Configuration previousConfiguraion = ConfigurationController.readConfig();
 
-                Configuration currentConfiguration = new Configuration();
-                currentConfiguration.setDestination(destination.getText());
-                currentConfiguration.setTopic(topic.getText());
-                currentConfiguration.setSubscription(subscription.getText());
-                currentConfiguration.setURL(URL.getText());
-
-                currentConfiguration.setOperator(operator.getText());
-                ConfigurationController.writeConfig(currentConfiguration);
 
                 if(!previousConfiguraion.equals(currentConfiguration) ){
+
+                    Platform.runLater(() -> ConfigurationController.writeConfig(currentConfiguration));
                     applyConfigurationButton.setDisable(true);
                     String prefix = currentConfiguration.getTopic().replace("*","");
                     Constant.topicPrefix = prefix;
@@ -421,13 +446,16 @@ public class SettingsController  implements ChangeListener, EventHandler<KeyEven
 
                     chatController.getHashMapOperator().remove(chatController.getDefaultOperator());
                     chatController.setConfig(currentConfiguration);
-                    Operator.messageBrokerUrl = currentConfiguration.getURL();
+
+
 
 /***************   can be done by creating new session*************/
                     OperatorController operatorController = null;
                     try {
                         operatorController.getOperator().messageBrokerUrl = currentConfiguration.getURL();
+
                         operatorController = new OperatorController(currentConfiguration.getOperator(), currentConfiguration.getTopic(),chatController);
+                        System.out.println(operatorController.getOperator().getMessageBrokerUrl());
 //                        operatorController.createSession();
 //                        operatorController.startDefaultOperatorAction();
 
