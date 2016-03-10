@@ -704,9 +704,7 @@ public class ChatController{
                                 messageTextField.setDisable(true);
                                 doTrain.setDisable(true);
                                 Username.setText("");
-
                                 messageDisplay.setContent(null);
-
 
                             }
 

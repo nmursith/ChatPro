@@ -848,8 +848,8 @@ public class OperatorController implements MessageListener {
                                         if(item!=null) {
                                             try{
                                                 System.out.println("first");
-                                                controller.getChatUsersList().getSelectionModel().select(0);
                                                 controller.setUsername(item);
+                                                controller.getChatUsersList().getSelectionModel().select(0);
                                             }
                                             catch (Exception e){
                                                 e.printStackTrace();
@@ -873,7 +873,7 @@ public class OperatorController implements MessageListener {
                                     controller.getDoTrain().setDisable(false);
                                 }
                                 //ScrollPane messageHolder = new ScrollPane();
-                                //messageHolder.setContent((bindOperator.getChatHolder()));
+
 
 /****need tofix here**/
                                 controller.messageDisplay.setVvalue(controller.messageDisplay.getVmax());
