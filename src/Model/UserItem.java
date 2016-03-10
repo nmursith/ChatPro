@@ -183,6 +183,9 @@ public class UserItem extends GridPane implements   Runnable, EventHandler<Mouse
                         } catch (InterruptedException e) {
 
                         }
+                        catch(Exception e){
+
+                        }
 
 
                         try {
@@ -199,6 +202,9 @@ public class UserItem extends GridPane implements   Runnable, EventHandler<Mouse
                             blink.sleep(250);
                         } catch (InterruptedException e) {
                             ///  e.printStackTrace();
+
+                        }
+                        catch(Exception e){
 
                         }
                         //    System.out.println("Loop: " + running);
@@ -235,6 +241,9 @@ public class UserItem extends GridPane implements   Runnable, EventHandler<Mouse
                 blink.sleep(250);
             } catch (InterruptedException e) {
                 ///  e.printStackTrace();
+
+            }
+            catch(Exception e){
 
             }
         }
